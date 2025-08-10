@@ -2,7 +2,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+@plugin "flyonui";
 /* Hero 動畫 */
 @layer utilities {
   @keyframes heroFadeIn {
@@ -960,5 +960,275 @@ body {
 
   .slide-description {
     width: 100%;
+  }
+}
+
+
+
+
+
+.hero {
+  position: relative;
+  width: 100vw;
+  height: 110vh;
+  background-color: #191919;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  clip-path: polygon(0% 45%, 0% 45%, 0% 55%, 0% 55%);
+  will-change: clip-path;
+}
+
+.progress-bar {
+  position: absolute;
+    background-color: #191919;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 25vw;
+  padding: 2em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #ffbb00;
+}
+
+.video-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100vw;
+  height: 120vh;
+  background-color: #000;
+  clip-path: polygon(20% 20%, 80% 20%, 80% 80%, 20% 80%);
+  will-change: transform, clip-path;
+  overflow: hidden;
+}
+
+.video-container video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: auto;
+  height: auto;
+  min-width: 100%;
+  min-height: 100%;
+  object-fit: cover;
+  opacity: 0.85;
+}
+
+nav,
+footer {
+  width: 100vw;
+  padding: 1.5em;
+  display: flex;
+  justify-content: space-between;
+  color: #fff;
+  mix-blend-mode: difference;
+  z-index: 2;
+}
+
+footer {
+  justify-content: flex-end;
+  gap: 1em;
+}
+
+.header {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.header h1 {
+  width: 100%;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 7vw;
+  line-height: 0.85;
+  letter-spacing: -0.25rem;
+  color: #fff;
+}
+
+.header p {
+  margin-top: 1em;
+  color: #ffbb00;
+}
+
+.coordinates {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 100vw;
+  padding: 1.5em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #ffbb00;
+}
+
+.logo {
+  position: absolute;
+  bottom: 0;
+  padding: 1.5em;
+  left: 50%;
+  display: flex;
+  transform: translateX(-50%);
+  will-change: transform;
+  color: #fff;
+  mix-blend-mode: difference;
+  z-index: 2;
+}
+
+.char.anim-out h1 {
+  position: relative;
+  will-change: transform;
+}
+
+.header h1,
+.header p,
+.coordinates p,
+.char.anim-out {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+.header span,
+.coordinates p span {
+  position: relative;
+  display: block;
+  transform: translateY(100%);
+  will-change: transform;
+}
+
+@media (max-width: 900px) {
+  p {
+    font-size: 13px;
+  }
+
+  .progress-bar {
+    justify-content: flex-end;
+  }
+
+  .progress-bar p:nth-child(1) {
+    display: none;
+  }
+
+  .header h1 {
+    font-size: 4vw;
+    letter-spacing: -0.125rem;
+  }
+
+  .coordinates {
+    top: 65%;
+    justify-content: center;
+    gap: 1em;
+    color: #fff;
+    opacity: 0.5;
+  }
+}
+
+
+
+.nav-logo a {
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+}
+
+.container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 100svh;
+  background-color: #e3e4d8;
+}
+
+.page-header {
+  width: 100vw;
+  height: 100svh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.archive {
+  width: 30%;
+  margin: 0 auto;
+  padding: 15rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.archive img {
+  aspect-ratio: 5/7;
+}
+
+.transition-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100svh;
+  display: flex;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.block {
+  flex: 1;
+  height: 100%;
+
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.logo-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100svh;
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  pointer-events: none;
+  opacity: 0;
+}
+
+.logo-container {
+  width: 200px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.char {
+  position: relative;
+  display: inline-block;
+  will-change: transform;
+}
+
+@media (max-width: 900px) {
+  h1 {
+    font-size: 2rem;
   }
 }

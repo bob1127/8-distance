@@ -1,7 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    unoptimized: true, // ✅ 完全不限制圖片來源，也不會進行圖片優化
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**", // 允許任何來源
+      },
+    ],
+    unoptimized: true, // 不啟用 Next 圖片優化
   },
 };
 

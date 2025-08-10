@@ -26,10 +26,10 @@ export default function TransitionLayout({
   return (
     <>
       <GTMDeferred />
-
+      {/* 
       <AnimatePresence mode="wait">
         {isAnimating && <LottieTransitionOverlay key="transition" />}
-      </AnimatePresence>
+      </AnimatePresence> */}
 
       <motion.div className="line-contact-bar fixed sm:hidden bottom-10 right-5 ">
         {/* LINE、FB、100 Icon 可保留原內容 */}
