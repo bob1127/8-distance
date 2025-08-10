@@ -391,13 +391,13 @@ function HomeClient({ specialPosts }) {
                   </div>
 
                   <div className="right w-[60%] flex justify-center items-center">
-                    <div className="max-w-[900px]">
+                    <div className="max-w-[600px]">
                       <h2 className="font-normal text-2xl">捌程室內設計</h2>
-                      <p className="text-[15px] leading-relaxed tracking-wide">
-                        程是一間室內與景觀設計的專業公司...
+                      <p className="text-[15px] leading-relaxed tracking-widest">
+                        捌程是一間室內與景觀設計的專業公司,擅長將室內、室外的景色融合。每個空間會因為不同的人所屬,而有著獨有的設計。程,以人為本為中心,創造功能合理、舒適優美、滿足物質和精神生活需要的室內環境,打造属於每個案件的獨有設計是捌程的理念,細心、用心與完美是捌程的宗旨!
                       </p>
-                      <p className="text-[15px] mt-4 leading-relaxed tracking-wide">
-                        程是一間室內與景觀設計的專業公司...
+                      <p className="text-[15px] mt-4 leading-relaxed tracking-widest">
+                        ,以人為本為中心,創造功能合理、舒適優美、滿足物質和精神生活需要的室內環境,打造属於每個案件的獨有設計是捌程的理念,細心、用心與完美是捌程的宗旨!
                       </p>
                     </div>
                   </div>

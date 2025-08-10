@@ -4,6 +4,7 @@ import { ViewTransitions } from "next-view-transitions";
 import type { Metadata } from "next";
 import AppShell from "../components/AppShell";
 import Nav from "../components/PageTransition/Nav";
+import Footer from "../components/Footer/Footer1";
 import PageTransition from "../components/PageTransition/PageTransition";
 export const metadata: Metadata = {
   title: "寬越設計｜商業空間與住宅設計",
@@ -24,6 +25,7 @@ export default function RootLayout({
             {children}
           </PageTransition>
         </body>
+        <Footer />
       </html>
     </ViewTransitions>
   );

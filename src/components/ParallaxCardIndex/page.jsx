@@ -131,7 +131,7 @@ const ParallaxCard = ({
                       {img.caption}
                     </div>
                     <div className="flex flex-col items-center justify-center py-5">
-                      <h2 className="text-[22px]">PORTFOLIO</h2>
+                      <h2 className="text-[20px] font-normal">PORTFOLIO</h2>
                     </div>
                   </motion.div>
                 </SwiperSlide>

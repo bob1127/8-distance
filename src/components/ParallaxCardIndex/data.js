@@ -4,9 +4,9 @@ export const projects = [
     description: "Taichung",
    
     images: [
-      { url: "https://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpghttps://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpg", caption: "作品 A" },
-      { url: "https://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpghttps://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpg", caption: "作品 B" },
-      { url: "/matsue00.jpg", caption: "作品 C" },
+      { url: "https://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpghttps://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpg",  caption: "台中麗音宅 | 2025-05-22" },
+      { url: "https://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpghttps://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpg",  caption: "台中陳宅 | 2025-05-22" },
+      { url: "/matsue00.jpg", caption: "台中李宅 | 2025-05-22" },
     ],
   },
   {
@@ -14,19 +14,19 @@ export const projects = [
     description: "Taichung",
     backgroundImage: "/matsue00.jpg",
     images: [
-      { url: "https://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpghttps://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpg", caption: "商空 A" },
-      { url: "https://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpghttps://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpg", caption: "商空 B" },
-      { url: "https://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpghttps://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpg", caption: "商空 C" },
+      { url: "https://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpghttps://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpg",  caption: "台中麗音宅 | 2025-05-22" },
+      { url: "https://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpghttps://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpg",  caption: "台中陳宅 | 2025-05-22" },
+      { url: "/matsue00.jpg", caption: "台中李宅 | 2025-05-22" },
     ],
   },
   {
     title: "景觀設計作品",
     description: "Taichung",
    
-    images: [
-      { url: "https://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpghttps://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpg", caption: "景觀 A" },
-      { url: "https://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpghttps://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpg", caption: "景觀 B" },
-      { url: "https://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpghttps://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpg", caption: "景觀 C" },
+     images: [
+      { url: "https://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpghttps://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpg",  caption: "台中麗音宅 | 2025-05-22" },
+      { url: "https://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpghttps://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpg",  caption: "台中陳宅 | 2025-05-22" },
+      { url: "/matsue00.jpg", caption: "台中李宅 | 2025-05-22" },
     ],
   }
 ];

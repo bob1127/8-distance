@@ -322,7 +322,7 @@ const Slider = () => {
       <div className="mask bg-black opacity-45 w-full h-full absolute left-0 top-0"></div>
 
       <div className="scale-100 transition duration-1000 group-hover:scale-110">
-        <canvas ref={canvasRef} className="block w-full h-auto" />
+        <canvas ref={canvasRef} className="ca-block w-full h-auto" />
       </div>
     </div>
   );

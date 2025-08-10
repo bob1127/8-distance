@@ -1207,14 +1207,6 @@ a {
   opacity: 0;
 }
 
-.logo-container {
-  width: 200px;
-  height: 200px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-}
 
 .char {
   position: relative;
