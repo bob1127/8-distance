@@ -1192,7 +1192,7 @@ footer {
 .block {
   flex: 1;
   height: 100%;
-
+  background: #222;
   transform: scaleX(0);
   transform-origin: left;
 }
@@ -1207,7 +1207,7 @@ footer {
   display: flex;
   justify-content: center;
   align-items: center;
-
+  background: #222;
   pointer-events: none;
   opacity: 0;
 }
