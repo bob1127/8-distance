@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect, useState, useCallback } from "react";
+import dynamic from "next/dynamic"; // ⬅️ 新增：關閉 SSR 用
 import Image from "next/image";
 import gsap from "gsap";
 import Link from "next/link";
@@ -29,7 +30,7 @@ import "swiper/css/pagination";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function HomeClient({ specialPosts }) {
+function HomeClient({ specialPosts }) {
   const [posts, setPosts] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(1);
   const imageRefs = useRef([]);
@@ -40,35 +41,43 @@ export default function HomeClient({ specialPosts }) {
     offset: ["start start", "end end"],
   });
 
-  // first => <Preloader01/>（有動畫） | repeat => <Preloader/>（無動畫）
-  const [preloaderType, setPreloaderType] = useState(null); // 'first' | 'repeat' | null
-  const didInit = useRef(false); // 防止 React 18 開發模式雙跑
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (didInit.current) return;
-    didInit.current = true;
-
+  // === 單一 boot 狀態，同步初始化（此元件已關 SSR，這裡一定拿得到 window） ===
+  const [boot, setBoot] = useState(() => {
     const LS_KEY = "visited";
     const SS_KEY = "visited_session";
 
-    const hadVisited =
-      !!window.localStorage.getItem(LS_KEY) ||
-      !!window.sessionStorage.getItem(SS_KEY);
-
-    if (hadVisited) {
-      setPreloaderType("repeat");
-    } else {
-      setPreloaderType("first");
-      // 第一次：同時寫入 localStorage + sessionStorage
-      try {
-        window.localStorage.setItem(LS_KEY, "1");
-      } catch {}
-      try {
-        window.sessionStorage.setItem(SS_KEY, "1");
-      } catch {}
+    let hadVisited = false;
+    try {
+      hadVisited =
+        !!window.localStorage.getItem(LS_KEY) ||
+        !!window.sessionStorage.getItem(SS_KEY);
+    } catch {
+      hadVisited = false;
     }
-  }, []);
+
+    if (hadVisited) return { type: "repeat", show: false };
+    try {
+      window.localStorage.setItem(LS_KEY, "1");
+    } catch {}
+    try {
+      window.sessionStorage.setItem(SS_KEY, "1");
+    } catch {}
+    return { type: "first", show: true }; // 無痕第一次也會是這個分支
+  });
+
+  // 8 秒保險
+  useEffect(() => {
+    if (boot.type !== "first" || !boot.show) return;
+    const t = setTimeout(() => setBoot((s) => ({ ...s, show: false })), 8000);
+    return () => clearTimeout(t);
+  }, [boot.type, boot.show]);
+
+  // 顯示 preloader 期間鎖 body 捲動
+  useEffect(() => {
+    if (boot.show) document.body.classList.add("overflow-hidden");
+    else document.body.classList.remove("overflow-hidden");
+    return () => document.body.classList.remove("overflow-hidden");
+  }, [boot.show]);
 
   const homeStructuredData = {
     "@context": "https://schema.org",
@@ -109,7 +118,6 @@ export default function HomeClient({ specialPosts }) {
   };
 
   const initGSAPAnimations = useCallback(() => {
-    if (typeof window === "undefined") return;
     if (window.innerWidth < 580) return;
 
     const ctx = gsap.context(() => {
@@ -158,8 +166,8 @@ export default function HomeClient({ specialPosts }) {
     return ctx;
   }, []);
 
-  // 可選：兩個 Preloader 動畫結束時呼叫，做進場後初始化
   const handlePreloaderFinish = () => {
+    setBoot((s) => ({ ...s, show: false }));
     requestAnimationFrame(() => {
       initGSAPAnimations();
     });
@@ -213,11 +221,11 @@ export default function HomeClient({ specialPosts }) {
           id="dark-section"
           className="relative w-full aspect-[16/11] md:aspect-[1920/1080] border-3 border-green-300 min-h-[90vh] sm:min-h-[85vh] md:min-h-[100vh] lg:min-h-[1000px] xl:min-h-[1000px]"
         >
-          {/* 首訪顯示 Preloader01（有動畫），之後顯示 Preloader（無動畫） */}
-          {preloaderType === "first" && (
+          {/* 首訪顯示 Preloader01（有動畫）；其餘顯示 Preloader（無動畫） */}
+          {boot.type === "first" && boot.show && (
             <Preloader01 onFinish={handlePreloaderFinish} />
           )}
-          {preloaderType === "repeat" && (
+          {boot.type && (boot.type === "repeat" || !boot.show) && (
             <Preloader onFinish={handlePreloaderFinish} />
           )}
 
@@ -469,3 +477,6 @@ export default function HomeClient({ specialPosts }) {
     </ReactLenis>
   );
 }
+
+// ⬇️ 這行讓整個頁面元件只在 Client 端渲染（無 SSR），確保第一次就能讀 storage 判斷
+export default dynamic(() => Promise.resolve(HomeClient), { ssr: false });
