@@ -2,7 +2,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@plugin "flyonui";
+
 /* Hero 動畫 */
 @layer utilities {
   @keyframes heroFadeIn {
@@ -497,16 +497,6 @@ body {
   z-index: -1;
 }
 
-.nav {
-  position: absolute;
-  top: 0;
-  width: 100vw;
-  padding: 1.25em 1.5em;
-  display: flex;
-  align-items: center;
-  gap: 1.5em;
-  will-change: transform;
-}
 
 .nav>div {
   flex: 1;
@@ -687,9 +677,7 @@ body {
   font-weight: 400;
 }
 
-.nav {
-  transform: translateY(-120%);
-}
+
 
 .cta {
   transform: translateX(-50%) scale(0);
@@ -1019,16 +1007,6 @@ body {
   opacity: 0.85;
 }
 
-nav,
-footer {
-  width: 100vw;
-  padding: 1.5em;
-  display: flex;
-  justify-content: space-between;
-  color: #fff;
-  mix-blend-mode: difference;
-  z-index: 2;
-}
 
 footer {
   justify-content: flex-end;
@@ -1133,6 +1111,23 @@ footer {
     color: #fff;
     opacity: 0.5;
   }
+}
+
+h1 {
+  text-transform: uppercase;
+  color: #141414;
+  font-size: 12rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+a {
+  text-decoration: none;
+  text-transform: uppercase;
+  color: #141414;
+  font-family: "DM Mono";
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
 

@@ -68,7 +68,7 @@ const ParallaxCard = ({
           </div>
 
           {/* 輪播區 */}
-          <div className="-mx-6">
+          <div className="-mx-6 ">
             <Swiper
               speed={800}
               spaceBetween={0}
@@ -127,11 +127,11 @@ const ParallaxCard = ({
                       />
                     </div>
 
-                    <div className="absolute bottom-0 left-0 w-full text-white text-sm text-center py-1 bg-black/50">
+                    <div className="absolute bottom-0 mb-5 left-0 w-full text-slate-900 text-sm text-center py-1">
                       {img.caption}
                     </div>
                     <div className="flex flex-col items-center justify-center py-5">
-                      <h2 className="text-[24px]">TITLE</h2>
+                      <h2 className="text-[22px]">PORTFOLIO</h2>
                     </div>
                   </motion.div>
                 </SwiperSlide>

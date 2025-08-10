@@ -219,7 +219,7 @@ function HomeClient({ specialPosts }) {
       <div className="">
         <div
           id="dark-section"
-          className="relative w-full aspect-[16/11] md:aspect-[1920/1080] border-3 border-green-300 min-h-[90vh] sm:min-h-[85vh] md:min-h-[100vh] lg:min-h-[1000px] xl:min-h-[1000px]"
+          className="relative w-full aspect-[16/11] md:aspect-[1920/1080]  min-h-[90vh] sm:min-h-[85vh] md:min-h-[100vh] lg:min-h-[1000px] xl:min-h-[1000px]"
         >
           {/* 首訪顯示 Preloader01（有動畫）；其餘顯示 Preloader（無動畫） */}
           {boot.type === "first" && boot.show && (
@@ -329,7 +329,22 @@ function HomeClient({ specialPosts }) {
                   </div>
                 </div>
               </section>
-
+              <section ref={container} className="section-portfolio relative">
+                {(projects || []).map((project, i) => {
+                  const targetScale = 1 - (projects.length - i) * 0.05;
+                  return (
+                    <ParallaxCard
+                      key={`card-${i}`}
+                      i={i}
+                      total={projects.length}
+                      progress={scrollYProgress}
+                      range={[i * 0.25, 1]}
+                      targetScale={targetScale}
+                      {...project}
+                    />
+                  );
+                })}
+              </section>
               <section className="section-video !w-full">
                 <div className="w-full ">
                   <Video
@@ -388,23 +403,6 @@ function HomeClient({ specialPosts }) {
                   </div>
                 </div>
               </section>
-
-              <main ref={container} className="relative">
-                {(projects || []).map((project, i) => {
-                  const targetScale = 1 - (projects.length - i) * 0.05;
-                  return (
-                    <ParallaxCard
-                      key={`card-${i}`}
-                      i={i}
-                      total={projects.length}
-                      progress={scrollYProgress}
-                      range={[i * 0.25, 1]}
-                      targetScale={targetScale}
-                      {...project}
-                    />
-                  );
-                })}
-              </main>
 
               <section className="section-others-project w-full">
                 <Swiper
