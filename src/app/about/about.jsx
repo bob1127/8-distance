@@ -1,48 +1,47 @@
-"use client";
-
-import ThreeDSlider from "../../components/3DSlider.jsx";
-import ParallaxImage from "../../components/ParallaxImage";
-import InfiniteScroll from "../../components/InfiniteScroll/page.jsx";
+// app/about/page.jsx
+// ✅ SSR + ISR：第一次就有完整 HTML；之後每 60 秒再生
+export const revalidate = 60;
 import GsapText from "../../components/RevealText/index";
-import HomeSlider from "../../components/HeroSliderHome/page.jsx";
-import { useState } from "react";
-import React, { useRef, useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link.js";
-import StaffCard from "@/components/StaffCard";
-
-import AnimatedLink from "../../components/AnimatedLink.tsx";
-import {
-  motion,
-  useScroll,
-  useTransform,
-  AnimatePresence,
-} from "framer-motion";
-import ScrollTopCard from "../../components/ScrollTopCard/index.jsx";
-import ScrollTopCard1 from "../../components/ScrollTopCard1/index.jsx";
-import ScrollTopCard2 from "../../components/ScrollTopCard2/index.jsx";
-import { ReactLenis } from "@studio-freight/react-lenis";
 import Script from "next/script";
-import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
-import Marquee from "react-fast-marquee";
-import Lenis from "@studio-freight/lenis";
+import Video from "../../components/Video"; // 你既有的元件（多半是 client，但可在 server page 中使用）
+import TimelineM062u03Client from "../../components/timeline"; // 新增的客戶端時間軸元件（見下一檔）
+import AboutGalleryClient from "../../components/AboutGalleryClient";
 
-gsap.registerPlugin(ScrollTrigger);
+// 依 API 常見欄位做映射，避免後端欄位命名異動造成頁面壞掉
+function mapHistory(h) {
+  const title =
+    h?.title ?? h?.name ?? h?.step_title ?? h?.heading ?? "未命名項目";
+  const text = h?.content ?? h?.description ?? h?.text ?? h?.body ?? "";
+  const img =
+    h?.image_url ?? h?.image ?? h?.cover ?? h?.picture ?? h?.photo ?? null;
+  return { title, text, img };
+}
 
-export default function About() {
-  const [isHover, setIsHover] = useState(false);
-
-  useEffect(() => {
-    const lenis = new Lenis();
-
-    function raf(time) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
+async function getAboutHistories() {
+  try {
+    const res = await fetch("https://api.ld-8distance.com/api/about", {
+      next: { revalidate: 60 }, // 與 export const revalidate 一致
+    });
+    if (!res.ok) {
+      console.error("Fetch /api/about failed:", res.status);
+      return [];
     }
+    const json = await res.json().catch(() => ({}));
+    const list = Array.isArray(json?.about_histories)
+      ? json.about_histories
+      : [];
+    return list.map(mapHistory).filter((i) => i.title);
+  } catch (e) {
+    console.error("Fetch /api/about error:", e);
+    return [];
+  }
+}
 
-    requestAnimationFrame(raf);
-  });
+export default async function AboutPage() {
+  const items = await getAboutHistories();
+
+  // 結構化資料（可照你原本的需求調整）
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -70,57 +69,422 @@ export default function About() {
       "https://www.instagram.com/kuankoshi.design",
     ],
   };
+  // 準備要進彈窗的圖片清單（字串需與實際 src 完全一致）
+  const galleryListA = [
+    "/332.jpg",
+    "/images/03-ADDＢ.webp",
+    "/images/taiwan.webp",
+  ];
+
+  const galleryListB = [
+    "/images/7caded2d-785f-4ccd-aa41-2c98678ca2fb.png",
+    "https://i0.wp.com/draft.co.jp/wp-content/uploads/2024/11/ELLE-DECOR_2412_PCichiran.jpg?fit=1920%2C1280&quality=85&strip=all&ssl=1",
+    "/images/a26ae4a7-fba6-4e16-b07f-1839b0add281.png",
+  ];
 
   return (
-    <ReactLenis root>
-      <div>
-        <section className="section-staff">
-          <div className="title pb-10 max-w-[1300px] mx-auto">
-            <h1 className="text-[28px] mt-0  text-black font-normal ">
-              <p className="text-[14px] font-bold text-[#126844]">Members</p>
-              捌程室內設計
-            </h1>
+    <main className="min-h-screen bg-[#f5f6f6] dark:bg-neutral-950">
+      {/* JSON-LD：加強 SEO */}
+      <Script
+        id="org-jsonld"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+
+      {/* HERO 視訊區（保留你的原樣） */}
+      <section className="section-video over !w-full">
+        <div className="w-full ">
+          <div className="mask absolute top-0 left-0 z-10 w-full h-[80vh] bg-black/30"></div>
+          <div className="content absolute w-full h-full top-0 left-0 z-20">
+            <div className="flex h-[80vh] flex-row ">
+              <div className="left w-1/2  flex  justify-center items-center  ">
+                <h1 className="text-white font-normal text-7xl">NEW</h1>
+              </div>
+            </div>
           </div>
-          <div className="menbers max-w-[1300px] mx-auto grid grid-cols-3 gap-4 pb-20">
-            <StaffCard
-              imgSrc="/images/menbers/捌程室內設計張佩甄.jpg.avif"
-              title="室內設計總監"
-              name="Jen 張褞矇"
-              description="專注於住宅與商空整合設計，擁有豐富的改造與風格塑造經驗。"
-            />
-            <StaffCard
-              imgSrc="/images/menbers/捌程室內設計胡萬福.jpeg.avif"
-              title="設計總監"
-              name="John 王小明"
-              description="擅長以簡約風格結合實用空間機能，深受客戶好評。"
-            />
-            <StaffCard
-              imgSrc="/images/menbers/蕭廷羽.jpg.avif"
-              title="室內設計總監"
-              name="Jen 張褞矇"
-              description="專注於住宅與商空整合設計，擁有豐富的改造與風格塑造經驗。"
-            />
-            <StaffCard
-              imgSrc="/images/menbers/捌程室內設計張佩甄.jpg.avif"
-              title="室內設計總監"
-              name="Jen 張褞矇"
-              description="專注於住宅與商空整合設計，擁有豐富的改造與風格塑造經驗。"
-            />
-            <StaffCard
-              imgSrc="/images/menbers/捌程室內設計胡萬福.jpeg.avif"
-              title="設計總監"
-              name="John 王小明"
-              description="擅長以簡約風格結合實用空間機能，深受客戶好評。"
-            />
-            <StaffCard
-              imgSrc="/images/menbers/蕭廷羽.jpg.avif"
-              title="室內設計總監"
-              name="Jen 張褞矇"
-              description="專注於住宅與商空整合設計，擁有豐富的改造與風格塑造經驗。"
-            />
+          <Video
+            src="https://video.wixstatic.com/video/b69ff1_143f9b33dccf44eea83413490c5a1713/2160p/mp4/file.mp4"
+            poster="/images/video-poster.jpg"
+            caption=""
+          />
+        </div>
+      </section>
+
+      <section className="relative ">
+        <div className="bg-white mx-auto   max-w-[1400px] pt-10 w-[90%] lg:w-[78%] flex md:flex-row flex-col justify-center items-center">
+          <div className="title w-full md:w-1/2 px-4 md:px-[9%] xl:px-[15%] h-full flex flex-col justify-between">
+            <b className="text-bold tracking-widest text-[1.4rem]">
+              打造理想居所
+            </b>
+            <div>
+              <b className="text-[.9rem] tracking-widest leading-loose font-normal">
+                對於新婚小家庭或小資族，我們以聰明布局與細緻機能，讓有限空間也能兼顧舒適與收納。從溫馨客廳到未來育兒彈性規劃，寬越以專業設計，陪伴你們築起幸福起點。
+              </b>
+            </div>
+          </div>
+          <div className=" w-full md:w-1/2 p-4 flex  justify-center items-center">
+            <Image
+              src="/images/03-ADDＢ.webp"
+              alt=""
+              placeholder="empty"
+              loading="lazy"
+              width={800}
+              height={800}
+              className="w-full"
+            ></Image>
+          </div>
+        </div>
+      </section>
+      <section className="company-intro max-w-[1920px] mx-auto w-[88%] flex flex-row">
+        <div className="left w-1/2 p-8">
+          <div className="info bg-white p-4">
+            <div className="top flex ">
+              <div className="w-1/2 p-10 text-3xl">About 8Distance</div>
+              <div className="txt w-1/2 leading-8 tracking-wider text-[14px] p-10">
+                捌程是一間室內與景觀設計的專業公司,擅長將室內、室外的景色融合。每個空間會因為不同的人所屬,而有著獨有的設計。程,以人為本為中心,創造功能合理、舒適優美、滿足物質和精神生活需要的室內環境,打造属於每個案件的獨有設計是捌程的理念,細心、用心與完美是捌程的宗旨!
+              </div>
+            </div>
+            <div className="img aspect-[4/4] relative overflow-hidden  p-8">
+              <Image
+                src="/332.jpg"
+                alt="company-img"
+                placeholder="empty"
+                loading="lazy"
+                fill
+                className="object-cover"
+              ></Image>
+            </div>
+          </div>
+        </div>
+        <div className="left w-1/2 p-8">
+          <div className="info ">
+            <div className="top  flex ">
+              <div className="w-1/2 p-10 text-3xl">公司外觀環境</div>
+              <div className="txt w-1/2 leading-8 tracking-wider text-[14px] p-10">
+                <h4 className="text-xl">Taichung</h4>
+              </div>
+            </div>
+            <div className="px-10">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate
+              alias commodi laborum, pariatur neque odit. Dolores incidunt illum
+              perferendis eaque velit veritatis animi nobis officia facilis,
+              iste necessitatibus distinctio vel?
+            </div>
+            <div className="p-10 flex">
+              <div className="w-1/2 overflow-hidden h-[550px] rounded-l-[150px]">
+                <Image
+                  src="/332.jpg"
+                  alt="company-img"
+                  placeholder="empty"
+                  loading="lazy"
+                  width={500}
+                  height={800}
+                  className="w-full"
+                ></Image>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ✅ SEO 重要區塊：時間軸（伺服端已把資料塞進 HTML，第一次就有內容） */}
+      <section className="py-6">
+        <TimelineM062u03Client items={items} />
+      </section>
+
+      {/* Members 區（保留簡化版，避免在 Server Page 使用 hooks） */}
+      <section className="section-staff">
+        <div className="title pb-10 max-w-[1300px] mx-auto px-4">
+          <h1 className="text-[28px] mt-0 text-black dark:text-white font-normal ">
+            <p className="text-[14px] font-bold text-[#126844]">Members</p>
+            捌程室內設計
+          </h1>
+        </div>
+        <div className="w-full mx-auto grid grid-cols-1 gap-4 pb-20 px-4">
+          <div className="flex flex-col md:flex-row">
+            <div className="md:w-1/2 w-full flex justify-center items-center mb-6 md:mb-0">
+              <div className="txt flex flex-col items-center md:items-start">
+                <p className="border text-center rounded-[15px] px-4 py-1 font-bold max-w-[120px]">
+                  設計總監
+                </p>
+                <h3 className="mt-3 text-2xl md:text-3xl font-semibold">
+                  JEN 張褞矇
+                </h3>
+              </div>
+            </div>
+            <div className="md:w-1/2 w-full">
+              <Image
+                src="https://static.wixstatic.com/media/b69ff1_b341c8c3f39e420abf4a4f626868096e~mv2.jpg/v1/crop/x_0,y_0,w_4000,h_5143/fill/w_289,h_372,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/捌程室內設計張佩甄.jpg"
+                width={1200}
+                height={1800}
+                className="w-full h-auto rounded-lg"
+                alt="staff"
+                priority={false}
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="w-full pt-20 bg-custom-gradient section-content">
+        <section className="mx-auto  max-w-[1920px]">
+          <div className="flex w-[80%] flex-col md:flex-row h-full justify-center items-center mx-auto">
+            <div className=" w-full md:w-1/2  pr-5 ">
+              <GsapText
+                text="持續進化的空間設計"
+                id="gsap-intro"
+                fontSize="1.3rem"
+                fontWeight="800"
+                color="#fff"
+                className="text-left  tracking-widest inline-block mb-0 h-auto"
+              />
+
+              <p className="text-[.85rem]   tracking-widest leading-loose text-gray-100 ">
+                從玄關延伸至室內動線，以工業風吊燈串聯，搭配異材質元素與層次光源，
+                <br></br>營造出個性鮮明又富有活力的居家氛圍。
+              </p>
+            </div>
+            <div className=" w-full md:w-1/2 flex mt-8 lg:mt-0  justify-center lg:justify-end items-center">
+              <div className="max-w-[580px] ">
+                <Image
+                  src="/images/taiwan.webp"
+                  placeholder="empty"
+                  loading="lazy"
+                  alt=""
+                  width={1500}
+                  height={800}
+                  className="w-full"
+                ></Image>
+              </div>
+            </div>
           </div>
         </section>
-      </div>
-    </ReactLenis>
+
+        <section className="section-footer mx-auto max-w-[1920px] ">
+          <div className="mx-auto w-[80%] 2xl:w-[80%] py-20">
+            <div className="top flex justify-between flex-col sm:flex-row">
+              <h3 className="text-white text-center sm:text-left text-[1.8rem] font-bold">
+                LOCATION
+              </h3>
+              <a href="/project">
+                <button class="group relative inline-flex text-[1rem] 2xl:text-[1.2rem] h-12 items-center justify-center  border-b-1 border-white px-6 font-medium text-neutral-100">
+                  <span className="font-mode">More</span>
+                  <div class="relative ml-1 h-5 w-5 overflow-hidden">
+                    <div class="absolute transition-all duration-200 sm:group-hover:-translate-y-5 sm:group-hover:translate-x-4">
+                      <svg
+                        width="15"
+                        height="15"
+                        viewBox="0 0 15 15"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-5 w-5"
+                      >
+                        <path
+                          d="M3.64645 11.3536C3.45118 11.1583 3.45118 10.8417 3.64645 10.6465L10.2929 4L6 4C5.72386 4 5.5 3.77614 5.5 3.5C5.5 3.22386 5.72386 3 6 3L11.5 3C11.6326 3 11.7598 3.05268 11.8536 3.14645C11.9473 3.24022 12 3.36739 12 3.5L12 9.00001C12 9.27615 11.7761 9.50001 11.5 9.50001C11.2239 9.50001 11 9.27615 11 9.00001V4.70711L4.35355 11.3536C4.15829 11.5488 3.84171 11.5488 3.64645 11.3536Z"
+                          fill="currentColor"
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                        ></path>
+                      </svg>
+                      <svg
+                        width="15"
+                        height="15"
+                        viewBox="0 0 15 15"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-5 w-5 -translate-x-4"
+                      >
+                        <path
+                          d="M3.64645 11.3536C3.45118 11.1583 3.45118 10.8417 3.64645 10.6465L10.2929 4L6 4C5.72386 4 5.5 3.77614 5.5 3.5C5.5 3.22386 5.72386 3 6 3L11.5 3C11.6326 3 11.7598 3.05268 11.8536 3.14645C11.9473 3.24022 12 3.36739 12 3.5L12 9.00001C12 9.27615 11.7761 9.50001 11.5 9.50001C11.2239 9.50001 11 9.27615 11 9.00001V4.70711L4.35355 11.3536C4.15829 11.5488 3.84171 11.5488 3.64645 11.3536Z"
+                          fill="currentColor"
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                        ></path>
+                      </svg>
+                    </div>
+                  </div>
+                </button>
+              </a>
+            </div>
+
+            <section className=" w-full mt-4">
+              <span className="text-white text-[1.4rem] mb-2">
+                我們的營業據點
+              </span>
+              <div className="flex  mx-auto   lg:w-full  w-full flex-wrap flex-row">
+                <a href="http://localhost:3000/project?cat=special-offers">
+                  <div className=" w-[90%] md:w-[240px] 2xl:w-[340px]  group ">
+                    <div className="img   mx-auto  sm:group-hover:h-[40vh] delay-75 duration-500  h-auto md:h-[33vh]  overflow-hidden">
+                      <div className="animate-image-wrapper mx-auto relative w-full aspect-[4/5] md:h-full overflow-hidden ">
+                        <div className="image-container relative w-full h-full">
+                          <Image
+                            src="/images/7caded2d-785f-4ccd-aa41-2c98678ca2fb.png"
+                            alt="About Image 1"
+                            fill
+                            className="object-cover sm:group-hover:scale-[1.05] duration-700"
+                            sizes="(max-width: 768px) 90vw, (max-width: 1024px) 550px, 85vw"
+                          />
+                          xs
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex flex-col px-3 py-4">
+                      <div className="inline-block pb-4">
+                        <button
+                          role="link"
+                          class="relative  !inline-block after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 after:bg-neutral-800 after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.65_0.05_0.36_1)] sm:group-hover:after:origin-bottom-left sm:group-hover:after:scale-x-100"
+                        >
+                          <button
+                            role="link"
+                            class="relative inline-block after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 after:bg-neutral-800 after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.65_0.05_0.36_1)] sm:group-hover:after:origin-bottom-left sm:group-hover:after:scale-x-100"
+                          >
+                            <b className="text-[.9rem] font-bold text-white">
+                              {" "}
+                              台中設計辦公室
+                            </b>
+                          </button>
+                        </button>
+                      </div>
+                      <span className="text-[.75rem] text-gray-100">
+                        捌程是一間室內與景觀設計的專業公司,擅長將室內、室外的景色融合
+                      </span>
+                      <span className="text-[.75rem] text-gray-100">
+                        Taichung - 南區
+                      </span>
+                    </div>
+                  </div>
+                </a>
+                <a href="/about">
+                  <div className=" w-[90%] md:w-[240px] 2xl:w-[340px]  group ">
+                    <div className="img   mx-auto    h-auto md:h-[36vh] sm:group-hover:h-[44vh] delay-75 duration-500 overflow-hidden">
+                      <div className="animate-image-wrapper mx-auto relative w-full aspect-[4/5] md:h-full overflow-hidden ">
+                        <div className="image-container relative w-full h-full">
+                          <Image
+                            src="/images/taiwan.webp"
+                            alt="About Image 1"
+                            fill
+                            className="object-cover sm:group-hover:scale-[1.05] duration-700"
+                            sizes="(max-width: 768px) 90vw, (max-width: 1024px) 550px, 85vw"
+                          />
+                          xs
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex flex-col px-3 py-4">
+                      <div className="inline-block pb-4">
+                        <button
+                          role="link"
+                          class="relative  !inline-block after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 after:bg-neutral-800 after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.65_0.05_0.36_1)] sm:group-hover:after:origin-bottom-left sm:group-hover:after:scale-x-100"
+                        >
+                          <button
+                            role="link"
+                            class="relative inline-block after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 after:bg-neutral-800 after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.65_0.05_0.36_1)] sm:group-hover:after:origin-bottom-left sm:group-hover:after:scale-x-100"
+                          >
+                            <b className="text-[.9rem] font-bold text-white">
+                              {" "}
+                              員林設計辦公室
+                            </b>
+                          </button>
+                        </button>
+                      </div>
+                      <span className="text-[.75rem] text-gray-100">
+                        捌程是一間室內與景觀設計的專業公司,擅長將室內、室外的景色融合
+                      </span>
+                      <span className="text-[.75rem] text-gray-100">
+                        彰化市 - 員林
+                      </span>
+                    </div>
+                  </div>
+                </a>
+                <a href="https://www.kuankoshi.com/project?cat=renovation-restoration">
+                  <div className=" w-[90%] md:w-[240px] 2xl:w-[340px]  group ">
+                    <div className="img   mx-auto    h-auto md:h-[26vh] sm:group-hover:h-[33vh] delay-75 duration-500 overflow-hidden">
+                      <div className="animate-image-wrapper mx-auto relative w-full aspect-[4/5] md:h-full overflow-hidden ">
+                        <div className="image-container relative w-full h-full">
+                          <Image
+                            src="/images/a26ae4a7-fba6-4e16-b07f-1839b0add281.png"
+                            alt="About Image 1"
+                            fill
+                            className="object-cover sm:group-hover:scale-[1.05] duration-700"
+                            sizes="(max-width: 768px) 90vw, (max-width: 1024px) 550px, 85vw"
+                          />
+                          xs
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex flex-col px-3 py-4">
+                      <div className="inline-block pb-4">
+                        <button
+                          role="link"
+                          class="relative  !inline-block after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 after:bg-neutral-800 after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.65_0.05_0.36_1)] sm:group-hover:after:origin-bottom-left sm:group-hover:after:scale-x-100"
+                        >
+                          <button
+                            role="link"
+                            class="relative inline-block after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 after:bg-neutral-800 after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.65_0.05_0.36_1)] sm:group-hover:after:origin-bottom-left sm:group-hover:after:scale-x-100"
+                          >
+                            <b className="text-[.9rem] font-bold text-white">
+                              {" "}
+                              田尾總部
+                            </b>
+                          </button>
+                        </button>
+                      </div>
+                      <span className="text-[.75rem] text-gray-100">
+                        結構重塑與格局優化，讓舊屋重獲新生，呈現嶄新生活樣貌。
+                      </span>
+                      <span className="text-[.75rem] text-gray-100">
+                        彰化市 - 田尾
+                      </span>
+                    </div>
+                  </div>
+                </a>
+                <a href="/ServiceProcess">
+                  <div className=" w-[90%] md:w-[240px] 2xl:w-[340px]  group ">
+                    <div className="img   mx-auto    h-auto md:h-[30vh] sm:group-hover:h-[35vh] delay-75 duration-500 overflow-hidden">
+                      <div className="animate-image-wrapper mx-auto relative w-full aspect-[4/5] md:h-full overflow-hidden ">
+                        <div className="image-container relative w-full h-full">
+                          <Image
+                            src="https://i0.wp.com/draft.co.jp/wp-content/uploads/2024/11/ELLE-DECOR_2412_PCichiran.jpg?fit=1920%2C1280&quality=85&strip=all&ssl=1"
+                            alt="About Image 1"
+                            fill
+                            className="object-cover sm:group-hover:scale-[1.05] duration-700"
+                            sizes="(max-width: 768px) 90vw, (max-width: 1024px) 550px, 85vw"
+                          />
+                          xs
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex flex-col px-3 py-4">
+                      <div className="inline-block pb-4">
+                        <button
+                          role="link"
+                          class="relative  !inline-block after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 after:bg-neutral-800 after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.65_0.05_0.36_1)] sm:group-hover:after:origin-bottom-left sm:group-hover:after:scale-x-100"
+                        >
+                          <button
+                            role="link"
+                            class="relative inline-block after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 after:bg-neutral-800 after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.65_0.05_0.36_1)] sm:group-hover:after:origin-bottom-left sm:group-hover:after:scale-x-100"
+                          >
+                            <b className="text-[.9rem] font-bold text-white">
+                              {" "}
+                              其他服務
+                            </b>
+                          </button>
+                        </button>
+                      </div>
+                      <span className="text-[.75rem] text-gray-100">
+                        從初談、丈量到完工，全流程專業陪伴，確保每一步都安心。
+                      </span>
+                      <span className="text-[.75rem] text-gray-100">
+                        Cintact - Us
+                      </span>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </section>
+          </div>
+        </section>
+      </section>
+    </main>
   );
 }

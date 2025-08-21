@@ -198,7 +198,7 @@ export const Card = ({
     <>
       <AnimatePresence>
         {open && (
-          <div className="fixed inset-0 z-[9999999999999999999] flex items-center justify-center">
+          <div className="fixed inset-0 z-[99] flex items-center justify-center">
             {/* 背景遮罩 */}
             <motion.div
               initial={{ opacity: 0 }}
@@ -214,7 +214,7 @@ export const Card = ({
               exit={{ opacity: 0, scale: 0.95 }}
               ref={containerRef}
               layoutId={layout ? `card-${card.title}` : undefined}
-              className="relative z-[9999999999999999999] w-[90vw] max-h-[90vh] overflow-y-auto bg-white dark:bg-neutral-900 rounded-3xl p-6 md:p-10"
+              className="relative z-[9999999999999999999] w-[90vw] max-h-[90vh] overflow-y-auto bg-white dark:bg-neutral-900  p-6 md:p-10"
               onWheel={(e) => e.stopPropagation()} // ✅ 這一行最關鍵
             >
               {/* 關閉按鈕 */}
@@ -249,7 +249,7 @@ export const Card = ({
       <motion.button
         layoutId={layout ? `card-${card.title}` : undefined}
         onClick={handleOpen}
-        className=" bg-gray-100 dark:bg-neutral-900 h-80 w-56 md:h-[30rem] rounded-[40px] md:w-96 overflow-hidden flex flex-col items-start justify-start relative z-10"
+        className=" bg-gray-100 dark:bg-neutral-900 h-80 w-56 md:h-[30rem]  md:w-96 overflow-hidden flex flex-col items-start justify-start relative z-10"
       >
         <div className="absolute h-full top-0 inset-x-0 bg-gradient-to-b from-black/50 via-transparent to-transparent z-30 pointer-events-none" />
         <div className="relative z-40 p-8">

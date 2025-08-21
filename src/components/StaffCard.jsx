@@ -8,7 +8,7 @@ export default function StaffCard({ imgSrc, title, name, description }) {
 
   return (
     <div
-      className="relative w-full max-w-[430px] h-[550px] overflow-hidden bg-[#f7f7f8] group"
+      className="relative w-full h-[550px] md:h-[700px]  xl:h-[1200px] overflow-hidden  bg-[#f7f7f8] group"
       onMouseEnter={() => setIsHover(true)}
       onMouseLeave={() => setIsHover(false)}
     >

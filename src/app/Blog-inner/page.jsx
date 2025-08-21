@@ -134,66 +134,26 @@ export default function About() {
   return (
     <ReactLenis root>
       <div className="bg-[#f8f8f8]">
-        <div className="relative w-full  h-[95vh] lg:h-[900px] overflow-hidden ">
-          <div className="hero-img-txt relative w-full h-full">
-            {/* 背景圖層 */}
-            <div
-              className="absolute inset-0 bg-cover bg-center"
-              style={{
-                backgroundImage:
-                  "url('https://static.wixstatic.com/media/b69ff1_30d89834222e4629bdd55b84b7ab2c8b~mv2.jpg/v1/fill/w_740,h_493,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/b69ff1_30d89834222e4629bdd55b84b7ab2c8b~mv2.jpg')",
-              }}
+        <section className="blog-inner-img">
+          <div className="relative h-[70vh] mx-auto w-[98%] overflow-hidden">
+            <div className="absolute left-[10%] top-1/2 -translate-y-1/2 z-40 w-[600px]">
+              <div className="flex flex-col">
+                <h1 className="text-white text-5xl font-normal">雲林虎尾</h1>
+                <p className="text-slate-50">Interior design</p>
+              </div>
+            </div>
+            <div className="absolute w-full h-full bg-black/20 top-0 left-0 z-30"></div>
+
+            <Image
+              src="/images/index/b69ff1_dfadbd53c3e2460c85392dc940a6c899~mv2.jpg.avif"
+              alt="hero-img"
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover"
             />
-
-            {/* ✅ 右側毛玻璃漸層遮罩 */}
-            <div className="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent backdrop-blur-2xl z-10" />
-
-            {/* 內容層 */}
-            <div className="relative z-30 flex md:flex-row flex-col w-full justify-center h-full">
-              <div className=" w-full md:w-1/2 flex items-center justify-center md:justify-end pr-10">
-                <img
-                  src="https://static.wixstatic.com/media/b69ff1_30d89834222e4629bdd55b84b7ab2c8b~mv2.jpg/v1/fill/w_740,h_493,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/b69ff1_30d89834222e4629bdd55b84b7ab2c8b~mv2.jpg"
-                  className=" w-[85%] md:w-full shadow-white shadow-sm max-w-[750px] rounded-xl"
-                  alt="hero-img "
-                />
-              </div>
-              <div className="w-full md:w-1/2 flex items-center justify-start pt-10 pl-10">
-                <div className="max-w-[500px] text-center">
-                  <div className="category_date  flex justify-between">
-                    <div className="date text-[14px] tetx-black">
-                      2025.09.11
-                    </div>
-                    <span className="bg-white px-4 py-1 rounded-[30px]">
-                      室內設計
-                    </span>
-                  </div>
-                  <h1 className="text-[4.5vmin]  text-left text-gray-200 font-bold">
-                    開放式空間設計好不好？一文搞懂優缺點與替代方案
-                  </h1>
-                  <p className="mt-2 text-sm text-left">
-                    不是所有家庭都適合打開隔間，真正的好設計應該因人而異
-                  </p>
-                </div>
-              </div>
-            </div>
           </div>
-
-          <div className="absolute h-[280px] bg-[#0b1110] z-20 left-0 top-0 w-full">
-            <div className="flex  w-full h-full relative">
-              <div className="w-1/2 flex flex-col justify-center items-center">
-                <div className="flex flex-col items-start">
-                  <h3 className="text-[26px] font-bold text-white">
-                    8 DISTANCE
-                  </h3>
-                  <p className="text-sm text-white">捌程室內設計</p>
-                </div>
-              </div>
-              <div className="w-1/2">
-                <h3 className="text-[26px] font-bold text-white"></h3>
-              </div>
-            </div>
-          </div>
-        </div>
+        </section>
 
         <section className=" py-5  flex flex-col lg:flex-row pt-8 mt-20  sm:pb-[80px]   max-w-[1920px] mx-auto w-full px-4 sn:px-0  sm:w-[95%] 2xl::w-[88%] ">
           <div className=" w-full lg:w-[15%]">

@@ -1,5 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+   theme: {
+    extend: {
+      fontFamily: {
+        ethnocentric: ["Ethnocentric", "sans-serif"],
+      },
+    },
+  },
   images: {
     remotePatterns: [
       {
