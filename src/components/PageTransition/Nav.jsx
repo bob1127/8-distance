@@ -43,7 +43,7 @@ export default function Nav() {
         <div className="nav-logo flex items-center justify-center w-[15%] min-w-[120px]">
           <Link href="/" aria-label="Go to home">
             <Image
-              src="/捌程室內設計.png.avif"
+              src="/images/捌程室內設計.png.avif"
               alt="company-logo"
               placeholder="empty"
               loading="lazy"
@@ -57,13 +57,22 @@ export default function Nav() {
         {/* 中：連結（桌機） */}
         <div className="nav-links hidden md:flex w-[65%] items-center justify-center gap-8 text-gray-800">
           <Link href="/" className="hover:opacity-70">
-            Index
+            最新動態
+          </Link>
+          <Link href="/" className="hover:opacity-70">
+            作品欣賞
+          </Link>
+          <Link href="/" className="hover:opacity-70">
+            服務流程
           </Link>
           <Link href="/note" className="hover:opacity-70">
             設計札記
           </Link>
-          <Link href="/contact" className="hover:opacity-70">
-            Contact
+          <Link href="/about" className="hover:opacity-70">
+            關於我們
+          </Link>
+          <Link href="/qa" className="hover:opacity-70">
+            QA
           </Link>
         </div>
 

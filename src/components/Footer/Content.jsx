@@ -384,30 +384,20 @@ const Nav = () => {
           <div className="grid grid-cols-2">
             <div className="flex py-8 flex-col">
               <div className="flex flex-col">
-                <b className="text-gray-400 text-[.8rem]">新案件賞</b>
-                <span className="text-[.8rem] text-white mt-1">新屋裝修</span>
-                <span className="text-[.8rem] text-white mt-1">老屋翻新</span>
-              </div>
-              <div className="flex mt-8 flex-col">
-                <b className="text-gray-400 text-[.8rem]">NEWS</b>
-                <span className="text-[.8rem] text-white mt-1">
-                  寬越設計案例
-                </span>
-                <span className="text-[.8rem] text-white mt-1">預售屋</span>
+                <b className="text-gray-400 text-[.8rem]">設計類型</b>
+                <span className="text-[.8rem] text-white mt-1">建築設計</span>
+                <span className="text-[.8rem] text-white mt-1">老屋改造</span>
+                <span className="text-[.8rem] text-white mt-1">住宅空間</span>
+                <span className="text-[.8rem] text-white mt-1">商業空間</span>
               </div>
             </div>
             <div className="flex pl-8 py-8 flex-col">
               <div className="flex flex-col">
-                <b className="text-gray-400 text-[.8rem]">新案件賞</b>
-                <span className="text-[.8rem] text-white mt-1">辦公空間</span>
-                <span className="text-[.8rem] text-white mt-1">商業空間</span>
-              </div>
-              <div className="flex mt-8 flex-col">
-                <b className="text-gray-400 text-[.8rem]">NEWS</b>
-                <span className="text-[.8rem] text-white mt-1">
-                  寬越設計案例
-                </span>
-                <span className="text-[.8rem] text-white mt-1">商務空間</span>
+                <b className="text-gray-400 text-[.8rem]">關於我們</b>
+                <span className="text-[.8rem] text-white mt-1">立即聯絡</span>
+                <span className="text-[.8rem] text-white mt-1">我們的團隊</span>
+                <span className="text-[.8rem] text-white mt-1">信箱：</span>
+                <span className="text-[.8rem] text-white mt-1">電話：</span>
               </div>
             </div>
           </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import Marquee from "react-fast-marquee";
 import { ReactLenis } from "@studio-freight/react-lenis";
 import { Carousel, Card } from "@/components/ui/apple-cards-carousel";
@@ -20,7 +21,8 @@ gsap.registerPlugin(CustomEase);
 const Photos = () => {
   const [showMoreContent, setShowMoreContent] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const galleryImages = [
     { src: "/images/project-01/img06.jpg", alt: "關於寬越設計的設計理念" },
     { src: "/images/project-01/img08.jpg", alt: "Blog-001 另一角度" },
@@ -203,14 +205,14 @@ const Photos = () => {
   ));
   return (
     <ReactLenis root>
-      <div className="!bg-[#F1F1F1]">
+      <div className="bg-[#F1F1F1]">
         {/* ====== Hero 區（原樣保留） ====== */}
         <section className="section-hero relative mt-[28vh] h-[70vh]">
-          <div className="white-section border rounded-tr-[60px] bg-[#F1F1F1] absolute top-[-90px] left-0 w-[88%] h-full z-10"></div>
+          <div className="white-section border rounded-tr-[60px] bg-[#F1F1F1] absolute top-[-90px] left-0 w-[88%] h-full "></div>
 
-          <section className="section-hero w-full aspect-[500/500] relative z-30 h-full md:aspect-[1024/576] xl:aspect-[1920/700] color-section">
+          <section className="section-hero w-full aspect-[500/500] relative  h-full md:aspect-[1024/576] xl:aspect-[1920/700] color-section">
             {/* 旋轉徽章 */}
-            <div className="absolute left-1/2 bottom-[-110px] z-50 w-[200px] h-[200px] flex items-center justify-center transform -translate-x-1/2">
+            <div className="absolute left-1/2 bottom-[-110px]  w-[200px] h-[200px] flex items-center justify-center transform -translate-x-1/2">
               <div className="absolute inset-0 animate-spin-slow flex items-center justify-center">
                 <svg className="w-full h-full" viewBox="0 0 200 200">
                   <defs>
@@ -227,7 +229,7 @@ const Photos = () => {
                   </text>
                 </svg>
               </div>
-              <div className="circle bg-[#F1F1F1] w-[100px] h-[100px] flex justify-center items-center text-[1.2rem] font-bold rounded-full z-10">
+              <div className="circle bg-[#F1F1F1] w-[100px] h-[100px] flex justify-center items-center text-[1.2rem] font-bold rounded-full ">
                 ORIGINAL
               </div>
             </div>
@@ -495,14 +497,16 @@ const Photos = () => {
         </section>
       </div>
 
-      {/* ====== 4) 真的把彈窗掛上去 ====== */}
-      {galleryOpen && (
-        <MiniMapGallery
-          images={galleryImages}
-          currentIndex={galleryStartIndex}
-          onClose={() => setGalleryOpen(false)}
-        />
-      )}
+      {mounted && galleryOpen
+        ? createPortal(
+            <MiniMapGallery
+              images={galleryImages}
+              currentIndex={galleryStartIndex}
+              onClose={() => setGalleryOpen(false)}
+            />,
+            document.body
+          )
+        : null}
     </ReactLenis>
   );
 };

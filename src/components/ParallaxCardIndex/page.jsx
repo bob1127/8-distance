@@ -42,14 +42,16 @@ const ParallaxCard = ({
       <div className={`${styles.cardContent} relative z-10 w-full`}>
         <div className="w-[100vw] mx-auto px-6">
           {/* Title + Description + 控制按鈕 */}
-          <div className="mb-8 text-center md:text-left relative">
-            <h2 className="text-3xl md:text-[53px] font-light text-black mb-2">
-              {title}
-            </h2>
-            <p className="text-gray-600 text-md tracking-widest mt-10 mb-4">
-              {description}
-            </p>
-
+          <div className="my-8 text-center md:text-left flex flex-row justify-between relative">
+            <div>
+              {" "}
+              <h2 className="text-3xl md:text-[53px] font-light text-black mb-2">
+                {title}
+              </h2>
+              <p className="text-gray-600 text-md tracking-widest mt-6 ml-2 mb-4">
+                {description}
+              </p>
+            </div>
             {/* 左右箭頭控制 */}
             <div className="flex justify-center md:justify-end gap-4 mt-4">
               <button
@@ -78,7 +80,6 @@ const ParallaxCard = ({
                 1024: { slidesPerView: 4.3 },
                 1440: { slidesPerView: 4.5 },
               }}
-              pagination={{ clickable: true }}
               autoplay={{ delay: 3500 }}
               modules={[Pagination, Autoplay, Navigation]}
               navigation={{

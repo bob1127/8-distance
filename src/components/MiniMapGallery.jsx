@@ -195,7 +195,7 @@ export default function MiniMapGallery({
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 bg-[#f1efe7] z-50 overflow-hidden"
+      className="!fixed inset-0 bg-[#f1efe7] z-[9999999999] overflow-hidden"
     >
       <button
         onClick={onClose}

@@ -24,10 +24,41 @@ import { Card, CardBody } from "@nextui-org/react";
 import { Pagination, A11y, Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { projects as projectsData } from "@/components/ParallaxCard/data";
-
+import AnimatedListFeed from "@/components/AnimatedListFeed";
 import "swiper/css";
 import "swiper/css/pagination";
 
+const notifications = [
+  {
+    name: "Payment received",
+    description:
+      "我們家有長輩和小孩，設計師特地為我們規劃了許多安全又貼心的設計，像是圓弧邊角、防滑地板等。整個過程中，服務態度始終如一，有任何問題都能迅速回應，真的很負責。",
+    time: "15m ago",
+    icon: "💸",
+    color: "#00C9A7",
+  },
+  {
+    name: "User signed up",
+    description: "Magic UI",
+    time: "10m ago",
+    icon: "👤",
+    color: "#FFB800",
+  },
+  {
+    name: "New message",
+    description: "Magic UI",
+    time: "5m ago",
+    icon: "💬",
+    color: "#FF3D71",
+  },
+  {
+    name: "New event",
+    description: "Magic UI",
+    time: "2m ago",
+    icon: "🗞️",
+    color: "#1E86FF",
+  },
+];
 gsap.registerPlugin(ScrollTrigger);
 
 function HomeClient({ specialPosts }) {
@@ -172,6 +203,59 @@ function HomeClient({ specialPosts }) {
       initGSAPAnimations();
     });
   };
+  useEffect(() => {
+    const items = gsap.utils.toArray(".news-item");
+
+    items.forEach((item) => {
+      const underline = item.querySelector(".news-underline");
+      const thumb =
+        item.querySelector(".news-thumb img") || // 支援 Next <Image />
+        item.querySelector(".news-thumb");
+      const title = item.querySelector(".news-title");
+      const sub = item.querySelector(".news-sub");
+
+      if (!underline) return;
+
+      // 初始
+      gsap.set(underline, { scaleX: 0, transformOrigin: "left center" });
+      if (thumb) gsap.set(thumb, { opacity: 0.3 });
+      if (title) gsap.set(title, { opacity: 0.3 });
+      if (sub) gsap.set(sub, { opacity: 0.3 });
+
+      const enter = () => {
+        gsap.to(underline, { scaleX: 1, duration: 1.5, ease: "power3.out" });
+        if (thumb)
+          gsap.to(thumb, { opacity: 1, duration: 0.5, ease: "power2.out" });
+        if (title)
+          gsap.to(title, { opacity: 1, duration: 0.5, ease: "power2.out" });
+        if (sub)
+          gsap.to(sub, { opacity: 1, duration: 0.5, ease: "power2.out" });
+      };
+
+      const leave = () => {
+        gsap.to(underline, { scaleX: 0, duration: 0.6, ease: "power3.in" });
+        if (thumb)
+          gsap.to(thumb, { opacity: 0.3, duration: 0.5, ease: "power2.in" });
+        if (title)
+          gsap.to(title, { opacity: 0.3, duration: 0.5, ease: "power2.in" });
+        if (sub)
+          gsap.to(sub, { opacity: 0.3, duration: 0.5, ease: "power2.in" });
+      };
+
+      ScrollTrigger.create({
+        trigger: item,
+        start: "top 40%",
+        end: "bottom 30%",
+        onEnter: enter,
+        onEnterBack: enter,
+        onLeave: leave,
+        onLeaveBack: leave,
+      });
+    });
+
+    ScrollTrigger.refresh();
+    return () => ScrollTrigger.getAll().forEach((st) => st.kill());
+  }, []);
 
   const staticSlides = [
     {
@@ -206,6 +290,41 @@ function HomeClient({ specialPosts }) {
   ];
 
   const projects = projectsData ?? [];
+  const slidesA = [
+    {
+      image: "/images/index/住宅空間-程宅.jpg",
+    },
+    {
+      image: "/images/index/住宅空間-程宅.jpg",
+    },
+  ];
+  const slidesB = [
+    {
+      image: "/images/index/商業空間-桃園招待所.jpg",
+    },
+    {
+      image: "/images/index/商業空間-桃園招待所.jpg",
+    },
+  ];
+
+  const slidesC = [
+    {
+      image: "/images/index/純設計案-和美.png",
+    },
+    {
+      image: "/images/index/純設計案-和美.png",
+    },
+  ];
+
+  const slidesD = [
+    {
+      image: "/images/index/老屋翻新-李宅.jpg",
+    },
+    {
+      image: "/images/index/老屋翻新-李宅.jpg",
+    },
+  ];
+  // 客戶好評區塊
 
   return (
     <ReactLenis root>
@@ -247,38 +366,80 @@ function HomeClient({ specialPosts }) {
                 <h2 className="font-normal text-[20px]">PORTFOLIO</h2>
               </div>
 
-              <section className="section-portfolio pb-20">
-                <div className="flex">
-                  <div className="w-[900px] border">
+              <section className="section-portfolio w-full pb-20">
+                <div className="grid relative grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4 w-full ">
+                  <div className=" border ">
                     <Link href="/KuankoshiProjectInner">
-                      <HoverItem />
+                      <HoverItem
+                        slides={slidesC}
+                        overlayTitle="建築設計 "
+                        overlaySubtitle="ARCHITECTURE"
+                        overlayDesc="專屬你的生活動線與材質表情。"
+                        showOverlay
+                        intervalMs={5000}
+                        overlayContainerClass="top-[45%] group-hover:top-[40%]" // ✅ 加回 hover 效果
+                        overlayTitleClass="text-[35px] text-center text-white m-0 font-extrabold  transition-all duration-300"
+                        overlaySubtitleClass="text-[18px] text-white text-center font-extrabold group-hover:opacity-80 transition-all duration-300"
+                        overlayDescClass="text-[14px] max-w-[420px] opacity-0 group-hover:opacity-100 transition duration-400 delay-75"
+                      />
                     </Link>
                   </div>
-                  <div className="w-[900px] border">
+                  <div className=" border ">
                     <Link href="/KuankoshiProjectInner">
-                      <HoverItem />
+                      <HoverItem
+                        slides={slidesD}
+                        overlayTitle="老屋改造 "
+                        overlaySubtitle="RENOVATION"
+                        overlayDesc="專屬你的生活動線與材質表情。"
+                        showOverlay
+                        intervalMs={5000}
+                        overlayContainerClass="top-[45%] group-hover:top-[40%]" // ✅ 加回 hover 效果
+                        overlayTitleClass="text-[35px] text-center text-white m-0 font-extrabold  transition-all duration-300"
+                        overlaySubtitleClass="text-[18px] text-white text-center font-extrabold group-hover:opacity-80 transition-all duration-300"
+                        overlayDescClass="text-[14px] max-w-[420px] opacity-0 group-hover:opacity-100 transition duration-400 delay-75"
+                      />
                     </Link>
                   </div>
-                </div>
-                <div className="flex">
-                  <div className="w-[900px] border">
+                  <div className=" border ">
                     <Link href="/KuankoshiProjectInner">
-                      <HoverItem />
+                      <HoverItem
+                        slides={slidesA}
+                        overlayTitle="住宅空間"
+                        overlaySubtitle="RESIDENTIAL"
+                        overlayDesc="專屬你的生活動線與材質表情。"
+                        showOverlay
+                        intervalMs={5000}
+                        overlayContainerClass="top-[45%] group-hover:top-[40%]" // ✅ 加回 hover 效果
+                        overlayTitleClass="text-[35px] text-center text-white m-0 font-extrabold  transition-all duration-300"
+                        overlaySubtitleClass="text-[18px] text-white text-center font-extrabold group-hover:opacity-80 transition-all duration-300"
+                        overlayDescClass="text-[14px] max-w-[420px] opacity-0 group-hover:opacity-100 transition duration-400 delay-75"
+                      />
                     </Link>
                   </div>
-                  <div className="w-[900px] border">
+                  <div className=" border ">
                     <Link href="/KuankoshiProjectInner">
-                      <HoverItem />
+                      <HoverItem
+                        slides={slidesB}
+                        overlayTitle="商業空間 "
+                        overlaySubtitle="COMMERCIAL"
+                        overlayDesc="專屬你的生活動線與材質表情。"
+                        showOverlay
+                        intervalMs={5000}
+                        overlayContainerClass="top-[45%] group-hover:top-[40%]" // ✅ 加回 hover 效果
+                        overlayTitleClass="text-[35px] text-center text-white m-0 font-extrabold  transition-all duration-300"
+                        overlaySubtitleClass="text-[18px] text-white text-center font-extrabold group-hover:opacity-80 transition-all duration-300"
+                        overlayDescClass="text-[14px] max-w-[420px] opacity-0 group-hover:opacity-100 transition duration-400 delay-75"
+                      />
                     </Link>
                   </div>
                 </div>
               </section>
-
               <section className="section_our_commit py-20 w-[80%] ">
                 <div className="title">
                   <h2>NEWS</h2>
                   <p>最新消息</p>
                 </div>
+
                 <div className="flex w-full mt-10">
                   <div className="left w-[30%] pr-5">
                     <div className="sticky top-20">
@@ -294,24 +455,26 @@ function HomeClient({ specialPosts }) {
                     {[1, 2, 3, 4].map((n) => (
                       <div
                         key={n}
-                        className="item w-full group hover:border-gray-600 transition duration-300 border-t-1 border-gray-200 py-10"
+                        className="news-item relative w-full py-10" // ⬅️ 移除 group / hover / border 類別
                       >
+                        {/* 頂部動畫線：scaleX 0→1 等同寬度 0→100% */}
+                        <div className="news-underline pointer-events-none absolute left-0 top-0 w-full !h-[1px] bg-gray-400 block origin-left scale-x-0" />
+
                         <div className="tag flex justify-between">
-                          <span className="text-gray-300 transition duration-300 group-hover:text-gray-800">
-                            (0{n})
-                          </span>
+                          <span className="text-gray-400">(0{n})</span>
                           <div>
-                            <span className="bg-[#cad1d6] group-hover:bg-[#389dea] group-hover:text-white transition duration-300 text-[13px] font-normal text-gray-400 px-4 py-1 rounded-[20px]">
+                            <span className="bg-[#cad1d6] text-[13px] font-normal text-gray-600 px-4 py-1 rounded-[20px]">
                               TAG
                             </span>
                           </div>
                         </div>
-                        <div className="content flex justify-between">
+
+                        <div className="flex justify-between">
                           <div className="flex flex-col">
-                            <h2 className="font-normal text-gray-300 group-hover:text-gray-900 transition duration-300">
+                            <h2 className="news-title font-normal text-gray-900">
                               紐約建築設計獎-2024
                             </h2>
-                            <span className="text-[14px] text-gray-300 group-hover:text-gray-900 transition duration-300">
+                            <span className="news-sub text-[14px] text-gray-800">
                               NY ARCHITECTURAL DESIGN AWARDS 紐約建築設計獎-2024
                               ​金獎
                             </span>
@@ -319,7 +482,7 @@ function HomeClient({ specialPosts }) {
                           <div className="img h-full mt-7 justify-center flex items-center">
                             <img
                               src="https://static.wixstatic.com/media/b69ff1_5832419ae5d64e72afacdadad35c78bd~mv2.jpg/v1/fill/w_787,h_444,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/%E5%B0%81%E9%9D%A2%20%E6%8B%B7%E8%B2%9D.jpg"
-                              className="max-w-[150px] opacity-35 group-hover:opacity-100 transition duration-300"
+                              className="news-thumb max-w-[150px]" // ⬅️ 不放任何 opacity 類別，由 GSAP 控制
                               alt=""
                             />
                           </div>
@@ -329,21 +492,27 @@ function HomeClient({ specialPosts }) {
                   </div>
                 </div>
               </section>
-              <section ref={container} className="section-portfolio relative">
-                {(projects || []).map((project, i) => {
-                  const targetScale = 1 - (projects.length - i) * 0.05;
-                  return (
-                    <ParallaxCard
-                      key={`card-${i}`}
-                      i={i}
-                      total={projects.length}
-                      progress={scrollYProgress}
-                      range={[i * 0.25, 1]}
-                      targetScale={targetScale}
-                      {...project}
-                    />
-                  );
-                })}
+
+              <section
+                ref={container}
+                className="section-portfolio w-full  relative"
+              >
+                <div className="">
+                  {(projects || []).map((project, i) => {
+                    const targetScale = 1 - (projects.length - i) * 0.05;
+                    return (
+                      <ParallaxCard
+                        key={`card-${i}`}
+                        i={i}
+                        total={projects.length}
+                        progress={scrollYProgress}
+                        range={[i * 0.25, 1]}
+                        targetScale={targetScale}
+                        {...project}
+                      />
+                    );
+                  })}
+                </div>
               </section>
               <section className="section-video !w-full">
                 <div className="w-full ">
@@ -388,6 +557,12 @@ function HomeClient({ specialPosts }) {
                         ))}
                       </div>
                     </div>
+                  </div>
+                  <div className="p-6">
+                    <AnimatedListFeed
+                      items={notifications}
+                      heightClassName="h-[420px]"
+                    />
                   </div>
 
                   <div className="right w-[60%] flex justify-center items-center">

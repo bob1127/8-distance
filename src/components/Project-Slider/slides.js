@@ -1,35 +1,35 @@
 const slides = [
   {
-    slideTitle: "Monochrome Signal",
+    slideTitle: "住宅設計",
     slideDescription:
       "A stripped-back visual experience blending luxury fashion with streetwear edge. Designed for bold statements and minimal distractions.",
-    slideUrl: "/images/hadashinoie016-2048x1365.jpg.webp",
-    slideTags: ["Monochrome", "Editorial", "Fashion", "Visual Identity"],
-    slideImg: "https://fdms.co.jp/wp-content/uploads/2024/08/3472588585599978761.jpg",
+    slideUrl: "/images/project-01/project05.jpg",
+    slideTags: ["室內純設計案", "住宅設計"],
+    slideImg: "/images/index/純設計案-和美.png",
   },
   {
-    slideTitle: "Mecha Muse",
+    slideTitle: "純設計案",
     slideDescription:
       "An experimental microsite blurring the line between human and machine. Cinematic visuals and deep red hues evoke a futuristic mythos.",
     slideUrl: "/projects/mecha-muse",
-    slideTags: ["Cyberpunk", "Experimental", "3D Layers", "Concept Design"],
-    slideImg: "https://fdms.co.jp/wp-content/uploads/2024/08/1500_G6A8766.jpg",
+    slideTags: ["室內純設計案", "住宅設計", "高雄"],
+    slideImg: "/images/index/老屋翻新-李宅.jpg",
   },
   {
-    slideTitle: "Neon Bloom",
+    slideTitle: "老屋翻新",
     slideDescription:
       "A surreal fusion of light, shadow, and sound. This project celebrates contrast and silhouette in a dreamlike digital space.",
     slideUrl: "/projects/neon-bloom",
-    slideTags: ["Surreal", "Lightplay", "Immersive", "Visual Narrative"],
-    slideImg: "https://fdms.co.jp/wp-content/uploads/2022/07/ce_ngr1_20-1920x1280.jpg",
+    slideTags: ["室內設計作品", "住宅設計", "員林"],
+    slideImg: "/images/index/住宅空間-程宅.jpg",
   },
   {
-    slideTitle: "Chromawave",
+    slideTitle: "雲河汽旅招待所",
     slideDescription:
       "A glossy, synth-infused interface for creators at the edge of music and fashion. Perfect for launch drops or digital showrooms.",
     slideUrl: "/projects/chromawave",
-    slideTags: ["Futuristic", "Glassmorphism", "Music", "Creative Tech"],
-    slideImg: "https://fdms.co.jp/wp-content/uploads/2024/12/3200_negura_lite070.jpg",
+    slideTags: ["室內商空作品", "旅宿/招待所"],
+    slideImg: "/images/index/商業空間-桃園招待所.jpg",
   },
 ];
 

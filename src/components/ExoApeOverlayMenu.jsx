@@ -3,11 +3,6 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 
-/**
- * ExoApe-Inspired Overlay Menu (React + GSAP) - Tailwind + children 版
- * - 手機：顯示漢堡 & Overlay（md:hidden）
- * - 桌機：不顯示漢堡與 Overlay，但 children 一律渲染（不會空白）
- */
 export default function ExoApeOverlayMenu({ children }) {
   const rootRef = useRef(null);
 
@@ -29,7 +24,50 @@ export default function ExoApeOverlayMenu({ children }) {
     const lineMid = $(".menu-toggle .line.middle");
     const lineBot = $(".menu-toggle .line.bottom");
 
-    // 初始預覽圖
+    // 只在「開啟菜單」時加上這些 class（行為維持原本）
+    const ACTIVE_CLASSES = [
+      "relative",
+      "w-screen",
+      "z-10",
+      "!bg-transparent",
+      "origin-top-right",
+    ];
+    const addActiveClasses = () => {
+      if (container) container.classList.add(...ACTIVE_CLASSES);
+    };
+    const removeActiveClasses = () => {
+      if (container) container.classList.remove(...ACTIVE_CLASSES);
+    };
+
+    // 手機才需要撐滿高度；桌機直接跳過
+    const setContainerMinHeight = () => {
+      if (!container) return;
+      if (window.matchMedia("(min-width: 768px)").matches) {
+        container.style.minHeight = ""; // 桌機移除任何 min-height
+        return;
+      }
+      const de = document.documentElement;
+      const body = document.body;
+      const docH = Math.max(
+        de.scrollHeight,
+        de.offsetHeight,
+        de.clientHeight,
+        body?.scrollHeight || 0,
+        body?.offsetHeight || 0
+      );
+      container.style.minHeight = `${docH}px`;
+    };
+
+    // 初次設定 + 監聽
+    setContainerMinHeight();
+    const onResize = () => setContainerMinHeight();
+    window.addEventListener("resize", onResize);
+    window.addEventListener("load", onResize);
+    document.fonts?.ready?.then(onResize);
+    const mo = new MutationObserver(() => setContainerMinHeight());
+    mo.observe(document.documentElement, { childList: true, subtree: true });
+
+    // 預覽圖
     const resetPreviewImage = () => {
       if (!menuPreviewImg) return;
       menuPreviewImg.innerHTML = "";
@@ -53,7 +91,6 @@ export default function ExoApeOverlayMenu({ children }) {
     let isOpen = false;
     let isAnimating = false;
 
-    // 漢堡動畫
     const animateHamburger = (opening) => {
       if (!lineTop || !lineMid || !lineBot) return;
       if (opening) {
@@ -91,26 +128,37 @@ export default function ExoApeOverlayMenu({ children }) {
       if (isAnimating || isOpen) return;
       isAnimating = true;
 
-      gsap.to(container, {
-        rotation: 10,
-        x: 300,
-        y: 450,
-        scale: 1.5,
-        duration: 1.25,
-        ease: "power4.inOut",
-      });
+      // 僅手機會有 container（桌機 md:hidden 沒有容器也沒關係）
+      if (menuOverlay) menuOverlay.style.pointerEvents = "auto";
+      addActiveClasses();
+      setContainerMinHeight();
+
+      if (container) {
+        gsap.to(container, {
+          rotation: 10,
+          x: 300,
+          y: 450,
+          scale: 1.5,
+          duration: 1.25,
+          ease: "power4.inOut",
+          transformOrigin: "right top",
+          onUpdate: setContainerMinHeight,
+        });
+      }
 
       animateHamburger(true);
 
-      gsap.to(menuContent, {
-        rotation: 0,
-        x: 0,
-        y: 0,
-        scale: 1,
-        opacity: 1,
-        duration: 1.25,
-        ease: "power4.inOut",
-      });
+      if (menuContent) {
+        gsap.to(menuContent, {
+          rotation: 0,
+          x: 0,
+          y: 0,
+          scale: 1,
+          opacity: 1,
+          duration: 1.25,
+          ease: "power4.inOut",
+        });
+      }
 
       gsap.to(
         [
@@ -127,71 +175,88 @@ export default function ExoApeOverlayMenu({ children }) {
         }
       );
 
-      gsap.to(menuOverlay, {
-        clipPath: "polygon(0% 0%, 100% 0%, 100% 175%, 0% 100%)",
-        duration: 1.25,
-        ease: "power4.inOut",
-        onComplete: () => {
-          isOpen = true;
-          isAnimating = false;
-          menuToggle?.setAttribute("aria-expanded", "true");
-        },
-      });
+      if (menuOverlay) {
+        gsap.to(menuOverlay, {
+          clipPath: "polygon(0% 0%, 100% 0%, 100% 175%, 0% 100%)",
+          duration: 1.25,
+          ease: "power4.inOut",
+          onComplete: () => {
+            isOpen = true;
+            isAnimating = false;
+            menuToggle?.setAttribute("aria-expanded", "true");
+            document.documentElement.style.overflow = "hidden";
+            setContainerMinHeight();
+          },
+        });
+      }
     };
 
     const closeMenu = () => {
       if (isAnimating || !isOpen) return;
       isAnimating = true;
 
-      gsap.to(container, {
-        rotation: 0,
-        x: 0,
-        y: 0,
-        scale: 1,
-        duration: 1.25,
-        ease: "power4.inOut",
-      });
+      if (container) {
+        gsap.to(container, {
+          rotation: 0,
+          x: 0,
+          y: 0,
+          scale: 1,
+          duration: 1.25,
+          ease: "power4.inOut",
+          transformOrigin: "right top",
+          onUpdate: setContainerMinHeight,
+          onComplete: setContainerMinHeight,
+        });
+      }
 
       animateHamburger(false);
 
-      gsap.to(menuContent, {
-        rotation: -15,
-        x: -100,
-        y: -100,
-        scale: 1.5,
-        opacity: 0.25,
-        duration: 1.25,
-        ease: "power4.inOut",
-      });
+      if (menuContent) {
+        gsap.to(menuContent, {
+          rotation: -15,
+          x: -100,
+          y: -100,
+          scale: 1.5,
+          opacity: 0.25,
+          duration: 1.25,
+          ease: "power4.inOut",
+        });
+      }
 
-      gsap.to(menuOverlay, {
-        clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
-        duration: 1.25,
-        ease: "power4.inOut",
-        onComplete: () => {
-          isOpen = false;
-          isAnimating = false;
-          menuToggle?.setAttribute("aria-expanded", "false");
-          gsap.set(
-            [
-              ...root.querySelectorAll(".link a"),
-              ...root.querySelectorAll(".social a"),
-            ],
-            { y: "120%", opacity: 0.25 }
-          );
-          resetPreviewImage();
-        },
-      });
+      if (menuOverlay) {
+        gsap.to(menuOverlay, {
+          clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
+          duration: 1.25,
+          ease: "power4.inOut",
+          onComplete: () => {
+            isOpen = false;
+            isAnimating = false;
+            menuToggle?.setAttribute("aria-expanded", "false");
+            gsap.set(
+              [
+                ...root.querySelectorAll(".link a"),
+                ...root.querySelectorAll(".social a"),
+              ],
+              { y: "120%", opacity: 0.25 }
+            );
+            resetPreviewImage();
+            document.documentElement.style.overflow = "";
+
+            menuOverlay.style.pointerEvents = "none";
+            removeActiveClasses();
+            setContainerMinHeight();
+          },
+        });
+      }
     };
 
     const handleToggle = () => (isOpen ? closeMenu() : openMenu());
 
-    // 預覽圖 hover
     const handleHover = (e) => {
       if (!isOpen || isAnimating) return;
       const link = e.currentTarget;
       const imgSrc = link.getAttribute("data-img");
-      if (!imgSrc) return;
+      if (!imgSrc || !menuPreviewImg) return;
 
       const imgs = menuPreviewImg.querySelectorAll("img");
       if (imgs.length > 0 && imgs[imgs.length - 1].src.endsWith(imgSrc)) return;
@@ -211,17 +276,16 @@ export default function ExoApeOverlayMenu({ children }) {
         rotation: 0,
         duration: 0.75,
         ease: "power2.out",
+        onComplete: setContainerMinHeight,
       });
     };
 
-    // 連結點擊自動關閉
     const handleLinkClick = (e) => {
       const href = e.currentTarget.getAttribute("href") || "#";
       if (href.startsWith("#") || href === "#") e.preventDefault();
       closeMenu();
     };
 
-    // 綁事件
     menuToggle?.addEventListener("click", handleToggle);
     menuLinks.forEach((a) => {
       a.addEventListener("mouseover", handleHover);
@@ -229,9 +293,10 @@ export default function ExoApeOverlayMenu({ children }) {
     });
 
     // 初始
+    if (menuOverlay) menuOverlay.style.pointerEvents = "none";
+    removeActiveClasses();
     resetPreviewImage();
 
-    // ESC 關閉
     const onKey = (e) => e.key === "Escape" && closeMenu();
     window.addEventListener("keydown", onKey);
 
@@ -242,22 +307,29 @@ export default function ExoApeOverlayMenu({ children }) {
         a.removeEventListener("click", handleLinkClick);
       });
       window.removeEventListener("keydown", onKey);
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("load", onResize);
+      mo.disconnect();
+
+      document.documentElement.style.overflow = "";
+      if (menuOverlay) menuOverlay.style.pointerEvents = "none";
+      removeActiveClasses();
     };
   }, []);
 
   return (
     <div ref={rootRef} className="exoape-menu-root">
       {/* 手機頂欄（桌機隱藏） */}
-      <nav className="md:hidden fixed top-0 inset-x-0 z-30 flex items-center justify-between px-5 py-4 bg-black/60 backdrop-blur border-b border-white/10">
+      <nav className="md:hidden fixed top-0 inset-x-0 z-[60] flex items-center justify-between px-5 py-4 bg-black/60 backdrop-blur border-b border-white/10">
         <div className="font-semibold text-white">
-          <a href="#" aria-label="Brand">
-            Void Construct
+          <a href="/" aria-label="Brand">
+            8-DISTANCE
           </a>
         </div>
 
         {/* 三條線漢堡按鈕 */}
         <button
-          className="menu-toggle relative w-11 h-11 inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/5"
+          className="menu-toggle z-50 relative w-11 h-11 inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/5"
           type="button"
           aria-label="Toggle menu"
           aria-expanded="false"
@@ -272,7 +344,7 @@ export default function ExoApeOverlayMenu({ children }) {
       {/* 手機 Overlay（桌機隱藏） */}
       <div
         id="exoape-menu-overlay"
-        className="menu-overlay md:hidden fixed inset-0 bg-[#0f0f0f] z-20"
+        className="menu-overlay md:hidden fixed inset-0 bg-[#0f0f0f] z-[50]"
         style={{ clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)" }}
         role="dialog"
         aria-modal="true"
@@ -284,13 +356,7 @@ export default function ExoApeOverlayMenu({ children }) {
               "translateX(-100px) translateY(-100px) scale(1.5) rotate(-15deg)",
           }}
         >
-          {/* 內容區 */}
           <div className="menu-items w-full flex flex-wrap gap-5 px-5 py-8 text-white">
-            {/* 預覽圖 */}
-            <div className="col-lg order-2 basis-full flex items-center justify-center">
-              <div className="menu-preview-img relative w-4/5 max-w-[360px] h-[38vh] overflow-hidden rounded-xl" />
-            </div>
-
             {/* 連結區 */}
             <div className="col-sm order-1 basis-full flex flex-col gap-8">
               <div className="menu-links flex flex-col gap-2">
@@ -371,12 +437,10 @@ export default function ExoApeOverlayMenu({ children }) {
         </div>
       </div>
 
-      {/* ✅ 這裡包住「當前頁面所有內容」（手機/桌機都渲染） */}
-      <div className="exo-container relative w-screen z-10 !bg-transparent h-full origin-top-right">
-        {children}
-      </div>
+      {/* 只有手機才有效果的 exo-container；桌機上不影響排版（display:contents） */}
+      <div className="exo-container md:contents">{children}</div>
 
-      {/* Scoped CSS（保留你原本的部分，移除會導致桌機隱藏的規則） */}
+      {/* 保留你原本的樣式，外加「桌機重置」段，確保只有手機受影響 */}
       <style jsx>{`
         :global(html, body, #__next) {
           height: 100%;
@@ -440,7 +504,7 @@ export default function ExoApeOverlayMenu({ children }) {
           width: 100vw;
           height: 100svh;
           background-color: #0f0f0f;
-          z-index: 20;
+          z-index: 50;
           clip-path: polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%);
         }
         .menu-content {
@@ -465,6 +529,7 @@ export default function ExoApeOverlayMenu({ children }) {
           gap: 1.25rem;
           flex-wrap: wrap;
         }
+
         .menu-preview-img {
           position: relative;
           width: 80%;
@@ -536,19 +601,23 @@ export default function ExoApeOverlayMenu({ children }) {
           transform-origin: left;
         }
 
+        /* 手機：保留原本絕對定位與 transform-origin，以符合你的動效 */
         .exo-container {
           position: absolute;
           width: 100%;
-          height: 100%;
           will-change: transform;
           transform-origin: right top;
         }
 
-        /* 初始動畫狀態（連結/社群） */
-        .link a,
-        .social a {
-          transform: translateY(120%);
-          opacity: 0.25;
+        /* 桌機（≥768px）：把 exo-container 變成不影響排版（display:contents），並重置所有會干擾高度的屬性 */
+        @media (min-width: 768px) {
+          .exo-container {
+            position: static !important;
+            width: auto !important;
+            min-height: 0 !important;
+            transform: none !important;
+            will-change: auto !important;
+          }
         }
       `}</style>
     </div>

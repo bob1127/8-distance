@@ -4,10 +4,12 @@ export const revalidate = 60;
 import GsapText from "../../components/RevealText/index";
 import Image from "next/image";
 import Script from "next/script";
+import VerticalExpandGallery from "@/components/VerticalExpandGallery";
+
 import Video from "../../components/Video"; // 你既有的元件（多半是 client，但可在 server page 中使用）
 import TimelineM062u03Client from "../../components/timeline"; // 新增的客戶端時間軸元件（見下一檔）
 import AboutGalleryClient from "../../components/AboutGalleryClient";
-
+import { ReactLenis } from "@studio-freight/react-lenis";
 // 依 API 常見欄位做映射，避免後端欄位命名異動造成頁面壞掉
 function mapHistory(h) {
   const title =
@@ -82,6 +84,14 @@ export default async function AboutPage() {
     "/images/a26ae4a7-fba6-4e16-b07f-1839b0add281.png",
   ];
 
+  const imgs = [
+    { src: "/images/staff/捌程室內設計張佩甄.jpg.avif", alt: "封面 1" },
+    { src: "/images/staff/捌程室內設計胡萬福.jpeg.avif", alt: "封面 1" },
+    { src: "/images/staff/蕭廷羽.jpg.avif", alt: "封面 1" },
+    { src: "/images/staff/志芸.jpg.avif", alt: "封面 1" },
+    { src: "/images/staff/李尉菁.jpg.avif", alt: "封面 1" },
+    { src: "/images/staff/蘇蘇.jpg.avif", alt: "封面 1" },
+  ];
   return (
     <main className="min-h-screen bg-[#f5f6f6] dark:bg-neutral-950">
       {/* JSON-LD：加強 SEO */}
@@ -111,32 +121,7 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      <section className="relative ">
-        <div className="bg-white mx-auto   max-w-[1400px] pt-10 w-[90%] lg:w-[78%] flex md:flex-row flex-col justify-center items-center">
-          <div className="title w-full md:w-1/2 px-4 md:px-[9%] xl:px-[15%] h-full flex flex-col justify-between">
-            <b className="text-bold tracking-widest text-[1.4rem]">
-              打造理想居所
-            </b>
-            <div>
-              <b className="text-[.9rem] tracking-widest leading-loose font-normal">
-                對於新婚小家庭或小資族，我們以聰明布局與細緻機能，讓有限空間也能兼顧舒適與收納。從溫馨客廳到未來育兒彈性規劃，寬越以專業設計，陪伴你們築起幸福起點。
-              </b>
-            </div>
-          </div>
-          <div className=" w-full md:w-1/2 p-4 flex  justify-center items-center">
-            <Image
-              src="/images/03-ADDＢ.webp"
-              alt=""
-              placeholder="empty"
-              loading="lazy"
-              width={800}
-              height={800}
-              className="w-full"
-            ></Image>
-          </div>
-        </div>
-      </section>
-      <section className="company-intro max-w-[1920px] mx-auto w-[88%] flex flex-row">
+      {/* <section className="company-intro max-w-[1920px] mx-auto w-[88%] flex flex-row">
         <div className="left w-1/2 p-8">
           <div className="info bg-white p-4">
             <div className="top flex ">
@@ -186,48 +171,155 @@ export default async function AboutPage() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* ✅ SEO 重要區塊：時間軸（伺服端已把資料塞進 HTML，第一次就有內容） */}
       <section className="py-6">
+        <div className="title my-10 flex flex-col justify-center items-center">
+          <h2 className="text-neutral-900 mb-0 pb-0">DESIGN.TEAM</h2>
+          <p className="text-neutral-900">我們的設計團隊</p>
+        </div>
         <TimelineM062u03Client items={items} />
       </section>
 
       {/* Members 區（保留簡化版，避免在 Server Page 使用 hooks） */}
-      <section className="section-staff">
+      {/* <section className="section-staff">
         <div className="title pb-10 max-w-[1300px] mx-auto px-4">
           <h1 className="text-[28px] mt-0 text-black dark:text-white font-normal ">
             <p className="text-[14px] font-bold text-[#126844]">Members</p>
             捌程室內設計
           </h1>
         </div>
-        <div className="w-full mx-auto grid grid-cols-1 gap-4 pb-20 px-4">
+        <div className="w-full mx-auto grid grid-cols-1  pb-20 px-4">
           <div className="flex flex-col md:flex-row">
             <div className="md:w-1/2 w-full flex justify-center items-center mb-6 md:mb-0">
               <div className="txt flex flex-col items-center md:items-start">
-                <p className="border text-center rounded-[15px] px-4 py-1 font-bold max-w-[120px]">
-                  設計總監
+                <p className="border text-center rounded-[15px] px-4 py-1 font-bold max-w-[200px]">
+                  捌程室內設計
                 </p>
-                <h3 className="mt-3 text-2xl md:text-3xl font-semibold">
-                  JEN 張褞矇
-                </h3>
+                <GsapText
+                  text="胡萬福"
+                  id="gsap-intro"
+                  fontSize="1.3rem"
+                  fontWeight="800"
+                  color="#000"
+                  className="text-left  tracking-widest inline-block mb-0 h-auto"
+                />
+
+                <h3 className="mt-3 text-2xl md:text-3xl font-semibold"></h3>
               </div>
             </div>
+            <div className="md:w-1/2 w-full">
+              <Image
+                src="/images/staff/捌程室內設計胡萬福.jpeg.avif"
+                width={1200}
+                height={1800}
+                className="w-full h-auto "
+                alt="staff"
+                priority={false}
+              />
+            </div>
+          </div>
+          <div className="flex flex-col md:flex-row">
             <div className="md:w-1/2 w-full">
               <Image
                 src="https://static.wixstatic.com/media/b69ff1_b341c8c3f39e420abf4a4f626868096e~mv2.jpg/v1/crop/x_0,y_0,w_4000,h_5143/fill/w_289,h_372,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/捌程室內設計張佩甄.jpg"
                 width={1200}
                 height={1800}
-                className="w-full h-auto rounded-lg"
+                className="w-full h-auto "
+                alt="staff"
+                priority={false}
+              />
+            </div>
+            <div className="md:w-1/2 w-full flex justify-center items-center mb-6 md:mb-0">
+              <div className="txt flex flex-col items-center md:items-start">
+                <p className="border text-center rounded-[15px] px-4 py-1 font-bold max-w-[200px]">
+                  設計總監
+                </p>
+                <GsapText
+                  text="JEN 張褞矇"
+                  id="gsap-intro"
+                  fontSize="1.3rem"
+                  fontWeight="800"
+                  color="#000"
+                  className="text-left  tracking-widest inline-block mb-0 h-auto"
+                />
+
+                <h3 className="mt-3 text-2xl md:text-3xl font-semibold"></h3>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col md:flex-row">
+            <div className="md:w-1/2 w-full flex justify-center items-center mb-6 md:mb-0">
+              <div className="txt flex flex-col items-center md:items-start">
+                <p className="border text-center rounded-[15px] px-4 py-1 font-bold max-w-[200px]">
+                  設計
+                </p>
+                <GsapText
+                  text="蕭廷羽"
+                  id="gsap-intro"
+                  fontSize="1.3rem"
+                  fontWeight="800"
+                  color="#000"
+                  className="text-left  tracking-widest inline-block mb-0 h-auto"
+                />
+
+                <h3 className="mt-3 text-2xl md:text-3xl font-semibold"></h3>
+              </div>
+            </div>
+            <div className="md:w-1/2 w-full">
+              <Image
+                src="/images/staff/蕭廷羽.jpg.avif"
+                width={1200}
+                height={1800}
+                className="w-full h-auto "
                 alt="staff"
                 priority={false}
               />
             </div>
           </div>
         </div>
-      </section>
-      <section className="w-full pt-20 bg-custom-gradient section-content">
-        <section className="mx-auto  max-w-[1920px]">
+      </section> */}
+      <section className="w-full bg-custom-gradient section-content">
+        <main className="min-h-screen max-w-[1920px] w-full flex-col pt-20 border bg-neutral-900 text-white flex items-center justify-center">
+          <div className="title mb-10 flex flex-col justify-center items-center">
+            <h2 className="text-white mb-0 pb-0">DESIGN.TEAM</h2>
+            <p className="text-gray-200">我們的設計團隊</p>
+          </div>
+          <VerticalExpandGallery
+            images={imgs}
+            captions={[
+              "​Jen 張褞矇",
+              "Hu 胡褰霡",
+              "​Artin 蕭廷羽",
+              "Claire 徐志芸",
+              "Weijing ​李尉菁",
+              "​SUSU 蘇姷霖",
+            ]}
+            height={820}
+            ratioW={13}
+            indicatorSafePadding={45}
+            ratioH={22}
+            collapsedSize={230} // 基準值
+            expandedSize={750} // 基準值
+            gap={10}
+            maxWidth={2500}
+            decorEnabled
+            decorColor="#ff4036"
+            decorTopLeft={[
+              { kicker: "Interior Design Director", label: "室內設計總監" },
+              { kicker: "CEO", label: "工程部門執行長" },
+              { kicker: "Interior Designer", label: "室內設計師" },
+              { kicker: "Interior Designer", label: "室內設計師" },
+              { kicker: "Interior Designer", label: "室內設計師" },
+              { kicker: "Interior Designer", label: "室內設計師" },
+            ]}
+            bottomBarWidth={0.66}
+            bottomBarHeight={22}
+            decorTextColor="#fff"
+          />
+        </main>
+        <section className="mx-auto  max-w-[1920px] pt-20">
           <div className="flex w-[80%] flex-col md:flex-row h-full justify-center items-center mx-auto">
             <div className=" w-full md:w-1/2  pr-5 ">
               <GsapText
@@ -247,7 +339,7 @@ export default async function AboutPage() {
             <div className=" w-full md:w-1/2 flex mt-8 lg:mt-0  justify-center lg:justify-end items-center">
               <div className="max-w-[580px] ">
                 <Image
-                  src="/images/taiwan.webp"
+                  src="/images/index/老屋翻新-李宅.jpg"
                   placeholder="empty"
                   loading="lazy"
                   alt=""
