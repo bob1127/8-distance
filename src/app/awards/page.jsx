@@ -82,7 +82,7 @@ export default function Home() {
       {/* <ThreeJs /> */}
       <section className="section-hero py-20">
         <Image
-          src="https://images.ctfassets.net/5md7dhlbngv9/9egAf1S897FxEXPOmTQzC/657118af41975f2070a235bf7efd86d0/journal-logo.svg?"
+          src="/images/awards-logo.png"
           alt="award-icon"
           placeholder="empty"
           loading="lazy"
@@ -91,22 +91,21 @@ export default function Home() {
           className="max-w-[350px] mx-auto"
         ></Image>
         <div className="description flex flex-col max-w-[600px] mx-auto">
-          <h1 className="text-rose-500 text-[20px] text-center">
-            .g Good Design Journa
-          </h1>
           <p className="tracking-wider leading-relaxed text-center">
-            是傳播GOOD DESIGN AWARD相關資訊，探索設計的新可能性的媒體。
-            為了讓所有人都能獲得接觸設計的機會，
-            以廣闊的視野和靈活的視角思考、傳播「什麼是GOOD DESIGN」。
+            法國設計獎
+          </p>
+          <h1 className="text-rose-500 text-[20px] text-center">Gold.Winner</h1>
+          <p className="tracking-wider leading-relaxed text-center">
+            榮獲國際大獎的肯定
           </p>
         </div>
         <Marquee>
           <div>
             <div className="text-[70px] flex justify-center items-center font-bold ">
               {" "}
-              IS GREAT INTERIOR{" "}
+              榮獲國際大獎的肯定{" "}
               <Image
-                src="https://images.ctfassets.net/5md7dhlbngv9/9egAf1S897FxEXPOmTQzC/657118af41975f2070a235bf7efd86d0/journal-logo.svg?"
+                src="/images/awards-logo.png"
                 alt="award-icon"
                 placeholder="empty"
                 loading="lazy"
@@ -114,9 +113,9 @@ export default function Home() {
                 height={700}
                 className="max-w-[80px] mx-8"
               ></Image>{" "}
-              DESIGN . 8 DISTANCE{" "}
+              法國設計獎{" "}
               <Image
-                src="matsue00.jpg"
+                src="/images/awards-logo.png"
                 alt="award-icon"
                 placeholder="empty"
                 loading="lazy"
@@ -124,7 +123,7 @@ export default function Home() {
                 height={700}
                 className="max-w-[80px] mx-8"
               ></Image>{" "}
-              INTERIOR DESIGN
+              Gold.Winner
             </div>
           </div>
         </Marquee>
@@ -150,7 +149,7 @@ export default function Home() {
           <div className="w-1/2 items-center flex justify-center">
             <div className=" w-full ">
               <Image
-                src="https://journal.g-mark.org/posts/report_029/report_000.jpg"
+                src="/images/捌程-2024法國設計獎電子證書-員林胡宅.png"
                 placeholder="empty"
                 loading="lazy"
                 className="w-[90%]"
@@ -163,26 +162,15 @@ export default function Home() {
           <div className=" w-full lg:w-1/2">
             <div className="description max-w-[600px] p-10">
               <TextGenerateEffect
-                words="獲得第三大獎的肯定
+                words="榮獲國際大獎的肯定
 
 "
               />
 
               <br></br>
               <p className="text-[.9rem] tracking-widest">
-                宜園建設堅信，家不僅是住所，更是安身立命的港灣。我們致力於打造宜居空間，
-                透過嚴謹的施工品質與細膩的設計，讓每一位住戶都能在這裡找到安心與幸福。
-              </p>
-              <p className="text-[.9rem] tracking-widest">
-                <br></br>
-                <br></br>
-                社區所擁有的個性是一件藝術作品，為人們的生活注入新的脈動，創造出特別的瞬間。
-              </p>
-              <br></br>
-              <br></br>
-              <p className="text-[.9rem] tracking-widest">
-                象徵著自然與人文的共融，我們將綠建築理念融入每一個案場，創造富含綠意、
-                舒適宜人的生活環境，讓建築不僅是一座空間，而是一處與自然共存的理想家園。
+                能夠榮獲國際大獎的肯定，對我們而言意義非凡。這份榮耀凝聚了團隊成員們的心血與智慧，是大家攜手努力的成果。這份肯定更是驅動我們不斷向前的動力，期許未來能持續精進設計，為大家帶來更多卓越的作品！
+                特別感謝我們的業主，您們的信任與支持是我們最大的力量。每一次的交流與啟發，都成為我們克服挑戰、實現創意的寶貴泉源。謝謝您們與我們一同成就這份殊榮。
               </p>
             </div>
           </div>

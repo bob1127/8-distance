@@ -56,16 +56,16 @@ export default function Nav() {
 
         {/* 中：連結（桌機） */}
         <div className="nav-links hidden md:flex w-[65%] items-center justify-center gap-8 text-gray-800">
-          <Link href="/" className="hover:opacity-70">
+          <Link href="/awards" className="hover:opacity-70">
             最新動態
           </Link>
-          <Link href="/" className="hover:opacity-70">
+          <Link href="/note" className="hover:opacity-70">
             作品欣賞
           </Link>
-          <Link href="/" className="hover:opacity-70">
+          <Link href="/service" className="hover:opacity-70">
             服務流程
           </Link>
-          <Link href="/note" className="hover:opacity-70">
+          <Link href="/blog" className="hover:opacity-70">
             設計札記
           </Link>
           <Link href="/about" className="hover:opacity-70">

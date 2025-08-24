@@ -3,7 +3,7 @@ import Image from "next/image";
 import styles from "./style.module.scss";
 import { useTransform, motion, useScroll } from "framer-motion";
 import { useRef } from "react";
-import AnimatedLink from "../../components/AnimatedLink";
+import Link from "next/link";
 
 const Card = ({
   i,
@@ -11,6 +11,7 @@ const Card = ({
   description,
   src,
   url,
+  href,
   backgroundImage,
   progress,
   range,
@@ -39,13 +40,21 @@ const Card = ({
   // 最後才決定是否要用固定值
   const scale = isLast ? 1 : scaleMotion;
 
-  const overlayOpacity = useTransform(scrollYProgress, [0, 1], [0.1, 0.7], {
+  const overlayOpacity = useTransform(scrollYProgress, [0, 1], [0.9, 0.2], {
     transition: { duration: 3, ease: "easeInOut" },
   });
+  // ✅ 若 data.js 沒給 url，就退回原本的 /ServiceProcess
+  const safeHref =
+    typeof href === "string" && href.trim() ? href : "/ServiceProcess";
+  const external = /^https?:\/\//i.test(safeHref);
 
   return (
     <div ref={container} className={styles.cardContainer}>
-      <AnimatedLink className="!w-[100vw]" href="/ServiceProcess">
+      <Link
+        className="!w-[100vw]"
+        href={safeHref}
+        {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+      >
         <motion.div
           style={{
             backgroundImage: `url(${backgroundImage})`,
@@ -57,7 +66,7 @@ const Card = ({
           className={styles.card}
         >
           <motion.div
-            className={styles.overlay}
+            className={`${styles.overlay} pointer-events-none`}
             style={{
               opacity: overlayOpacity,
             }}
@@ -66,7 +75,7 @@ const Card = ({
             <div className={styles.description}>
               <div className="absolute hover:opacity-85 duration-500 hover:scale-95 hover:shadow-xl shadow-white w-[110px] sm:w-[170px] sm:h-[170px] h-[110px] lg:w-[200px] lg:h-[200px] left-[10%] xl:left-[20%] top-[30%] sm:top-[40%] xl:top-10  z-50 bg-black opacity-45 border rounded-full ">
                 <div className="flex justify-center items-center h-full w-full">
-                  <button className=" relative inline-flex h-12 w-12 items-center justify-center overflow-hidden rounded-full font-medium text-neutral-200">
+                  <div className=" relative inline-flex h-12 w-12 items-center justify-center overflow-hidden rounded-full font-medium text-neutral-200">
                     <div className="translate-x-0 transition group-hover:translate-x-[300%]">
                       <svg
                         width="45"
@@ -101,7 +110,7 @@ const Card = ({
                         ></path>
                       </svg>
                     </div>
-                  </button>
+                  </div>
                 </div>
               </div>
               <button className="group relative h-8 bg-transparent px-4 text-neutral-950">
@@ -118,7 +127,7 @@ const Card = ({
             </div>
           </div>
         </motion.div>
-      </AnimatedLink>
+      </Link>
     </div>
   );
 };
