@@ -176,8 +176,8 @@ export default async function AboutPage() {
       {/* ✅ SEO 重要區塊：時間軸（伺服端已把資料塞進 HTML，第一次就有內容） */}
       <section className="py-6">
         <div className="title my-10 flex flex-col justify-center items-center">
-          <h2 className="text-neutral-900 mb-0 pb-0">DESIGN.TEAM</h2>
-          <p className="text-neutral-900">我們的設計團隊</p>
+          <h2 className="text-neutral-900 mb-0 pb-0">COMPANY.ORIGINAL</h2>
+          <p className="text-neutral-900">公司歷程</p>
         </div>
         <TimelineM062u03Client items={items} />
       </section>

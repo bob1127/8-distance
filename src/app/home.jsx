@@ -23,7 +23,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardBody } from "@nextui-org/react";
 import { Pagination, A11y, Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { projects as projectsData } from "@/components/ParallaxCard/data";
+import { projects as projectsData } from "@/components/ParallaxCardIndex/data";
 import AnimatedListFeed from "@/components/AnimatedListFeed";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -338,7 +338,7 @@ function HomeClient({ specialPosts }) {
       <div className="">
         <div
           id="dark-section"
-          className="relative w-full aspect-[16/11] md:aspect-[1920/1080]  min-h-[90vh] sm:min-h-[85vh] md:min-h-[100vh] lg:min-h-[1000px] xl:min-h-[1000px]"
+          className="relative w-full aspect-[16/11] md:aspect-[1920/1080] overflow-hidden  min-h-[90vh] sm:min-h-[85vh] md:min-h-[100vh] lg:min-h-[1000px] xl:min-h-[1000px]"
         >
           {/* 首訪顯示 Preloader01（有動畫）；其餘顯示 Preloader（無動畫） */}
           {boot.type === "first" && boot.show && (
@@ -434,14 +434,14 @@ function HomeClient({ specialPosts }) {
                   </div>
                 </div>
               </section>
-              <section className="section_our_commit py-20 w-[80%] ">
+              <section className="section_our_commit flex lg:flex-row flex-col py-20 w-[80%] ">
                 <div className="title">
                   <h2>NEWS</h2>
                   <p>最新消息</p>
                 </div>
 
-                <div className="flex w-full mt-10">
-                  <div className="left w-[30%] pr-5">
+                <div className="flex lg:flex-row flex-col w-full mt-10">
+                  <div className="left  w-full lg:w-[30%] pr-5">
                     <div className="sticky top-20">
                       <img
                         src="https://i0.wp.com/tjda.com/wp/wp-content/uploads/2024/11/14_Hibiya_02.jpg?fit=2880%2C1920&quality=85&strip=all&ssl=1"
@@ -451,7 +451,7 @@ function HomeClient({ specialPosts }) {
                     </div>
                   </div>
 
-                  <div className="right w-[70%] ">
+                  <div className="right lg:mt-0 mt-4 w-full lg:w-[70%] ">
                     {[1, 2, 3, 4].map((n) => (
                       <div
                         key={n}
@@ -469,7 +469,7 @@ function HomeClient({ specialPosts }) {
                           </div>
                         </div>
 
-                        <div className="flex justify-between">
+                        <div className="flex lg:flex-row flex-col justify-between">
                           <div className="flex flex-col">
                             <h2 className="news-title font-normal text-gray-900">
                               紐約建築設計獎-2024
@@ -479,10 +479,10 @@ function HomeClient({ specialPosts }) {
                               ​金獎
                             </span>
                           </div>
-                          <div className="img h-full mt-7 justify-center flex items-center">
+                          <div className="img h-full mt-7 justify-start items-start lg:justify-center flex lg:items-center">
                             <img
                               src="https://static.wixstatic.com/media/b69ff1_5832419ae5d64e72afacdadad35c78bd~mv2.jpg/v1/fill/w_787,h_444,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/%E5%B0%81%E9%9D%A2%20%E6%8B%B7%E8%B2%9D.jpg"
-                              className="news-thumb max-w-[150px]" // ⬅️ 不放任何 opacity 類別，由 GSAP 控制
+                              className="news-thumb max-w-full lg:max-w-[150px]" // ⬅️ 不放任何 opacity 類別，由 GSAP 控制
                               alt=""
                             />
                           </div>
@@ -525,21 +525,24 @@ function HomeClient({ specialPosts }) {
               </section>
 
               <section className="section-company-intro w-full py-20">
-                <div className=" w-[95%] flex mx-auto">
-                  <div className="left w-[40%] flex justify-start pl-10 items-center">
-                    <div className="flex flex-col">
+                <div className=" w-[95%] flex lg:flex-row flex-col mx-auto">
+                  <div className="left w-full lg:w-[40%] flex justify-start pl-10 items-center">
+                    <div className="flex flex-col w-full">
                       <div className="title">
                         <div className="flex flex-row">
                           <b className="text-[15.5px] mr-2">+景觀設計</b>
                           <b className="text-[15.5px] mr-2">+室內設計</b>
                         </div>
                       </div>
-                      <img
-                        src="https://i0.wp.com/tjda.com/wp-content/uploads/2024/01/05_plus-shift_pj_cover.jpg?fit=2880%2C1920&quality=85&strip=all&ssl=1"
-                        className="w-[300px] mt-4"
-                        alt=""
-                      />
-                      <div className="info py-4">
+                      <div className="aspect-[4/3] w-full lg:w-[85%] relative overflow-hidden">
+                        <Image
+                          src="https://i0.wp.com/tjda.com/wp-content/uploads/2024/01/05_plus-shift_pj_cover.jpg?fit=2880%2C1920&quality=85&strip=all&ssl=1"
+                          className="object-cover "
+                          alt=""
+                          fill
+                        />
+                      </div>
+                      <div className="info grid lg:grid-cols-1 grid-cols-2 py-4">
                         {[
                           ["LOCATION", "台中市-TAICHUNG"],
                           ["ADDRESS", "台中市五權三街273號"],
@@ -565,13 +568,13 @@ function HomeClient({ specialPosts }) {
                     />
                   </div>
 
-                  <div className="right w-[60%] flex justify-center items-center">
+                  <div className="right w-full px-3 sm:px-8 lg:px-0 lg:w-[60%] flex justify-center items-center">
                     <div className="max-w-[600px]">
                       <h2 className="font-normal text-2xl">捌程室內設計</h2>
-                      <p className="text-[15px] leading-relaxed tracking-widest">
+                      <p className="text-[14px] lg:text-[15px] leading-relaxed tracking-widest">
                         捌程是一間室內與景觀設計的專業公司,擅長將室內、室外的景色融合。每個空間會因為不同的人所屬,而有著獨有的設計。程,以人為本為中心,創造功能合理、舒適優美、滿足物質和精神生活需要的室內環境,打造属於每個案件的獨有設計是捌程的理念,細心、用心與完美是捌程的宗旨!
                       </p>
-                      <p className="text-[15px] mt-4 leading-relaxed tracking-widest">
+                      <p className="text-[14px] lg:text-[15px] mt-4 leading-relaxed tracking-widest">
                         ,以人為本為中心,創造功能合理、舒適優美、滿足物質和精神生活需要的室內環境,打造属於每個案件的獨有設計是捌程的理念,細心、用心與完美是捌程的宗旨!
                       </p>
                     </div>
@@ -579,7 +582,7 @@ function HomeClient({ specialPosts }) {
                 </div>
               </section>
 
-              <section className="section-others-project w-full">
+              <section className="section-others-project overflow-hidden w-full">
                 <Swiper
                   modules={[Pagination, A11y, Autoplay]}
                   autoplay={{ delay: 4000, disableOnInteraction: false }}

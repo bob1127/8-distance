@@ -4,9 +4,12 @@ export const projects = [
     description: "Taichung",
    
     images: [
-      { url: "https://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpghttps://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpg",  caption: "台中麗音宅 | 2025-05-22" },
-      { url: "https://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpghttps://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpg",  caption: "台中陳宅 | 2025-05-22" },
-      { url: "/matsue00.jpg", caption: "台中李宅 | 2025-05-22" },
+      { url: "/images/室內設計作品/逸瓏山蔡宅.jpg",  caption: "逸瓏山蔡宅 | 2025-05-22" , href: "/note",},
+      { url: "/images/室內設計作品/員林胡宅.jpg",  caption: "員林胡宅 | 2025-05-22", href: "/note", },
+      { url: "/images/室內設計作品/太平劉宅.jpg", caption: "太平劉宅 | 2025-05-22", href: "/note", },
+       { url: "/images/室內設計作品/東區古宅.jpg", caption: "東區古宅 | 2025-05-22", href: "/note", },
+        { url: "/images/室內設計作品/竹山林.jpg", caption: "竹山林 | 2025-05-22", href: "/note", },
+           { url: "/images/室內設計作品/新晴許宅.jpg", caption: "新晴許宅 | 2025-05-22", href: "/note", },
     ],
   },
   {
@@ -14,9 +17,12 @@ export const projects = [
     description: "Taichung",
     backgroundImage: "/matsue00.jpg",
     images: [
-      { url: "https://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpghttps://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpg",  caption: "台中麗音宅 | 2025-05-22" },
-      { url: "https://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpghttps://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpg",  caption: "台中陳宅 | 2025-05-22" },
-      { url: "/matsue00.jpg", caption: "台中李宅 | 2025-05-22" },
+      { url: "/images/室內設計作品/逸瓏山蔡宅.jpg",  caption: "逸瓏山蔡宅 | 2025-05-22" , href: "/note",},
+      { url: "/images/室內設計作品/員林胡宅.jpg",  caption: "員林胡宅 | 2025-05-22", href: "/note", },
+      { url: "/images/室內設計作品/太平劉宅.jpg", caption: "太平劉宅 | 2025-05-22", href: "/note", },
+       { url: "/images/室內設計作品/東區古宅.jpg", caption: "東區古宅 | 2025-05-22", href: "/note", },
+        { url: "/images/室內設計作品/竹山林.jpg", caption: "竹山林 | 2025-05-22", href: "/note", },
+           { url: "/images/室內設計作品/新晴許宅.jpg", caption: "新晴許宅 | 2025-05-22", href: "/note", },
     ],
   },
   {
@@ -24,9 +30,12 @@ export const projects = [
     description: "Taichung",
    
      images: [
-      { url: "https://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpghttps://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpg",  caption: "台中麗音宅 | 2025-05-22" },
-      { url: "https://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpghttps://fdms.co.jp/wp-content/uploads/2022/07/1350_IMG_6681-1-768x1024.jpg",  caption: "台中陳宅 | 2025-05-22" },
-      { url: "/matsue00.jpg", caption: "台中李宅 | 2025-05-22" },
+     { url: "/images/室內設計作品/逸瓏山蔡宅.jpg",  caption: "逸瓏山蔡宅 | 2025-05-22" , href: "/note",},
+      { url: "/images/室內設計作品/員林胡宅.jpg",  caption: "員林胡宅 | 2025-05-22", href: "/note", },
+      { url: "/images/室內設計作品/太平劉宅.jpg", caption: "太平劉宅 | 2025-05-22", href: "/note", },
+       { url: "/images/室內設計作品/東區古宅.jpg", caption: "東區古宅 | 2025-05-22", href: "/note", },
+        { url: "/images/室內設計作品/竹山林.jpg", caption: "竹山林 | 2025-05-22", href: "/note", },
+           { url: "/images/室內設計作品/新晴許宅.jpg", caption: "新晴許宅 | 2025-05-22", href: "/note", },
     ],
   }
 ];

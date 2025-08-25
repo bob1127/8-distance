@@ -9,11 +9,12 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import gsap from "gsap";
 import styles from "./style.module.scss";
-
+import Link from "next/link";
 const ParallaxCard = ({
   i,
   title,
   description,
+  defaultLabel,
   images,
   progress,
   range,
@@ -40,7 +41,7 @@ const ParallaxCard = ({
 
       {/* 正文內容 */}
       <div className={`${styles.cardContent} relative z-10 w-full`}>
-        <div className="w-[100vw] mx-auto px-6">
+        <div className="w-[100vw] mx-auto px-6 pb-10">
           {/* Title + Description + 控制按鈕 */}
           <div className="my-8 text-center md:text-left flex flex-row justify-between relative">
             <div>
@@ -56,13 +57,31 @@ const ParallaxCard = ({
             <div className="flex justify-center md:justify-end gap-4 mt-4">
               <button
                 ref={prevRef}
-                className="swiper-button-prev-custom  w-[80px] border rounded-[20px] text-black flex items-center justify-center  px-4 py-2 border-black transition"
+                className="
+      swiper-button-prev-custom
+      flex items-center justify-center
+      border border-black rounded-[15px] !h-[40px] p-0 m-0
+      aspect-square w-[130px] 
+      hover:bg-stone-800 hover:text-white
+      text-black transition
+      [&.swiper-button-disabled]:opacity-40
+      [&.swiper-button-disabled]:cursor-not-allowed
+    "
               >
                 ←
               </button>
               <button
                 ref={nextRef}
-                className="swiper-button-next-custom w-[80px] border rounded-[20px] text-black flex items-center justify-center  px-4 py-2 border-black transition"
+                className="
+      swiper-button-next-custom
+      hover:bg-stone-800 hover:text-white
+      flex items-center justify-center
+      border border-black rounded-[15px] !h-[40px] p-0 m-0
+      aspect-square w-[130px] 
+      text-black transition
+      [&.swiper-button-disabled]:opacity-40
+      [&.swiper-button-disabled]:cursor-not-allowed
+    "
               >
                 →
               </button>
@@ -102,8 +121,13 @@ const ParallaxCard = ({
               }}
             >
               {images?.map((img, idx) => (
-                <SwiperSlide key={idx} className="!m-0 !p-0 group overflow-">
-                  <motion.div
+                <SwiperSlide
+                  key={idx}
+                  className="!m-0 !p-0 group overflow-hidden"
+                  style={{ height: "auto" }}
+                >
+                  <motion.a
+                    href={img.href || "#"}
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{
@@ -111,30 +135,31 @@ const ParallaxCard = ({
                       ease: "easeOut",
                       delay: idx * 0.05,
                     }}
-                    className={`relative w-full aspect-video border-t border-b border-black ${
-                      idx === 0
-                        ? "border-l"
-                        : idx === images.length - 1
-                        ? "border-r"
-                        : "border-r"
-                    }`}
+                    className={`
+      block w-full
+      border-t  border-black
+      ${idx === 0 ? "" : "border-r"}
+    `}
                   >
-                    <div className="overflow-hidden w-full h-[400px]">
-                      {" "}
+                    {/* 固定比例容器：保證有高度，避免整張卡片被壓扁 */}
+                    <div className="relative w-full overflow-hidden aspect-[10/9]">
                       <img
                         src={img.url}
                         alt={img.caption}
-                        className="w-full h-full group-hover:scale-105 transition duration-400 scale-100  object-cover"
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                     </div>
 
-                    <div className="absolute bottom-0 mb-5 left-0 w-full text-slate-900 text-sm text-center py-1">
-                      {img.caption}
+                    {/* 文字區：放在比例容器外面，避免絕對定位造成高度為 0 */}
+                    <div className="px-2 pt-8 pb-14 bg-white">
+                      <div className="flex items-center justify-center py-2">
+                        <h2 className="text-[20px] font-normal">PORTFOLIO</h2>
+                      </div>
+                      <div className="text-slate-900 text-sm text-center">
+                        {img.caption}
+                      </div>
                     </div>
-                    <div className="flex flex-col items-center justify-center py-5">
-                      <h2 className="text-[20px] font-normal">PORTFOLIO</h2>
-                    </div>
-                  </motion.div>
+                  </motion.a>
                 </SwiperSlide>
               ))}
             </Swiper>
