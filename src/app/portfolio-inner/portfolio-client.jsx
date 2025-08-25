@@ -212,7 +212,7 @@ const Photos = () => {
 
           <section className="section-hero w-full aspect-[500/500] relative  h-full md:aspect-[1024/576] xl:aspect-[1920/700] color-section">
             {/* 旋轉徽章 */}
-            <div className="absolute left-1/2 bottom-[-110px]  w-[200px] h-[200px] flex items-center justify-center transform -translate-x-1/2">
+            <div className="absolute z-10 left-1/2 bottom-[-110px]  w-[200px] h-[200px] flex items-center justify-center transform -translate-x-1/2">
               <div className="absolute inset-0 animate-spin-slow flex items-center justify-center">
                 <svg className="w-full h-full" viewBox="0 0 200 200">
                   <defs>
@@ -223,14 +223,14 @@ const Photos = () => {
                   </defs>
                   <text fill="#ffffff" fontSize="12" fontWeight="bold">
                     <textPath href="#circlePath" startOffset="0">
-                      設計靈感 • 美好生活 • 空間美學 • 設計靈感 • 美好生活 •
-                      空間美學 •
+                      設計靈感 • 空間美學 • 設計靈感 • 美好生活 • 空間美學 •
+                      設計靈感
                     </textPath>
                   </text>
                 </svg>
               </div>
-              <div className="circle bg-[#F1F1F1] w-[100px] h-[100px] flex justify-center items-center text-[1.2rem] font-bold rounded-full ">
-                ORIGINAL
+              <div className="circle bg-[#3b3d3c] text-white text-md w-[100px] h-[100px] flex justify-center items-center text-[1.2rem] font-bold rounded-full ">
+                design
               </div>
             </div>
 
@@ -273,9 +273,9 @@ const Photos = () => {
             <div className="hero-title w-1/2 absolute left-[4%] top-[90%] z-20">
               <div className="text-center px-4">
                 <GsapText
-                  text="最新消息"
+                  text="作品展示"
                   id="gsap-intro"
-                  fontSize="2.8rem"
+                  fontSize="2rem"
                   fontWeight="200"
                   color="#fff"
                   lineHeight="60px"
@@ -284,9 +284,9 @@ const Photos = () => {
               </div>
               <div className="text-center px-4">
                 <GsapText
-                  text="NEWS"
+                  text="PORTFOLIO"
                   id="gsap-intro"
-                  fontSize="1.2rem"
+                  fontSize="1rem"
                   fontWeight="200"
                   color="#fff"
                   lineHeight="30px"

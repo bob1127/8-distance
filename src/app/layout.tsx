@@ -22,13 +22,14 @@ export default function RootLayout({
     <ViewTransitions>
       <html lang="zh-Hant">
         <body className="antialiased bg-white text-gray-900">
-          {/* ✅ Nav 固定在視窗頂；用 md:block 隱藏手機（避免被 overlay 接管的手機導覽衝突） */}
-          <div className="hidden md:block fixed inset-x-0 top-0 z-[99999999]">
-            <Nav />
-          </div>
-
-          {/* ✅ 手機才需要 overlay 動畫；桌機只是單純的容器 */}
           <ExoApeOverlayMenu>
+            {/* ✅ Nav 固定在視窗頂；用 md:block 隱藏手機（避免被 overlay 接管的手機導覽衝突） */}
+            <div className="hidden md:block fixed inset-x-0 top-0 z-20">
+              <Nav />
+            </div>
+
+            {/* ✅ 手機才需要 overlay 動畫；桌機只是單純的容器 */}
+
             <PageTransition>{children}</PageTransition>
             <Footer />
           </ExoApeOverlayMenu>

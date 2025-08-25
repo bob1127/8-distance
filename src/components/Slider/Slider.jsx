@@ -300,7 +300,7 @@ const Slider = ({
 
   return (
     <div
-      className="w-full group relative h-[800px] text-white overflow-hidden"
+      className="w-full group relative h-[550px] text-white overflow-hidden"
       ref={sliderRef}
     >
       {/* hover 遮罩 */}

@@ -463,7 +463,7 @@ function HomeClient({ specialPosts }) {
                         <div className="tag flex justify-between">
                           <span className="text-gray-400">(0{n})</span>
                           <div>
-                            <span className="bg-[#cad1d6] text-[13px] font-normal text-gray-600 px-4 py-1 rounded-[20px]">
+                            <span className="bg-[#E1A95F] text-[13px] font-normal text-gray-600 px-4 py-1 rounded-[20px]">
                               TAG
                             </span>
                           </div>

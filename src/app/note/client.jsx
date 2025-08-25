@@ -148,10 +148,10 @@ const QaClient = () => {
       </section>
 
       <section className="section-portfolio-category py-20 bg-white text-black">
-        <div className="title flex justify-center">
+        <div className="title flex  justify-center">
           <h2 className="text-2xl ">作品欣賞</h2>
         </div>
-        <div className="max-w-[1920px] w-[85%] mx-auto px-4">
+        <div className="max-w-[1920px] w-[95%] 2xl:w-[85%] mx-auto px-4">
           {/* Tabs */}
           <div className="flex flex-wrap justify-center gap-4 mb-10">
             {categories.map((cat) => (
@@ -160,8 +160,8 @@ const QaClient = () => {
                 onClick={() => setActiveCategory(cat.value)}
                 className={`px-6 py-2 rounded-full border transition-colors duration-300 ${
                   activeCategory === cat.value
-                    ? "bg-black text-white"
-                    : "bg-white text-black border-black hover:bg-black hover:text-white"
+                    ? "bg-[#E1A95F] text-white"
+                    : "bg-white text-black border-gray-300 hover:bg-[#E1A95F] hover:text-white"
                 }`}
               >
                 {cat.label}

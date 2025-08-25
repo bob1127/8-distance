@@ -318,7 +318,7 @@ export default function ExoApeOverlayMenu({ children }) {
   }, []);
 
   return (
-    <div ref={rootRef} className="exoape-menu-root">
+    <div ref={rootRef} className="exoape-menu-root z-[60]">
       {/* 手機頂欄（桌機隱藏） */}
       <nav className="md:hidden fixed top-0 inset-x-0 z-[60] flex items-center justify-between px-5 py-4 bg-black/60 backdrop-blur border-b border-white/10">
         <div className="font-semibold text-white">
@@ -329,7 +329,7 @@ export default function ExoApeOverlayMenu({ children }) {
 
         {/* 三條線漢堡按鈕 */}
         <button
-          className="menu-toggle z-50 relative w-11 h-11 inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/5"
+          className="menu-toggle !z-50 relative w-11 h-11 inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/5"
           type="button"
           aria-label="Toggle menu"
           aria-expanded="false"

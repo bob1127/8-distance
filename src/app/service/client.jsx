@@ -5,7 +5,8 @@ import { motion, AnimatePresence, animate } from "framer-motion";
 import { createPortal } from "react-dom";
 import SwiperCarousel from "../../components/SwiperCarousel/SwiperCard";
 import { ReactLenis } from "@studio-freight/react-lenis";
-
+import Image from "next/image";
+import Link from "next/link";
 /** 只讓膠囊本身可點，其餘整層都讓事件穿透 */
 function FixedSwitchPortal({ showSwitch, activeTab, onSwitch }) {
   const [mounted, setMounted] = useState(false);
@@ -17,7 +18,7 @@ function FixedSwitchPortal({ showSwitch, activeTab, onSwitch }) {
       {showSwitch && (
         <motion.div
           key="switch"
-          className="fixed z-[9999999] left-0 bottom-[30%] w-full pointer-events-none" // ← 讓整層穿透
+          className="fixed z-[9999999] left-0 bottom-[6%] w-full pointer-events-none" // ← 讓整層穿透
           style={{ pointerEvents: "none" }} // ← 雙保險
           initial={{ opacity: 0, y: 60, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -147,7 +148,7 @@ export default function ServiceClient() {
 
       <div className="relative">
         {/* Hero */}
-        <section className="section-hero pt-20">
+        {/* <section className="section-hero pt-20">
           <div className="relative py-10">
             <SwiperCarousel />
             <div className="title absolute z-50 left-[10%] top-1/2">
@@ -161,16 +162,33 @@ export default function ServiceClient() {
               </p>
             </div>
           </div>
-        </section>
-
+        </section> */}
+        <div className="xl:aspect-[16/7.5] aspect-[16/14] sm:aspect-[16/10] relative overflow-hidden">
+          <div className="txt absolute top-1/2 left-1/2 z-30 -translate-x-1/2 -translate-y-1/2">
+            <div className="flex flex-col justify-center items-center">
+              {" "}
+              <h2 className="text-white text-2xl">設計內容</h2>
+              <Link href="/3d">
+                <div className="border border-white rounded-[20px] w-[200px] py-2 text-center text-white">
+                  INFO
+                </div>
+              </Link>
+            </div>
+          </div>
+          <Image
+            src="/images/7cf01af6-3902-4896-8049-90ebdb7df94c.png"
+            fill
+            className="w-full object-cover"
+          ></Image>
+        </div>
         {/* 服務項目（流程區） */}
         <section ref={serviceRef} className="section-process my-20">
-          <div className="title flex justify-center items-center flex-col max-w-[1200px] mx-auto">
+          <div className="title flex justify-center items-center flex-col w-[90%] max-w-[1200px] mx-auto">
             <span className="text-[14px] text-gray-600">PROCESS</span>
             <h2 className="font-normal">設計流程</h2>
           </div>
 
-          <div className="grid max-w-[1200px] mx-auto grid-cols-2">
+          <div className="grid w-[90%] max-w-[1200px] mx-auto grid-cols-2">
             {Array.from({ length: 4 }).map((_, i) => (
               <div
                 key={i}

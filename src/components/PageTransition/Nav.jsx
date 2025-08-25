@@ -36,7 +36,7 @@ export default function Nav() {
   };
 
   return (
-    <nav className="!fixed inset-x-0 top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-200">
+    <nav className="fixed inset-x-0 top-0 z-40 bg-white/90 backdrop-blur border-b border-gray-200">
       {/* NAV BAR */}
       <div className="relative w-full flex items-center justify-between px-4 py-3">
         {/* 左：Logo */}

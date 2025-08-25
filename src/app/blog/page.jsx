@@ -6,6 +6,8 @@ import { TextGenerateEffect } from "../../components/ui/text-generate-effec-home
 import ScrollCard from "../../components/ParallaxCard/page";
 import { Card, CardBody } from "@nextui-org/react";
 import Images from "next/image";
+import JanusButton02 from "../../components/JanusButton2.jsx";
+import Link from "next/link";
 import { useScroll } from "framer-motion";
 import { useEffect, useRef } from "react";
 import Lenis from "@studio-freight/lenis";
@@ -67,43 +69,156 @@ export default function Home() {
 
   return (
     <div className="bg-[#f6f6f7]">
-      <section className="flex max-w-[1920px] py-20 h-screen w-[85%] mx-auto flex-row">
-        <div className="left w-[70%]">
-          <div className="blog-grid grid sm:grid-cols-2 grid-cols-1 2xl:grid-cols-3">
-            <div className="item  overflow-hidden group bg-white  transition-all duration-400">
-              <div className="img w-ful p-1 overflow-hidden relative hover:p-1 transition duration-500 aspect-[4/3]">
-                <Image
-                  src="https://static.wixstatic.com/media/b69ff1_30d89834222e4629bdd55b84b7ab2c8b~mv2.jpg/v1/fill/w_740,h_493,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/b69ff1_30d89834222e4629bdd55b84b7ab2c8b~mv2.jpg"
-                  alt="blog-img"
-                  placeholder="empty"
-                  loading="lazy"
-                  fill
-                  className="object-cover  group-hover:scale-105 scale-100 transition-all duration-400 w-full"
-                ></Image>
-              </div>
+      <section className="flex pt-[100px] max-w-[1920px] py-20   w-[90%] mx-auto flex-col lg:flex-row">
+        <div className="left w-full lg:w-[70%]">
+          <div className="blog-grid grid pl-0 lg:pr-10 sm:grid-cols-2 grid-cols-1 gap-4 2xl:grid-cols-3">
+            <Link href="Blog-inner">
+              <div className="item  overflow-hidden relative group bg-white  transition-all duration-400">
+                <div className=" !absolute hidden group-hover:block w-[90px] h-[90px] bottom-3 right-5">
+                  <JanusButton02 />
+                </div>
+                <div className="img mx-10 w-ful  overflow-hidden mt-5 relative hover:p-1 transition duration-500 aspect-[4/3]">
+                  <Image
+                    src="https://static.wixstatic.com/media/b69ff1_30d89834222e4629bdd55b84b7ab2c8b~mv2.jpg/v1/fill/w_740,h_493,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/b69ff1_30d89834222e4629bdd55b84b7ab2c8b~mv2.jpg"
+                    alt="blog-img"
+                    placeholder="empty"
+                    loading="lazy"
+                    fill
+                    className="object-cover  group-hover:scale-105 scale-100 transition-all duration-400 w-full"
+                  ></Image>
+                </div>
 
-              <div className="content p-6 flex flex-col ">
-                <h2 className="text-[20px]">
-                  開放式空間設計好不好？一文搞懂優缺點與替代方案
-                </h2>
-                <p className="text-[14px] text-gray-800">
-                  開放式空間設計（Open-Plan
-                  Design）近年來在室內設計圈持續流行，特別是小坪數住宅與現代風格居家案例中，經常可見客廳
-                </p>
-                <div className="info mt-4">
-                  <div className="flex">
-                    {" "}
-                    <b className="text-[14px] tracking-widest">發佈於:</b>
-                    <span className="date text-[14px] tracking-widest">
-                      2024.11.23
-                    </span>
+                <div className=" px-10 pt-8 pb-12 flex flex-col ">
+                  <h2 className="text-[20px]">
+                    開放式空間設計好不好？一文搞懂優缺點與替代方案
+                  </h2>
+                  <p className="text-[14px] text-gray-800">
+                    開放式空間設計（Open-Plan
+                    Design）近年來在室內設計圈持續流行，特別是小坪數住宅與現代風格居家案例中，經常可見客廳
+                  </p>
+                  <div className="info mt-4">
+                    <div className="flex">
+                      {" "}
+                      <b className="text-[14px] tracking-widest">發佈於:</b>
+                      <span className="date text-[14px] tracking-widest">
+                        2024.11.23
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            </Link>
+            <Link href="Blog-inner">
+              <div className="item  overflow-hidden relative group bg-white  transition-all duration-400">
+                <div className=" !absolute hidden group-hover:block w-[90px] h-[90px] bottom-3 right-5">
+                  <JanusButton02 />
+                </div>
+                <div className="img mx-10 w-ful  overflow-hidden mt-5 relative hover:p-1 transition duration-500 aspect-[4/3]">
+                  <Image
+                    src="https://static.wixstatic.com/media/b69ff1_30d89834222e4629bdd55b84b7ab2c8b~mv2.jpg/v1/fill/w_740,h_493,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/b69ff1_30d89834222e4629bdd55b84b7ab2c8b~mv2.jpg"
+                    alt="blog-img"
+                    placeholder="empty"
+                    loading="lazy"
+                    fill
+                    className="object-cover  group-hover:scale-105 scale-100 transition-all duration-400 w-full"
+                  ></Image>
+                </div>
+
+                <div className=" px-10 pt-8 pb-12 flex flex-col ">
+                  <h2 className="text-[20px]">
+                    開放式空間設計好不好？一文搞懂優缺點與替代方案
+                  </h2>
+                  <p className="text-[14px] text-gray-800">
+                    開放式空間設計（Open-Plan
+                    Design）近年來在室內設計圈持續流行，特別是小坪數住宅與現代風格居家案例中，經常可見客廳
+                  </p>
+                  <div className="info mt-4">
+                    <div className="flex">
+                      {" "}
+                      <b className="text-[14px] tracking-widest">發佈於:</b>
+                      <span className="date text-[14px] tracking-widest">
+                        2024.11.23
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Link>
+            <Link href="Blog-inner">
+              <div className="item  overflow-hidden relative group bg-white  transition-all duration-400">
+                <div className=" !absolute hidden group-hover:block w-[90px] h-[90px] bottom-3 right-5">
+                  <JanusButton02 />
+                </div>
+                <div className="img mx-10 w-ful  overflow-hidden mt-5 relative hover:p-1 transition duration-500 aspect-[4/3]">
+                  <Image
+                    src="https://static.wixstatic.com/media/b69ff1_30d89834222e4629bdd55b84b7ab2c8b~mv2.jpg/v1/fill/w_740,h_493,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/b69ff1_30d89834222e4629bdd55b84b7ab2c8b~mv2.jpg"
+                    alt="blog-img"
+                    placeholder="empty"
+                    loading="lazy"
+                    fill
+                    className="object-cover  group-hover:scale-105 scale-100 transition-all duration-400 w-full"
+                  ></Image>
+                </div>
+
+                <div className=" px-10 pt-8 pb-12 flex flex-col ">
+                  <h2 className="text-[20px]">
+                    開放式空間設計好不好？一文搞懂優缺點與替代方案
+                  </h2>
+                  <p className="text-[14px] text-gray-800">
+                    開放式空間設計（Open-Plan
+                    Design）近年來在室內設計圈持續流行，特別是小坪數住宅與現代風格居家案例中，經常可見客廳
+                  </p>
+                  <div className="info mt-4">
+                    <div className="flex">
+                      {" "}
+                      <b className="text-[14px] tracking-widest">發佈於:</b>
+                      <span className="date text-[14px] tracking-widest">
+                        2024.11.23
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Link>
+            <Link href="Blog-inner">
+              <div className="item  overflow-hidden relative group bg-white  transition-all duration-400">
+                <div className=" !absolute hidden group-hover:block w-[90px] h-[90px] bottom-3 right-5">
+                  <JanusButton02 />
+                </div>
+                <div className="img mx-10 w-ful  overflow-hidden mt-5 relative hover:p-1 transition duration-500 aspect-[4/3]">
+                  <Image
+                    src="https://static.wixstatic.com/media/b69ff1_30d89834222e4629bdd55b84b7ab2c8b~mv2.jpg/v1/fill/w_740,h_493,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/b69ff1_30d89834222e4629bdd55b84b7ab2c8b~mv2.jpg"
+                    alt="blog-img"
+                    placeholder="empty"
+                    loading="lazy"
+                    fill
+                    className="object-cover  group-hover:scale-105 scale-100 transition-all duration-400 w-full"
+                  ></Image>
+                </div>
+
+                <div className=" px-10 pt-8 pb-12 flex flex-col ">
+                  <h2 className="text-[20px]">
+                    開放式空間設計好不好？一文搞懂優缺點與替代方案
+                  </h2>
+                  <p className="text-[14px] text-gray-800">
+                    開放式空間設計（Open-Plan
+                    Design）近年來在室內設計圈持續流行，特別是小坪數住宅與現代風格居家案例中，經常可見客廳
+                  </p>
+                  <div className="info mt-4">
+                    <div className="flex">
+                      {" "}
+                      <b className="text-[14px] tracking-widest">發佈於:</b>
+                      <span className="date text-[14px] tracking-widest">
+                        2024.11.23
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Link>
           </div>
         </div>
-        <div className="right w-[30%] ">
+        <div className="right w-full pt-10 lg:pt-0 lg:w-[30%] ">
           <div className="right-bar bg-white sticky top-20 py-8">
             <div className="mx-auto rounded-[22px] relative bg-black p-4 flex justify-center max-w-[120px] items-center">
               <div className="absolute color bg-[#323936] w-full h-full rounded-[22px] rotate-12"></div>

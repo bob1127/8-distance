@@ -3,7 +3,7 @@
 import React from "react";
 import { useEffect } from "react";
 import Marquee from "react-fast-marquee";
-import AnimatedLink from "../AnimatedLink";
+import Link from "next/link";
 // import { PlaceholdersAndVanishInput } from "../ui/placeholders-and-vanish-input";
 export default function Content() {
   // ✅ 修正卡住滾動的 bug：每次進入頁面都清除 .page-transition
@@ -385,19 +385,50 @@ const Nav = () => {
             <div className="flex py-8 flex-col">
               <div className="flex flex-col">
                 <b className="text-gray-400 text-[.8rem]">設計類型</b>
-                <span className="text-[.8rem] text-white mt-1">建築設計</span>
-                <span className="text-[.8rem] text-white mt-1">老屋改造</span>
-                <span className="text-[.8rem] text-white mt-1">住宅空間</span>
-                <span className="text-[.8rem] text-white mt-1">商業空間</span>
+                <Link href="/note" className="mt-2">
+                  {" "}
+                  <span className="text-[.8rem] text-white mt-1">建築設計</span>
+                </Link>
+                <Link href="/note" className="mt-2">
+                  {" "}
+                  <span className="text-[.8rem] text-white mt-1">老屋改造</span>
+                </Link>
+                <Link href="/note" className="mt-2">
+                  {" "}
+                  <span className="text-[.8rem] text-white mt-1">住宅空間</span>
+                </Link>
+                <Link href="/note" className="mt-2">
+                  {" "}
+                  <span className="text-[.8rem] text-white mt-1">商業空間</span>
+                </Link>
               </div>
             </div>
             <div className="flex pl-8 py-8 flex-col">
               <div className="flex flex-col">
                 <b className="text-gray-400 text-[.8rem]">關於我們</b>
-                <span className="text-[.8rem] text-white mt-1">立即聯絡</span>
-                <span className="text-[.8rem] text-white mt-1">我們的團隊</span>
+                <Link href="/contact" className="mt-2">
+                  {" "}
+                  <span className="text-[.8rem] text-white mt-1">立即聯絡</span>
+                </Link>
+                <Link href="/about" className="mt-2">
+                  <span className="text-[.8rem] text-white mt-1">
+                    我們的團隊
+                  </span>
+                </Link>
                 <span className="text-[.8rem] text-white mt-1">信箱：</span>
+                <span className="text-[.8rem] text-white mt-1">
+                  室內設計｜8distancee@gmail.com
+                </span>
+                <span className="text-[.8rem] text-white mt-1">
+                  景觀設計｜8.distance.ld@gmail.com
+                </span>
                 <span className="text-[.8rem] text-white mt-1">電話：</span>
+                <span className="text-[.8rem] text-white mt-1">
+                  室內設計｜04- 23720128 室內設計部門
+                </span>
+                <span className="text-[.8rem] text-white mt-1">
+                  景觀設計｜0986-272188 張特助
+                </span>
               </div>
             </div>
           </div>
