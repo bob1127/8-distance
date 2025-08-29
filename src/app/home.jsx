@@ -5,12 +5,12 @@ import dynamic from "next/dynamic"; // ⬅️ 新增：關閉 SSR 用
 import Image from "next/image";
 import gsap from "gsap";
 import Link from "next/link";
-import SpecialOffers from "../components/SpecialOffers";
+
 import ParallaxCard from "../components/ParallaxCardIndex/page";
 import { useScroll } from "framer-motion";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { ReactLenis } from "@studio-freight/react-lenis";
-import ThreeDSlider from "../components/3DSlider.jsx";
+
 import GsapText from "../components/RevealText/index";
 import Preloader01 from "../components/Preloader01/index";
 import Preloader from "../components/Preloader/index";
@@ -18,8 +18,7 @@ import AnimatedLink from "../components/AnimatedLink";
 import HoverItem from "../components/Slider/Slider.jsx";
 import Video from "../components/Video";
 import Script from "next/script";
-import { Compare } from "../components/ui/compare";
-import { motion, AnimatePresence } from "framer-motion";
+
 import { Card, CardBody } from "@nextui-org/react";
 import { Pagination, A11y, Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";

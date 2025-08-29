@@ -11,6 +11,11 @@ import ExoApeOverlayMenu from "../components/ExoApeOverlayMenu";
 export const metadata: Metadata = {
   title: "寬越設計｜商業空間與住宅設計",
   description: "寬越設計專注於舊屋翻新、住宅裝修與商業空間的室內設計整合服務。",
+  icons: {
+    icon: "/favicon.ico", // 放在 public/ 下即可
+    shortcut: "/favicon.ico",
+    apple: "/apple-touch-icon.png", // 如果有 Apple Touch Icon
+  },
 };
 
 export default function RootLayout({
@@ -23,13 +28,9 @@ export default function RootLayout({
       <html lang="zh-Hant">
         <body className="antialiased bg-white text-gray-900">
           <ExoApeOverlayMenu>
-            {/* ✅ Nav 固定在視窗頂；用 md:block 隱藏手機（避免被 overlay 接管的手機導覽衝突） */}
             <div className="hidden md:block fixed inset-x-0 top-0 z-20">
               <Nav />
             </div>
-
-            {/* ✅ 手機才需要 overlay 動畫；桌機只是單純的容器 */}
-
             <PageTransition>{children}</PageTransition>
             <Footer />
           </ExoApeOverlayMenu>
