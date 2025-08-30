@@ -339,15 +339,7 @@ function HomeClient({ specialPosts }) {
           id="dark-section"
           className="relative w-full aspect-[16/11] md:aspect-[1920/1080] overflow-hidden  min-h-[90vh] sm:min-h-[85vh] md:min-h-[100vh] lg:min-h-[1000px] xl:min-h-[1000px]"
         >
-          {/* 首訪顯示 Preloader01（有動畫）；其餘顯示 Preloader（無動畫） */}
-          {boot.type === "first" && boot.show && (
-            <Preloader01 onFinish={handlePreloaderFinish} />
-          )}
-          {boot.type && (boot.type === "repeat" || !boot.show) && (
-            <Preloader onFinish={handlePreloaderFinish} />
-          )}
-
-          <div></div>
+          <Preloader01 />
         </div>
 
         <section id="dark-section" className="section-padding">
@@ -365,7 +357,7 @@ function HomeClient({ specialPosts }) {
                 <h2 className="font-normal text-[20px]">PORTFOLIO</h2>
               </div>
 
-              <section className="section-portfolio w-full pb-20">
+              <section className="section-portfolio w-full pb-5 xl:pb-20">
                 <div className="grid relative grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4 w-full ">
                   <div className=" border ">
                     <Link href="/KuankoshiProjectInner">
@@ -433,13 +425,12 @@ function HomeClient({ specialPosts }) {
                   </div>
                 </div>
               </section>
-              <section className="section_our_commit flex lg:flex-row flex-col py-20 w-[80%] ">
-                <div className="title">
-                  <h2>NEWS</h2>
-                  <p>最新消息</p>
-                </div>
-
-                <div className="flex lg:flex-row flex-col w-full mt-10">
+              <section className="section_our_commit flex lg:flex-row flex-col py-5 2xl:py-20 w-[80%] ">
+                <div className="flex  lg:flex-row flex-col w-full mt-10">
+                  <div className="title lg:pr-3">
+                    <h2 className="m-0">NEWS</h2>
+                    <p>最新消息</p>
+                  </div>
                   <div className="left  w-full lg:w-[30%] pr-5">
                     <div className="sticky top-20">
                       <img

@@ -410,7 +410,7 @@ export default async function AboutPage() {
                       <div className="animate-image-wrapper mx-auto relative w-full aspect-[4/5] md:h-full overflow-hidden ">
                         <div className="image-container relative w-full h-full">
                           <Image
-                            src="/images/7caded2d-785f-4ccd-aa41-2c98678ca2fb.png"
+                            src="/images/index/住宅空間-程宅.jpg"
                             alt="About Image 1"
                             fill
                             className="object-cover sm:group-hover:scale-[1.05] duration-700"
@@ -452,7 +452,7 @@ export default async function AboutPage() {
                       <div className="animate-image-wrapper mx-auto relative w-full aspect-[4/5] md:h-full overflow-hidden ">
                         <div className="image-container relative w-full h-full">
                           <Image
-                            src="/images/taiwan.webp"
+                            src="/images/index/老屋翻新-李宅.jpg"
                             alt="About Image 1"
                             fill
                             className="object-cover sm:group-hover:scale-[1.05] duration-700"
@@ -494,7 +494,7 @@ export default async function AboutPage() {
                       <div className="animate-image-wrapper mx-auto relative w-full aspect-[4/5] md:h-full overflow-hidden ">
                         <div className="image-container relative w-full h-full">
                           <Image
-                            src="/images/a26ae4a7-fba6-4e16-b07f-1839b0add281.png"
+                            src="/images/index/b69ff1_dfadbd53c3e2460c85392dc940a6c899~mv2.jpg.avif"
                             alt="About Image 1"
                             fill
                             className="object-cover sm:group-hover:scale-[1.05] duration-700"

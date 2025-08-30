@@ -43,13 +43,13 @@ const ParallaxCard = ({
       <div className={`${styles.cardContent} relative z-10 w-full`}>
         <div className="w-[100vw] mx-auto px-6 pb-10">
           {/* Title + Description + 控制按鈕 */}
-          <div className="my-8 text-center md:text-left flex flex-row justify-between relative">
+          <div className="my-8 text-center md:text-left flex flex-col md:flex-row justify-between relative">
             <div>
               {" "}
-              <h2 className="text-3xl md:text-[53px] font-light text-black mb-2">
+              <h2 className=" text-[30px] md:text-3xl md:text-[53px] font-light text-black mb-2">
                 {title}
               </h2>
-              <p className="text-gray-600 text-md tracking-widest mt-6 ml-2 mb-4">
+              <p className="text-gray-600 text-md tracking-widest mt-2  md:mt-6 ml-2 mb-4">
                 {description}
               </p>
             </div>
@@ -142,7 +142,7 @@ const ParallaxCard = ({
     `}
                   >
                     {/* 固定比例容器：保證有高度，避免整張卡片被壓扁 */}
-                    <div className="relative w-full overflow-hidden aspect-[10/9]">
+                    <div className="relative w-full overflow-hidden aspect-[4/3] lg:aspect-[10/7.5]">
                       <img
                         src={img.url}
                         alt={img.caption}
@@ -151,9 +151,11 @@ const ParallaxCard = ({
                     </div>
 
                     {/* 文字區：放在比例容器外面，避免絕對定位造成高度為 0 */}
-                    <div className="px-2 pt-8 pb-14 bg-white">
+                    <div className="px-2 pt-5 xl:pt-8 pb-5 xl:pb-14 bg-white">
                       <div className="flex items-center justify-center py-2">
-                        <h2 className="text-[20px] font-normal">PORTFOLIO</h2>
+                        <h2 className="text-[20px] m-0 font-normal">
+                          PORTFOLIO
+                        </h2>
                       </div>
                       <div className="text-slate-900 text-sm text-center">
                         {img.caption}

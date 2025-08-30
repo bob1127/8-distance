@@ -12,6 +12,8 @@ import { CustomEase } from "gsap/CustomEase";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
+import SwiperCarousel from "../../components/SwiperCarousel/SwiperCard";
+import FacebookReelsSection from "@/components/FacebookReelsSection";
 
 // ✅ 引入你的 MiniMapGallery（依實際路徑調整）
 import MiniMapGallery from "../../components/MiniMapGallery";
@@ -43,9 +45,9 @@ const Photos = () => {
   };
 
   const backgroundImages = [
-    "/images/project-01/img03.jpg",
-    "/images/hero-img/img06.png",
-    "/images/hero-img/img07.png",
+    "/images/index/b69ff1_ed3d1e1ab1e14db4bd8ad2c8f3b9c3de~mv2.jpg.avif",
+    "/images/index/b69ff1_2e8beb67f7c64ad9aaab0271e8d9a385~mv2.jpg.avif",
+    "/images/index/b69ff1_dbf0d0c42626415881135b9768235d8f~mv2.jpg.avif",
   ];
 
   useEffect(() => {
@@ -55,164 +57,16 @@ const Photos = () => {
     return () => clearInterval(timer);
   }, [backgroundImages.length]);
 
-  const data = [
-    {
-      title: "2024",
-      content: (
-        <div>
-          <p className="mb-8 text-xs font-normal text-neutral-800 md:text-sm dark:text-neutral-200">
-            Built and launched Aceternity UI and Aceternity UI Pro from scratch
-          </p>
-          <div className="grid grid-cols-2 gap-4">
-            <img
-              src="/images/project-01/img03.jpg"
-              alt="startup template"
-              width={500}
-              height={500}
-              className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
-            />
-            <img
-              src="https://assets.aceternity.com/templates/startup-2.webp"
-              alt="startup template"
-              width={500}
-              height={500}
-              className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
-            />
-            <img
-              src="https://assets.aceternity.com/templates/startup-3.webp"
-              alt="startup template"
-              width={500}
-              height={500}
-              className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
-            />
-            <img
-              src="https://assets.aceternity.com/templates/startup-4.webp"
-              alt="startup template"
-              width={500}
-              height={500}
-              className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
-            />
-          </div>
-        </div>
-      ),
-    },
-    {
-      title: "Early 2023",
-      content: (
-        <div>
-          <p className="mb-8 text-xs font-normal text-neutral-800 md:text-sm dark:text-neutral-200">
-            I usually run out of copy, but when I see content this big, I try to
-            integrate lorem ipsum.
-          </p>
-          <p className="mb-8 text-xs font-normal text-neutral-800 md:text-sm dark:text-neutral-200">
-            Lorem ipsum is for people who are too lazy to write copy. But we are
-            not. Here are some more example of beautiful designs I built.
-          </p>
-          <div className="grid grid-cols-2 gap-4">
-            <img
-              src="https://assets.aceternity.com/pro/hero-sections.png"
-              alt="hero template"
-              width={500}
-              height={500}
-              className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
-            />
-            <img
-              src="https://assets.aceternity.com/features-section.png"
-              alt="feature template"
-              width={500}
-              height={500}
-              className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
-            />
-            <img
-              src="https://assets.aceternity.com/pro/bento-grids.png"
-              alt="bento template"
-              width={500}
-              height={500}
-              className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
-            />
-            <img
-              src="https://assets.aceternity.com/cards.png"
-              alt="cards template"
-              width={500}
-              height={500}
-              className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
-            />
-          </div>
-        </div>
-      ),
-    },
-    {
-      title: "Changelog",
-      content: (
-        <div>
-          <p className="mb-4 text-xs font-normal text-neutral-800 md:text-sm dark:text-neutral-200">
-            Deployed 5 new components on Aceternity today
-          </p>
-          <div className="mb-8">
-            <div className="flex items-center gap-2 text-xs text-neutral-700 md:text-sm dark:text-neutral-300">
-              ✅ Card grid component
-            </div>
-            <div className="flex items-center gap-2 text-xs text-neutral-700 md:text-sm dark:text-neutral-300">
-              ✅ Startup template Aceternity
-            </div>
-            <div className="flex items-center gap-2 text-xs text-neutral-700 md:text-sm dark:text-neutral-300">
-              ✅ Random file upload lol
-            </div>
-            <div className="flex items-center gap-2 text-xs text-neutral-700 md:text-sm dark:text-neutral-300">
-              ✅ Himesh Reshammiya Music CD
-            </div>
-            <div className="flex items-center gap-2 text-xs text-neutral-700 md:text-sm dark:text-neutral-300">
-              ✅ Salman Bhai Fan Club registrations open
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <img
-              src="https://assets.aceternity.com/pro/hero-sections.png"
-              alt="hero template"
-              width={500}
-              height={500}
-              className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
-            />
-            <img
-              src="https://assets.aceternity.com/features-section.png"
-              alt="feature template"
-              width={500}
-              height={500}
-              className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
-            />
-            <img
-              src="https://assets.aceternity.com/pro/bento-grids.png"
-              alt="bento template"
-              width={500}
-              height={500}
-              className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
-            />
-            <img
-              src="https://assets.aceternity.com/cards.png"
-              alt="cards template"
-              width={500}
-              height={500}
-              className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
-            />
-          </div>
-        </div>
-      ),
-    },
-  ];
-
-  const cards = data.map((card, index) => (
-    <Card key={card.title + index} card={card} index={index} />
-  ));
   return (
     <ReactLenis root>
-      <div className="bg-[#F1F1F1]">
+      <div className="bg-[#f1f1f1]">
         {/* ====== Hero 區（原樣保留） ====== */}
         <section className="section-hero relative mt-[28vh] h-[70vh]">
-          <div className="white-section border rounded-tr-[60px] bg-[#F1F1F1] absolute top-[-90px] left-0 w-[88%] h-full "></div>
+          <div className="white-section border rounded-tr-[60px] bg-[#ffc59c] absolute top-[-90px] left-0 w-[88%] h-full "></div>
 
           <section className="section-hero w-full aspect-[500/500] relative  h-full md:aspect-[1024/576] xl:aspect-[1920/700] color-section">
             {/* 旋轉徽章 */}
-            <div className="absolute z-10 left-1/2 bottom-[-110px]  w-[200px] h-[200px] flex items-center justify-center transform -translate-x-1/2">
+            <div className="absolute z-40 left-1/2 bottom-[-110px]  w-[200px] h-[200px] flex items-center justify-center transform -translate-x-1/2">
               <div className="absolute inset-0 animate-spin-slow flex items-center justify-center">
                 <svg className="w-full h-full" viewBox="0 0 200 200">
                   <defs>
@@ -229,7 +83,7 @@ const Photos = () => {
                   </text>
                 </svg>
               </div>
-              <div className="circle bg-[#3b3d3c] text-white text-md w-[100px] h-[100px] flex justify-center items-center text-[1.2rem] font-bold rounded-full ">
+              <div className="circle bg-[#ffc59c]  text-white text-md w-[100px] h-[100px] flex justify-center items-center text-[1.2rem] font-bold rounded-full ">
                 design
               </div>
             </div>
@@ -269,7 +123,7 @@ const Photos = () => {
             </div>
 
             {/* 遮罩 + 文字 */}
-            <div className="bg-black opacity-40 w-full h-full absolute top-0 left-0 z-10" />
+            <div className="bg-black opacity-10 w-full h-full absolute top-0 left-0 z-10" />
             <div className="hero-title w-1/2 absolute left-[4%] top-[90%] z-20">
               <div className="text-center px-4">
                 <GsapText
@@ -464,34 +318,48 @@ const Photos = () => {
         </section>
 
         {/* 下方輪播（原樣） */}
-        <section className="flex py-[140px] bg-custom-gradient">
-          <div className="w-[30%] flex items-center justify-end">
-            <div className="card-text flex flex-col justify-center items-center">
-              <h2 className="text-[9.5vmin] text-[#F1F1F1] rotate-[90deg] tracking-wide">
-                IDEA
-              </h2>
-              <div className="project-amount text-white my-5 bg-black flex justify-center items-center rounded-full w-8 h-8">
-                23
-              </div>
-              <span
-                className="text-[1.4rem] text-[#F1F1F1] mt-10"
-                style={{
-                  writingMode: "vertical-rl",
-                  textOrientation: "upright",
-                }}
-              >
-                創意想法案件
-              </span>
-            </div>
+        <section className="flex pl-20 flex-col py-[140px] bg-custom-gradient">
+          <div className="flex flex-col  justify-center items-center">
+            <h3 className="text-4xl text-white">對我們作品有興趣嗎？</h3>
+            <button className="bg-[#f7a438] mt-3 text-stone-800 rounded-[30px] font-bold px-4 border border-gray-300 py-1">
+              協助貸款
+            </button>
+
+            <input
+              type="text"
+              placeholder="歡迎聯繫我們"
+              className="rounded-[40px] py-2 w-[800px] mt-10 px-5"
+            />
           </div>
-          <div className="w-[90%] overflow-hidden">
-            <Carousel items={cards} />
-            <div className="pt-8">
-              <span className="text-[.85rem] text-gray-400">
-                界裡還有許多充滿趣味的店舗設計想法。使用海外材料和個性化的色彩設計的空間中，充滿了商店設計的靈感。
-                <br />
-                我們可以以輕鬆旅行的心情，去發現新的設計。
-              </span>
+          <div className="FB-reels mt-10 flex">
+            <div className="w-[10%]  flex items-center justify-end">
+              <div className="card-text flex flex-col justify-center items-center">
+                <h2 className="text-[9.5vmin] text-[#F1F1F1] rotate-[90deg] tracking-wide">
+                  IDEA
+                </h2>
+                <div className="project-amount text-white my-5 bg-black flex justify-center items-center rounded-full w-8 h-8">
+                  23
+                </div>
+                <span
+                  className="text-[1.4rem] text-[#F1F1F1] mt-10"
+                  style={{
+                    writingMode: "vertical-rl",
+                    textOrientation: "upright",
+                  }}
+                >
+                  創意想法案件
+                </span>
+              </div>
+            </div>
+            <div className="w-[90%] overflow-hidden">
+              <SwiperCarousel />
+              <div className="pt-8">
+                <span className="text-[.85rem] text-gray-400">
+                  界裡還有許多充滿趣味的店舗設計想法。使用海外材料和個性化的色彩設計的空間中，充滿了商店設計的靈感。
+                  <br />
+                  我們可以以輕鬆旅行的心情，去發現新的設計。
+                </span>
+              </div>
             </div>
           </div>
         </section>
@@ -534,126 +402,3 @@ const DummyContent = ({ title, description, imageUrl }) => {
     </div>
   );
 };
-
-const data = [
-  {
-    category: "建築老屋",
-    title: "老屋翻新-外觀拉皮",
-    src: "/images/project-01/img06.jpg",
-    content: (
-      <div className="">
-        <div className="p-8 ">
-          <div className="flex flex-col items-start justify-start">
-            <h2 className="text-2xl font-bold mb-4">
-              翻新35年老透天，打造現代俐落街景
-            </h2>
-            <p>從老舊磁磚屋到質感現代建築，一場建築的重生旅程。</p>
-          </div>
-          <Image
-            src="/images/project-01/img06.jpg"
-            alt="AI Example"
-            width={1500}
-            height={800}
-            className="mt-4  w-full md:w-[80%]   rounded-lg"
-          />
-        </div>
-      </div>
-    ),
-  },
-  {
-    category: "建築老屋",
-    title: "老屋翻新-外觀拉皮",
-    src: "/images/blog/建築老屋/img01.png",
-    content: (
-      <div className="">
-        <div className="p-8 ">
-          <div className="flex flex-col items-start justify-start">
-            <h2 className="text-2xl font-bold mb-4">
-              翻新35年老透天，打造現代俐落街景
-            </h2>
-            <p>從老舊磁磚屋到質感現代建築，一場建築的重生旅程。</p>
-          </div>
-          <Image
-            src="/images/blog/建築老屋/img01.png"
-            alt="AI Example"
-            width={1500}
-            height={800}
-            className="mt-4  w-full md:w-[80%]   rounded-lg"
-          />
-        </div>
-      </div>
-    ),
-  },
-  {
-    category: "建築老屋",
-    title: "老屋翻新-外觀拉皮",
-    src: "/images/blog/建築老屋/img01.png",
-    content: (
-      <div className="">
-        <div className="p-8 ">
-          <div className="flex flex-col items-start justify-start">
-            <h2 className="text-2xl font-bold mb-4">
-              翻新35年老透天，打造現代俐落街景
-            </h2>
-            <p>從老舊磁磚屋到質感現代建築，一場建築的重生旅程。</p>
-          </div>
-          <Image
-            src="/images/blog/建築老屋/img01.png"
-            alt="AI Example"
-            width={1500}
-            height={800}
-            className="mt-4  w-full md:w-[80%]   rounded-lg"
-          />
-        </div>
-      </div>
-    ),
-  },
-  {
-    category: "建築老屋",
-    title: "老屋翻新-外觀拉皮",
-    src: "/images/blog/建築老屋/img01.png",
-    content: (
-      <div className="">
-        <div className="p-8 ">
-          <div className="flex flex-col items-start justify-start">
-            <h2 className="text-2xl font-bold mb-4">
-              翻新35年老透天，打造現代俐落街景
-            </h2>
-            <p>從老舊磁磚屋到質感現代建築，一場建築的重生旅程。</p>
-          </div>
-          <Image
-            src="/images/blog/建築老屋/img01.png"
-            alt="AI Example"
-            width={1500}
-            height={800}
-            className="mt-4  w-full md:w-[80%]   rounded-lg"
-          />
-        </div>
-      </div>
-    ),
-  },
-  {
-    category: "建築老屋",
-    title: "老屋翻新-外觀拉皮",
-    src: "/images/blog/建築老屋/img01.png",
-    content: (
-      <div className="">
-        <div className="p-8 ">
-          <div className="flex flex-col items-start justify-start">
-            <h2 className="text-2xl font-bold mb-4">
-              翻新35年老透天，打造現代俐落街景
-            </h2>
-            <p>從老舊磁磚屋到質感現代建築，一場建築的重生旅程。</p>
-          </div>
-          <Image
-            src="/images/blog/建築老屋/img01.png"
-            alt="AI Example"
-            width={1500}
-            height={800}
-            className="mt-4  w-full md:w-[80%]   rounded-lg"
-          />
-        </div>
-      </div>
-    ),
-  },
-];

@@ -1,8 +1,24 @@
 "use client";
 import { Suspense } from "react";
-
+import Lightbox from "yet-another-react-lightbox";
+import {
+  Captions,
+  Download,
+  Fullscreen,
+  Zoom,
+  Thumbnails,
+} from "yet-another-react-lightbox/plugins";
+import "yet-another-react-lightbox/styles.css";
+import "yet-another-react-lightbox/plugins/captions.css";
+import "yet-another-react-lightbox/plugins/thumbnails.css";
 import HomeSlider from "../../components/HeroSliderHome/page.jsx";
-import React, { useRef, useEffect } from "react";
+import React, {
+  useRef,
+  useEffect,
+  useState,
+  useMemo,
+  useCallback,
+} from "react";
 import Image from "next/image";
 import Link from "next/link.js";
 import { ReactLenis } from "@studio-freight/react-lenis";
@@ -131,17 +147,46 @@ export default function About() {
       link: "/project/luxury-modern",
     },
   ];
+  const [lbOpen, setLbOpen] = useState(false);
+  const [lbIndex, setLbIndex] = useState(0);
+
+  // 你想放進 Lightbox 的圖片清單（依序給 index）
+  const slides = useMemo(
+    () => [
+      {
+        src: "https://static.wixstatic.com/media/b69ff1_f971c77f04fe413ab0d7ee9d7342b526~mv2.jpg/v1/fill/w_740,h_459,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/b69ff1_f971c77f04fe413ab0d7ee9d7342b526~mv2.jpg",
+        title: "側欄小圖 3",
+        description: "Small viewer image #3",
+        download: "side-3.jpg",
+      },
+      {
+        src: "https://static.wixstatic.com/media/b69ff1_2cccc2d74bb747fe9d61abd6c1deae4f~mv2.jpg/v1/fill/w_740,h_497,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/b69ff1_2cccc2d74bb747fe9d61abd6c1deae4f~mv2.jpg",
+        title: "推薦文章封面",
+        description: "Swiper 卡片圖",
+        download: "card-1.jpg",
+      },
+    ],
+    []
+  );
+
+  const openAt = useCallback((i) => {
+    setLbIndex(i);
+    setLbOpen(true);
+  }, []);
+
   return (
     <ReactLenis root>
-      <div className="bg-[#f8f8f8]">
-        <section className="blog-inner-img">
-          <div className="relative h-[70vh] mx-auto w-[98%] overflow-hidden">
+      <div className="bg-[#f8f8f8] pt-20">
+        {/* <section className="blog-inner-img">
+          <div className="relative h-[70vh] mx-auto w-[98%] ">
             <div className="absolute left-[10%] top-1/2 -translate-y-1/2 z-40 w-[600px]">
               <div className="flex flex-col">
                 <h1 className="text-white text-5xl font-normal">雲林虎尾</h1>
                 <p className="text-slate-50">Interior design</p>
               </div>
             </div>
+            <div className="absolute left-1/2 -translate-x-1/2 bottom-[-90px] z-40 max-w-[1000px] w-[80%]"></div>
+
             <div className="absolute w-full h-full bg-black/20 top-0 left-0 z-30"></div>
 
             <Image
@@ -153,7 +198,7 @@ export default function About() {
               className="object-cover"
             />
           </div>
-        </section>
+        </section> */}
         <div className="navgation pl-[5%] mt-[90px] flex">
           <div className="border bg-white/20 hover:bg-white/90 transition duration-300 rounded-md px-4 py-2 flex">
             <Link href="/blog">
@@ -179,37 +224,37 @@ export default function About() {
               <div className="border-b-1   border-gray-400 pb-5">
                 <span className="text-[16px] gray-800">快速導覽</span>
               </div>
-              <div className="items flex flex-col">
+              <div className="items flex  flex-col">
                 <div className="border-b-1 py-5 border-gray-400 flex justify-center items-center">
                   <div className="dots">
                     <div className="bg-[#b0bfda] w-[10px] h-[10px] rounded-full mx-4"></div>
                   </div>
-                  <span className="text-gray-500 tracking-widest text-[14px]">
-                    以瑞典為基地的TUF設計了可供所有年齡層日常使用的系列
+                  <span className="text-gray-800 text-[14px]">
+                    掌握空間規劃，讓動線與使用更直覺
                   </span>
                 </div>
                 <div className="border-b-1 py-5 border-gray-400 flex justify-center items-center">
                   <div className="dots">
                     <div className="bg-[#b0bfda] w-[10px] h-[10px] rounded-full mx-4"></div>
                   </div>
-                  <span className="text-gray-500 tracking-widest text-[14px]">
-                    以瑞典為基地的TUF設計了可供所有年齡層日常使用的系列
+                  <span className="text-gray-800 text-[14px]">
+                    統一設計語言，打造一眼認出的風格
                   </span>
                 </div>
                 <div className="border-b-1 py-5 border-gray-400 flex justify-center items-center">
                   <div className="dots">
                     <div className="bg-[#b0bfda] w-[10px] h-[10px] rounded-full mx-4"></div>
                   </div>
-                  <span className="text-gray-500 tracking-widest text-[14px]">
-                    以瑞典為基地的TUF設計了可供所有年齡層日常使用的系列
+                  <span className="text-gray-800 text-[14px]">
+                    把細節做好，體感分數自然上來
                   </span>
                 </div>
                 <div className="border-b-1 py-5 border-gray-400 flex justify-center items-center">
                   <div className="dots">
                     <div className="bg-[#b0bfda] w-[10px] h-[10px] rounded-full mx-4"></div>
                   </div>
-                  <span className="text-gray-500 tracking-widest text-[14px]">
-                    以瑞典為基地的TUF設計了可供所有年齡層日常使用的系列
+                  <span className="text-gray-800 text-[14px]">
+                    兼顧美觀與維護，營運更省心
                   </span>
                 </div>
               </div>
@@ -217,52 +262,230 @@ export default function About() {
           </div>
 
           <div className="flex w-full lg:w-[60%] px-8 flex-col">
-            <div className="title flex justify-between pl-8"></div>
-            <div className="  mx-auto px-4 md:px-10">
-              <Image
-                src="https://kon-sumai.com/wp/wp-content/uploads/2023/11/6-6-2048x1357.jpg"
-                alt=""
-                placeholder="empty"
-                loading="eager"
-                width={1500}
-                height={800}
-                className="w-screen"
-              />
-              <div className="text text-[.95rem] leading-loose mt-5">
-                以瑞典為基地的TUF設計了可供所有年齡層日常使用的系列。這款設計關注於尺寸與用途的關係，讓孩子的大盤子可以成為成年人的小菜盤，並不拘泥於單一的使用方式，而是通過使用者的想像力來適應各種功能。這是一系列源於融化冰淇淋主題和印章等充滿趣味的創意。以瑞典為基地的TUF設計了可供所有年齡層日常使用的系列。這款設計關注於尺寸與用途的關係，讓孩子的大盤子可以成為成年人的小菜盤，並不拘泥於單一的使用方式，而是通過使用者的想像力來適應各種功能。這是一系列源於融化冰淇淋主題和印章等充滿趣味的創意。以瑞典為基地的TUF設計了可供所有年齡層日常使用的系列。這款設計關注於尺寸與用途的關係，讓孩子的大盤子可以成為成年人的小菜盤，並不拘泥於單一的使用方式，而是通過使用者的想像力來適應各種功能。這是一系列源於融化冰淇淋主題和印章等充滿趣味的創意。
-                <br></br>
-                <br></br>
-                以瑞典為基地的TUF設計了可供所有年齡層日常使用的系列。這款設計關注於尺寸與用途的關係，讓孩子的大盤子可以成為成年人的小菜盤，並不拘泥於單一的使用方式，而是通過使用者的想像力來適應各種功能。這是一系列源於融化冰淇淋主題和印章等充滿趣味的創意。
-                Designer
+            <article className="mx-auto w-[92%] max-w-3xl py-10 text-gray-800">
+              {/* Hero */}
+              <div className="relative aspect-[16/9] w-full overflow-hidden  bg-gray-100">
+                <Image
+                  src="https://static.wixstatic.com/media/b69ff1_f971c77f04fe413ab0d7ee9d7342b526~mv2.jpg/v1/fill/w_740,h_459,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/b69ff1_f971c77f04fe413ab0d7ee9d7342b526~mv2.jpg"
+                  alt="高評價民宿設計關鍵：空間、細節一次到位"
+                  fill
+                  className="object-cover cursor-zoom-in"
+                  priority
+                  onClick={() => openAt(0)}
+                />
               </div>
-              <Image
-                src="https://kon-sumai.com/wp/wp-content/uploads/2024/07/0423_012-%E3%81%AE%E3%82%B3%E3%83%94%E3%83%BC-1-2048x1411.jpg"
-                alt=""
-                placeholder="empty"
-                loading="eager"
-                width={1500}
-                height={800}
-                className="w-screen mt-8"
-              />
-              <div className="text text-[.95rem] leading-loose mt-5">
-                以瑞典為基地的TUF設計了可供所有年齡層日常使用的系列。這款設計關注於尺寸與用途的關係，讓孩子的大盤子可以成為成年人的小菜盤，並不拘泥於單一的使用方式，而是通過使用者的想像力來適應各種功能。這是一系列源於融化冰淇淋主題和印章等充滿趣味的創意。以瑞典為基地的TUF設計了可供所有年齡層日常使用的系列。這款設計關注於尺寸與用途的關係，讓孩子的大盤子可以成為成年人的小菜盤，並不拘泥於單一的使用方式，而是通過使用者的想像力來適應各種功能。這是一系列源於融化冰淇淋主題和印章等充滿趣味的創意。以瑞典為基地的TUF設計了可供所有年齡層日常使用的系列。這款設計關注於尺寸與用途的關係，讓孩子的大盤子可以成為成年人的小菜盤，並不拘泥於單一的使用方式，而是通過使用者的想像力來適應各種功能。這是一系列源於融化冰淇淋主題和印章等充滿趣味的創意。
-                <br></br>
-                <br></br>
-                以瑞典為基地的TUF設計了可供所有年齡層日常使用的系列。這款設計關注於尺寸與用途的關係，讓孩子的大盤子可以成為成年人的小菜盤，並不拘泥於單一的使用方式，而是通過使用者的想像力來適應各種功能。這是一系列源於融化冰淇淋主題和印章等充滿趣味的創意。
-                Designer
+
+              {/* Title & meta */}
+              <header className="mt-8">
+                <h1 className="text-3xl font-semibold leading-tight">
+                  高評價民宿設計關鍵：空間、細節一次到位
+                </h1>
+                <p className="mt-2 text-sm text-gray-500">
+                  重點整理版｜來源：捌程室內設計 8 Distance
+                </p>
+              </header>
+
+              {/* Intro */}
+              <p className="mt-6 leading-8">
+                在競爭激烈的旅宿市場，一間能拿到高評價的民宿，往往不是「只要好看」就夠了；從
+                <span className="font-medium">空間規劃</span>、
+                <span className="font-medium">風格一致性</span> 到
+                <span className="font-medium">細節、品牌與維護</span>
+                ，每一環都會直接影響入住體驗與回訪率。以下整理實作重點，協助你打造有記憶點、又好經營的民宿空間。
+              </p>
+
+              {/* Section 1 */}
+              <section className="mt-10">
+                <h2 className="mb-3 text-xl font-semibold">
+                  1｜掌握空間規劃，讓動線與使用更直覺
+                </h2>
+                <p className="mb-4 leading-8">
+                  民宿不同於一般住宅，需要同時兼顧
+                  <span className="font-medium">共享區域</span>與
+                  <span className="font-medium">私密空間</span>
+                  。良好的配置能提升住宿舒適度，也能降低營運維護成本。
+                </p>
+                <ul className="list-disc space-y-2 pl-6 leading-8">
+                  <li>
+                    <span className="font-medium">公共區域：</span>
+                    客廳、餐廚或交誼空間採
+                    <span className="font-medium">開放且順暢的動線</span>
+                    ，方便互動。
+                  </li>
+                  <li>
+                    <span className="font-medium">客房配置：</span>
+                    依客群規劃雙人／家庭房，確保
+                    <span className="font-medium">完善衛浴與足夠收納</span>。
+                  </li>
+                  <li>
+                    <span className="font-medium">彈性機能：</span>
+                    活動隔間、滑門等
+                    <span className="font-medium">可變空間</span>
+                    ，對淡旺季或長短租都更友善。
+                  </li>
+                </ul>
+              </section>
+
+              {/* Section 2 */}
+              <section className="mt-10">
+                <h2 className="mb-3 text-xl font-semibold">
+                  2｜統一設計語言，打造一眼認出的風格
+                </h2>
+                <p className="mb-4 leading-8">
+                  想在平台與社群上脫穎而出，必須有
+                  <span className="font-medium">一致的視覺與材質語言</span>
+                  。不論日式侘寂、北歐簡約、工業或鄉村風，都應從色彩、材質到家具選擇保持同調。
+                </p>
+                <ul className="list-disc space-y-2 pl-6 leading-8">
+                  <li>避免「拼貼式風格」，維持整體一致與專業度。</li>
+                  <li>結合在地元素或文化符號，增強識別與記憶點。</li>
+                  <li>以目標客群與區域調性為主軸，做深做滿。</li>
+                </ul>
+              </section>
+              <div className="relative aspect-[16/9] w-full overflow-hidden  bg-gray-100">
+                <Image
+                  src="https://static.wixstatic.com/media/b69ff1_2cccc2d74bb747fe9d61abd6c1deae4f~mv2.jpg/v1/fill/w_740,h_497,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/b69ff1_2cccc2d74bb747fe9d61abd6c1deae4f~mv2.jpg"
+                  alt="高評價民宿設計關鍵：空間、細節一次到位"
+                  fill
+                  className="object-cover cursor-zoom-in"
+                  priority
+                  onClick={() => openAt(1)}
+                />
               </div>
-            </div>
+              {/* Section 3 */}
+              <section className="mt-10">
+                <h2 className="mb-3 text-xl font-semibold">
+                  3｜把細節做好，體感分數自然上來
+                </h2>
+                <p className="mb-4 leading-8">
+                  高評價的關鍵常藏在細節：燈光、插座、布品、五金與香氛等都會影響體驗。
+                </p>
+                <ul className="list-disc space-y-2 pl-6 leading-8">
+                  <li>
+                    <span className="font-medium">照明層次：</span>
+                    主燈＋間接光＋床頭閱讀燈，夜間更舒適。
+                  </li>
+                  <li>
+                    <span className="font-medium">電源配置：</span>插座與 USB
+                    位置貼近使用情境，減少延長線與動線干擾。
+                  </li>
+                  <li>
+                    <span className="font-medium">布品等級：</span>以
+                    <span className="font-medium">飯店等級</span>
+                    床單、枕頭、浴巾提升觸感與衛生感。
+                  </li>
+                  <li>
+                    <span className="font-medium">五金配件：</span>
+                    毛巾掛架、置物層板、門把與鉸鏈選耐用款。
+                  </li>
+                  <li>
+                    <span className="font-medium">氣味與陳列：</span>
+                    選擇與品牌調性一致的香氛與小物，營造在地記憶。
+                  </li>
+                </ul>
+              </section>
+
+              {/* Section 4 */}
+              <section className="mt-10">
+                <h2 className="mb-3 text-xl font-semibold">
+                  4｜品牌感與視覺識別：讓每個角落都能被打卡
+                </h2>
+                <p className="mb-4 leading-8">
+                  於社群時代，強烈的
+                  <span className="font-medium">品牌識別</span>
+                  能快速累積口碑。從 Logo、門牌、引導牌到房卡與小卡，視覺系統要
+                  <span className="font-medium">一致且好拍</span>。
+                </p>
+                <ul className="list-disc space-y-2 pl-6 leading-8">
+                  <li>把品牌色與材質語言延伸到空間細節與備品。</li>
+                  <li>規劃「打卡牆」或小型裝置，創造自然擴散點。</li>
+                  <li>每個轉角皆可成為旅客記憶框景。</li>
+                </ul>
+              </section>
+
+              {/* Section 5 */}
+              <section className="mt-10">
+                <h2 className="mb-3 text-xl font-semibold">
+                  5｜兼顧美觀與維護，營運更省心
+                </h2>
+                <p className="mb-4 leading-8">
+                  長期營運必須考量清潔與維修效率。選材、櫃體與設備應同時滿足
+                  <span className="font-medium">耐用、易保養、易替換</span>。
+                </p>
+                <ul className="list-disc space-y-2 pl-6 leading-8">
+                  <li>地坪與牆面選擇抗污、防潮、易清潔材質。</li>
+                  <li>衛浴設備挑選維修資源充足的品牌，備品規格一致化。</li>
+                  <li>水電與機電預留檢修空間，後續升級不拆大面。</li>
+                </ul>
+              </section>
+
+              {/* CTA */}
+              <section className="mt-12  border border-gray-200 bg-white p-6">
+                <h3 className="text-lg font-semibold">
+                  需要一起規劃你的民宿嗎？
+                </h3>
+                <p className="mt-2 leading-8">
+                  若你正要籌備或優化民宿，我們可依據品牌定位、空間條件與預算，提供從
+                  規劃到落地的完整服務，讓空間更有辨識度也更好管理。
+                </p>
+              </section>
+
+              {/* Source note */}
+              <p className="mt-8 text-xs leading-6 text-gray-500">
+                本文為參考
+                <a
+                  href="https://www.8distance.com/post/%E9%AB%98%E8%A9%95%E5%83%B9%E6%B0%91%E5%AE%BF%E8%A8%AD%E8%A8%88%E9%97%9C%E9%8D%B5%EF%BC%9A%E7%A9%BA%E9%96%93%E3%80%81%E7%B4%B0%E7%AF%80%E4%B8%80%E6%AC%A1%E5%88%B0%E4%BD%8D"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mx-1 underline"
+                >
+                  8 Distance：高評價民宿設計關鍵：空間、細節一次到位
+                </a>
+                之整理（非逐字轉載）。
+              </p>
+            </article>
           </div>
           <div className=" w-full py-10 px-5 sm:px-0 lg:py-0 sm:w-[60%] mx-auto lg:w-[25%] pr-8  flex flex-col">
             <div className="">
-              <span className="text-[.8rem]">
-                以瑞典為基地的TUF設計了可供所有年齡層日常使用的系列。這款設計關注於尺寸與用途的關係，讓孩子的大盤子可以成為成年人的小菜盤，並不拘泥於單一的使用方式，而是通過使用者的想像力來適應各種功能。這是一系列源於融化冰淇淋主題和印章等充滿趣味的創意。
-                Designer
+              <span className="text-[14px]">
+                民宿設計的第一步，就是做好空間規劃。不同於一般住宅，民宿空間需兼顧私密性與共享性、舒適度與實用性。良好的空間規劃能提升整體入住體驗，也降低管理維護成本。
               </span>
             </div>
             <div className="sticky  my-4 top-24 ">
-              <div className="flex  px-4 flex-col border border-[#d7d7d7] bg-[#242724]">
-                <div className="h-[340px] w-full"></div>
+              <div className="main-info bg-white rounded-lg p-8 grid grid-cols-2">
+                <div className="flex flex-col">
+                  <b className="text-[14px] mt-3">室內坪數：</b>
+                  <span className="text-[14px] mt-1 text-gray-700">35 坪</span>
+
+                  <b className="text-[14px] mt-3">案件地點：</b>
+                  <span className="text-[14px] mt-1 text-gray-700">
+                    台中市西屯區
+                  </span>
+                </div>
+
+                <div className="flex flex-col">
+                  <b className="text-[14px] mt-3">風格：</b>
+                  <span className="text-[14px] mt-1 text-gray-700">
+                    現代簡約
+                  </span>
+
+                  <b className="text-[14px] mt-3">格局：</b>
+                  <span className="text-[14px] mt-1 text-gray-700">
+                    3 房 2 廳 2 衛
+                  </span>
+                </div>
+
+                <div className="flex flex-col">
+                  <b className="text-[14px] mt-3">色系：</b>
+                  <span className="text-[14px] mt-1 text-gray-700">
+                    木質暖白
+                  </span>
+
+                  <b className="text-[14px] mt-3">空間佔比：</b>
+                  <span className="text-[14px] mt-1 text-gray-700">
+                    客廳 30%｜餐廳 20%｜臥室 40%｜其他 10%
+                  </span>
+                </div>
               </div>
               <div className="small-viewer-project p-5">
                 <div className="flex flex-row justify-between my-3 ">
@@ -833,6 +1056,17 @@ export default function About() {
       {/* <div className="w-full h-full py-20">
         <Carousel items={cards} />
       </div> */}
+      <Lightbox
+        open={lbOpen}
+        close={() => setLbOpen(false)}
+        index={lbIndex}
+        slides={slides}
+        plugins={[Captions, Download, Fullscreen, Zoom, Thumbnails]}
+        captions={{ showToggle: true }}
+        thumbnails={{ position: "bottom" }}
+        zoom={{ maxZoomPixelRatio: 2 }}
+        carousel={{ finite: false }}
+      />
     </ReactLenis>
   );
 }

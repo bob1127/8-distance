@@ -26,18 +26,65 @@ export default function Home() {
 
   useGSAP(
     () => {
-      if (typeof window !== "undefined" && document.readyState === "complete") {
-        const counter = document.getElementById("counter");
-        const heroElement = document.querySelector(".hero");
-        const videoContainer = document.querySelector(".video-container");
-        const progressBar = document.querySelector(".progress-bar");
-        const logo = document.querySelector(".logo");
-        const animOutChars = document.querySelectorAll(".char.anim-out h1");
-        const animInChars = document.querySelectorAll(".char.anim-in h1");
-        const headerSpans = document.querySelectorAll(".header span");
-        const coordinatesSpans = document.querySelectorAll(".coordinates span");
-        const preloader = document.querySelector(".preloader-screen");
+      if (typeof window === "undefined") return;
 
+      const prefersReducedMotion =
+        !!window.matchMedia &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      const alreadySeen =
+        prefersReducedMotion ||
+        window.localStorage.getItem("home_intro_done") === "1";
+
+      const counter = document.getElementById("counter");
+      const heroElement = document.querySelector(".hero");
+      const videoContainer = document.querySelector(".video-container");
+      const progressBar = document.querySelector(".progress-bar");
+      const logo = document.querySelector(".logo");
+      const animOutChars = document.querySelectorAll(".char.anim-out h1");
+      const animInChars = document.querySelectorAll(".char.anim-in h1");
+      const headerSpans = document.querySelectorAll(".header span");
+      const coordinatesSpans = document.querySelectorAll(".coordinates span");
+      const preloader = document.querySelector(".preloader-screen");
+      const spans = [...headerSpans, ...coordinatesSpans];
+
+      const setFinalState = () => {
+        if (heroElement) {
+          gsap.set(heroElement, {
+            clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+            backgroundColor: "#ffffff",
+          });
+        }
+        if (videoContainer) {
+          gsap.set(videoContainer, {
+            scale: 1,
+            rotation: 0,
+            clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+            top: "790px", // ← 保持 790px 位移
+            position: "absolute",
+          });
+        }
+        if (progressBar) gsap.set(progressBar, { opacity: 0 });
+        if (counter) gsap.set(counter, { innerHTML: 100 });
+        if (logo) gsap.set(logo, { left: "0%", xPercent: 0 });
+        if (animOutChars.length) gsap.set(animOutChars, { y: "100%" });
+        if (animInChars.length) gsap.set(animInChars, { x: "-1200%" });
+        if (spans.length) gsap.set(spans, { y: 0, opacity: 1 });
+        if (taglineRef.current?.length)
+          gsap.set(taglineRef.current, { y: 0, opacity: 1 });
+
+        // ✅ 只移除 fixed，不要 display: none
+        if (preloader) preloader.classList.remove("fixed");
+      };
+
+      // 🛑 已看過（或使用者偏好減少動畫）→ 直接套用完成狀態
+      if (alreadySeen) {
+        setFinalState();
+        return;
+      }
+
+      // ⏳ 第一次：跑你的原本動畫（可保留你現有的 readyState 檢查）
+      if (document.readyState === "complete") {
         if (videoContainer) {
           gsap.set(videoContainer, {
             scale: 0,
@@ -138,7 +185,6 @@ export default function Home() {
           });
         }
 
-        const spans = [...headerSpans, ...coordinatesSpans];
         if (spans.length > 0) {
           gsap.fromTo(
             spans,
@@ -151,9 +197,7 @@ export default function Home() {
               ease: "power3.out",
               delay: 5.75,
               onComplete: () => {
-                if (preloader) {
-                  preloader.classList.remove("fixed");
-                }
+                if (preloader) preloader.classList.remove("fixed");
               },
             }
           );
@@ -170,6 +214,10 @@ export default function Home() {
               ease: "power4.out",
               delay: 7.8,
               stagger: 0.2,
+              // ✅ 第一次動畫全跑完 → 設定旗標
+              onComplete: () => {
+                window.localStorage.setItem("home_intro_done", "1");
+              },
             }
           );
         }
@@ -180,11 +228,8 @@ export default function Home() {
 
   return (
     <div>
-      <div className="preloader-screen fixed inset-0 z-[9999999999] bg-white">
-        <div
-          className="hero relative overflow-hidden h-full w-full bg-white"
-          ref={container}
-        >
+      <div className="preloader-screen  fixed inset-0 z-[9999999999] bg-white">
+        <div className="hero relative   w-full bg-white" ref={container}>
           <div className="progress-bar z-20 absolute top-6 left-6 px-6 py-2 text-black">
             <p>loading</p>
             <p>
@@ -193,11 +238,11 @@ export default function Home() {
           </div>
 
           <div
-            className="video-container absolute left-0 w-screen h-screen overflow-hidden will-change-transform z-0"
+            className="video-container absolute left-0 w-screen will-change-transform z-0"
             style={{ top: "0px" }}
           >
             <BackgroundSlider images={backgroundImages} duration={5} />
-            <div className="absolute bottom-6 right-6 z-20 text-white text-sm flex items-center space-x-4">
+            {/* <div className="absolute bottom-1/2 right-6 z-20 text-white text-sm flex items-center space-x-4">
               <button className="px-3 py-1 bg-black/60 hover:bg-black/80 rounded">
                 Prev
               </button>
@@ -205,12 +250,12 @@ export default function Home() {
               <button className="px-3 py-1 bg-black/60 hover:bg-black/80 rounded">
                 Next
               </button>
-            </div>
+            </div> */}
           </div>
 
-          <div className="header absolute bottom-20 left-10 z-30 text-white leading-tight space-y-1">
-            <div className="overflow-hidden">
-              <span className="block text-[55px] font-semibold">
+          <div className="header absolute !bg-transparent bottom-20 left-10 z-30 text-white leading-tight space-y-1">
+            {/* <div className="overflow-hidden">
+              <span className="block  !bg-transparent text-[55px] font-semibold">
                 8 DISTANCE
               </span>
             </div>
@@ -218,21 +263,21 @@ export default function Home() {
               <span className="block text-[55px] font-semibold">
                 捌程室內設計
               </span>
-            </div>
+            </div> */}
           </div>
 
           <div className="coordinates absolute bottom-10 right-10 text-white z-30 space-y-1">
             <p>
-              <span>37.6934° N</span>
+              <span></span>
             </p>
             <p>
-              <span>97.3382° W</span>
+              <span></span>
             </p>
           </div>
         </div>
       </div>
 
-      <div className="absolute top-[8%] ml-[100px] text-black text-4xl font-bold z-40 flex">
+      <div className="absolute top-[8%] ml-[100px] text-black text-4xl font-bold z-10 flex">
         <div className="flex flex-col">
           <h1
             className="text-[50px] font-normal mt-9 tracking-widest h-4 opacity-0"

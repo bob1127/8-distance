@@ -74,6 +74,9 @@ export default function Nav() {
           <Link href="/qa" className="hover:opacity-70">
             QA
           </Link>
+          <Link href="/contact" className="hover:opacity-70">
+            聯絡我們
+          </Link>
         </div>
 
         {/* 右：搜尋 + 漢堡（手機） / 只搜尋（桌機） */}
