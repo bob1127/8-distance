@@ -12,6 +12,7 @@ import "yet-another-react-lightbox/styles.css";
 import "yet-another-react-lightbox/plugins/captions.css";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
 import HomeSlider from "../../components/HeroSliderHome/page.jsx";
+import SwiperCarousel from "../../components/SwiperCarousel/SwiperCard";
 import React, {
   useRef,
   useEffect,
@@ -714,249 +715,72 @@ export default function About() {
             </button>
           </div>
         </section>
-        <div className="bg-white z-[99999999] py-10 bottom-section flex flex-col justify-center items-center">
-          <div className="flex bg-white flex-row justify-center items-center flex-wrap">
-            <div className="news-item  group overflow-hidden  m-1 sm:m-2 bg-[url('https://kon-sumai.com/wp/wp-content/uploads/2024/05/1KKP6021s-1s-scaled.jpg')] bg-no-repeat relative bg-cover bg-center w-[170px] sm:w-[230px] lg:w-[270px] h-[230px]  sm:h-[300px] lg:h-[340px]">
-              <div className="description absolute w-full bottom-0 h-[0%] opacity-0 group-hover:opacity-100 duration-500 group-hover:h-[40%] flex flex-col bg-white p-3">
-                <p className="text-[.8rem] hidden sm:block">
-                  輕裝潢時代來了！我該繼續選擇傳統室內設計嗎？
-                </p>
-                <div className="flex flex-col sm:flex-row justify-center items-center">
-                  <b className="text-[.8rem] mr-3 mt-4"> 室內設計知識</b>
-                  <button class="group relative inline-flex h-6 w-6 items-center justify-center  rounded-full bg-neutral-950 font-medium text-neutral-200">
-                    <div class="translate-x-0 transition group-hover:translate-x-[300%]">
-                      <svg
-                        width="10"
-                        height="10"
-                        viewBox="0 0 15 15"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-5 w-5"
-                      >
-                        <path
-                          d="M8.14645 3.14645C8.34171 2.95118 8.65829 2.95118 8.85355 3.14645L12.8536 7.14645C13.0488 7.34171 13.0488 7.65829 12.8536 7.85355L8.85355 11.8536C8.65829 12.0488 8.34171 12.0488 8.14645 11.8536C7.95118 11.6583 7.95118 11.3417 8.14645 11.1464L11.2929 8H2.5C2.22386 8 2 7.77614 2 7.5C2 7.22386 2.22386 7 2.5 7H11.2929L8.14645 3.85355C7.95118 3.65829 7.95118 3.34171 8.14645 3.14645Z"
-                          fill="currentColor"
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
-                        ></path>
-                      </svg>
-                    </div>
-                    <div class="absolute -translate-x-[300%] transition group-hover:translate-x-0 duration-1000">
-                      <svg
-                        width="15"
-                        height="15"
-                        viewBox="0 0 15 15"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-5 w-5"
-                      >
-                        <path
-                          d="M8.14645 3.14645C8.34171 2.95118 8.65829 2.95118 8.85355 3.14645L12.8536 7.14645C13.0488 7.34171 13.0488 7.65829 12.8536 7.85355L8.85355 11.8536C8.65829 12.0488 8.34171 12.0488 8.14645 11.8536C7.95118 11.6583 7.95118 11.3417 8.14645 11.1464L11.2929 8H2.5C2.22386 8 2 7.77614 2 7.5C2 7.22386 2.22386 7 2.5 7H11.2929L8.14645 3.85355C7.95118 3.65829 7.95118 3.34171 8.14645 3.14645Z"
-                          fill="currentColor"
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
-                        ></path>
-                      </svg>
-                    </div>
-                  </button>{" "}
+        {/* 下方輪播（原樣） */}
+        <section className="flex pl-20 flex-col py-4 lg:py-[60px] ">
+          <div className="flex flex-col  justify-center items-center">
+            <h3 className="text-4xl text-stone-800">對我們作品有興趣嗎？</h3>
+            <button className="bg-[#f7a438] mt-3 text-stone-800 rounded-[30px] font-bold px-4 border border-gray-300 py-1">
+              協助貸款
+            </button>
+
+            <input
+              type="text"
+              placeholder="歡迎聯繫我們"
+              className="rounded-[40px] py-2 w-[90%] max-w-[800px] mt-10 px-5"
+            />
+          </div>
+          <div className="FB-reels mt-10 flex sm:flex-row flex-col">
+            <div className="w-full sm:w-[10%]  flex items-center justify-center sm:justify-end">
+              <div className="card-text flex flex-col justify-center items-center text-center">
+                <div className="flex flex-row justify-center items-center sm:flex-col">
+                  <h2
+                    className=" m-0
+      text-[9.5vmin] text-[#222222] tracking-wide
+      rotate-0 sm:rotate-90
+    "
+                  >
+                    IDEA
+                  </h2>
+
+                  <div
+                    className="
+      project-amount text-white my-0 mb-0 sm:my-16 bg-black flex justify-center items-center 
+      rounded-full w-10 h-10 sm:w-8 sm:h-8
+      text-[1rem] sm:text-[0.9rem]
+    "
+                  >
+                    23
+                  </div>
                 </div>
+
+                <span
+                  className="
+      text-[1.2rem] sm:text-[1.4rem] text-[#1c1c1c] mb-5 sm:mt-10
+    "
+                  style={{
+                    writingMode: "horizontal-tb",
+                    textOrientation: "mixed",
+                  }}
+                >
+                  <span
+                    className="hidden sm:inline"
+                    style={{
+                      writingMode: "vertical-rl",
+                      textOrientation: "upright",
+                    }}
+                  >
+                    創意想法案件
+                  </span>
+                  <span className="sm:hidden">創意想法案件</span>
+                </span>
               </div>
             </div>
-            <div className="news-item  group overflow-hidden  m-1 sm:m-2 bg-[url('https://kon-sumai.com/wp/wp-content/uploads/2024/05/KKP24_04_KonKomuten20083sss-scaled.jpg')] bg-no-repeat relative bg-cover bg-center w-[170px] sm:w-[230px] lg:w-[270px] h-[230px]  sm:h-[300px] lg:h-[340px]">
-              <div className="description absolute w-full bottom-0 h-[0%] opacity-0 group-hover:opacity-100 duration-500 group-hover:h-[40%] flex flex-col bg-white p-3">
-                <p className="text-[.8rem] hidden sm:block">
-                  室內設計的新選擇！為什麼越來越多新成屋裝潢找軟裝設計師？
-                </p>
-                <div className="flex flex-col sm:flex-row justify-center items-center">
-                  <b className="text-[.8rem] mr-3 mt-4"> 室內設計知識</b>
-                  <button class="group relative inline-flex h-6 w-6 items-center justify-center  rounded-full bg-neutral-950 font-medium text-neutral-200">
-                    <div class="translate-x-0 transition group-hover:translate-x-[300%]">
-                      <svg
-                        width="10"
-                        height="10"
-                        viewBox="0 0 15 15"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-5 w-5"
-                      >
-                        <path
-                          d="M8.14645 3.14645C8.34171 2.95118 8.65829 2.95118 8.85355 3.14645L12.8536 7.14645C13.0488 7.34171 13.0488 7.65829 12.8536 7.85355L8.85355 11.8536C8.65829 12.0488 8.34171 12.0488 8.14645 11.8536C7.95118 11.6583 7.95118 11.3417 8.14645 11.1464L11.2929 8H2.5C2.22386 8 2 7.77614 2 7.5C2 7.22386 2.22386 7 2.5 7H11.2929L8.14645 3.85355C7.95118 3.65829 7.95118 3.34171 8.14645 3.14645Z"
-                          fill="currentColor"
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
-                        ></path>
-                      </svg>
-                    </div>
-                    <div class="absolute -translate-x-[300%] transition group-hover:translate-x-0 duration-1000">
-                      <svg
-                        width="15"
-                        height="15"
-                        viewBox="0 0 15 15"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-5 w-5"
-                      >
-                        <path
-                          d="M8.14645 3.14645C8.34171 2.95118 8.65829 2.95118 8.85355 3.14645L12.8536 7.14645C13.0488 7.34171 13.0488 7.65829 12.8536 7.85355L8.85355 11.8536C8.65829 12.0488 8.34171 12.0488 8.14645 11.8536C7.95118 11.6583 7.95118 11.3417 8.14645 11.1464L11.2929 8H2.5C2.22386 8 2 7.77614 2 7.5C2 7.22386 2.22386 7 2.5 7H11.2929L8.14645 3.85355C7.95118 3.65829 7.95118 3.34171 8.14645 3.14645Z"
-                          fill="currentColor"
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
-                        ></path>
-                      </svg>
-                    </div>
-                  </button>{" "}
-                </div>
-              </div>
-            </div>
-            <div className="news-item  group overflow-hidden  m-1 sm:m-2 bg-[url('https://kon-sumai.com/wp/wp-content/uploads/2024/05/KKP24_04_KonKomuten20035ss-scaled.jpg')] bg-no-repeat relative bg-cover bg-center w-[170px] sm:w-[230px] lg:w-[270px] h-[230px]  sm:h-[300px] lg:h-[340px]">
-              <div className="description absolute w-full bottom-0 h-[0%] opacity-0 group-hover:opacity-100 duration-500 group-hover:h-[40%] flex flex-col bg-white p-3">
-                <p className="text-[.8rem] hidden sm:block">
-                  一個人的休閒療癒宅！隔間牆還能這樣做？11 坪小宅打造北歐簡約風
-                </p>
-                <div className="flex flex-col sm:flex-row justify-center items-center">
-                  <b className="text-[.8rem] mr-3 mt-4"> 空間故事</b>
-                  <button class="group relative inline-flex h-6 w-6 items-center justify-center  rounded-full bg-neutral-950 font-medium text-neutral-200">
-                    <div class="translate-x-0 transition group-hover:translate-x-[300%]">
-                      <svg
-                        width="10"
-                        height="10"
-                        viewBox="0 0 15 15"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-5 w-5"
-                      >
-                        <path
-                          d="M8.14645 3.14645C8.34171 2.95118 8.65829 2.95118 8.85355 3.14645L12.8536 7.14645C13.0488 7.34171 13.0488 7.65829 12.8536 7.85355L8.85355 11.8536C8.65829 12.0488 8.34171 12.0488 8.14645 11.8536C7.95118 11.6583 7.95118 11.3417 8.14645 11.1464L11.2929 8H2.5C2.22386 8 2 7.77614 2 7.5C2 7.22386 2.22386 7 2.5 7H11.2929L8.14645 3.85355C7.95118 3.65829 7.95118 3.34171 8.14645 3.14645Z"
-                          fill="currentColor"
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
-                        ></path>
-                      </svg>
-                    </div>
-                    <div class="absolute -translate-x-[300%] transition group-hover:translate-x-0 duration-1000">
-                      <svg
-                        width="15"
-                        height="15"
-                        viewBox="0 0 15 15"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-5 w-5"
-                      >
-                        <path
-                          d="M8.14645 3.14645C8.34171 2.95118 8.65829 2.95118 8.85355 3.14645L12.8536 7.14645C13.0488 7.34171 13.0488 7.65829 12.8536 7.85355L8.85355 11.8536C8.65829 12.0488 8.34171 12.0488 8.14645 11.8536C7.95118 11.6583 7.95118 11.3417 8.14645 11.1464L11.2929 8H2.5C2.22386 8 2 7.77614 2 7.5C2 7.22386 2.22386 7 2.5 7H11.2929L8.14645 3.85355C7.95118 3.65829 7.95118 3.34171 8.14645 3.14645Z"
-                          fill="currentColor"
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
-                        ></path>
-                      </svg>
-                    </div>
-                  </button>{" "}
-                </div>
-              </div>
-            </div>
-            <div className="news-item  group overflow-hidden  m-1 sm:m-2 bg-[url('https://kon-sumai.com/wp/wp-content/uploads/2024/07/0423_067-%E3%81%AE%E3%82%B3%E3%83%94%E3%83%BC-1367x2050.jpg')] bg-no-repeat relative bg-cover bg-center w-[170px] sm:w-[230px] lg:w-[270px] h-[230px]  sm:h-[300px] lg:h-[340px]">
-              <div className="description absolute w-full bottom-0 h-[0%] opacity-0 group-hover:opacity-100 duration-500 group-hover:h-[40%] flex flex-col bg-white p-3">
-                <p className="text-[.8rem] hidden sm:block">
-                  不簡單的青海路，相遇不平凡的青世代 獻給，鍾情市中心的菁英家庭
-                  致邀，職住共生的青創企業家
-                </p>
-                <div className="flex flex-col sm:flex-row justify-center items-center">
-                  <b className="text-[.8rem] mr-3 mt-4">
-                    {" "}
-                    NEWS:神隱青海│2-3房│含精裝修{" "}
-                  </b>
-                  <button class="group relative inline-flex h-6 w-6 items-center justify-center  rounded-full bg-neutral-950 font-medium text-neutral-200">
-                    <div class="translate-x-0 transition group-hover:translate-x-[300%]">
-                      <svg
-                        width="10"
-                        height="10"
-                        viewBox="0 0 15 15"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-5 w-5"
-                      >
-                        <path
-                          d="M8.14645 3.14645C8.34171 2.95118 8.65829 2.95118 8.85355 3.14645L12.8536 7.14645C13.0488 7.34171 13.0488 7.65829 12.8536 7.85355L8.85355 11.8536C8.65829 12.0488 8.34171 12.0488 8.14645 11.8536C7.95118 11.6583 7.95118 11.3417 8.14645 11.1464L11.2929 8H2.5C2.22386 8 2 7.77614 2 7.5C2 7.22386 2.22386 7 2.5 7H11.2929L8.14645 3.85355C7.95118 3.65829 7.95118 3.34171 8.14645 3.14645Z"
-                          fill="currentColor"
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
-                        ></path>
-                      </svg>
-                    </div>
-                    <div class="absolute -translate-x-[300%] transition group-hover:translate-x-0 duration-1000">
-                      <svg
-                        width="15"
-                        height="15"
-                        viewBox="0 0 15 15"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-5 w-5"
-                      >
-                        <path
-                          d="M8.14645 3.14645C8.34171 2.95118 8.65829 2.95118 8.85355 3.14645L12.8536 7.14645C13.0488 7.34171 13.0488 7.65829 12.8536 7.85355L8.85355 11.8536C8.65829 12.0488 8.34171 12.0488 8.14645 11.8536C7.95118 11.6583 7.95118 11.3417 8.14645 11.1464L11.2929 8H2.5C2.22386 8 2 7.77614 2 7.5C2 7.22386 2.22386 7 2.5 7H11.2929L8.14645 3.85355C7.95118 3.65829 7.95118 3.34171 8.14645 3.14645Z"
-                          fill="currentColor"
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
-                        ></path>
-                      </svg>
-                    </div>
-                  </button>{" "}
-                </div>
-              </div>
-            </div>
-            <div className="news-item  group overflow-hidden  m-1 sm:m-2 bg-[url('https://kon-sumai.com/wp/wp-content/uploads/2024/07/0423_060-%E3%81%AE%E3%82%B3%E3%83%94%E3%83%BC-1367x2050.jpg')] bg-no-repeat relative bg-cover bg-center w-[170px] sm:w-[230px] lg:w-[270px] h-[230px]  sm:h-[300px] lg:h-[340px]">
-              <div className="description absolute w-full bottom-0 h-[0%] opacity-0 group-hover:opacity-100 duration-500 group-hover:h-[40%] flex flex-col bg-white p-3">
-                <p className="text-[.8rem] hidden sm:block">
-                  不簡單的青海路，相遇不平凡的青世代 獻給，鍾情市中心的菁英家庭
-                  致邀，職住共生的青創企業家
-                </p>
-                <div className="flex flex-col sm:flex-row justify-center items-center">
-                  <b className="text-[.8rem] mr-3 mt-4">
-                    {" "}
-                    NEWS:神隱青海│2-3房│含精裝修{" "}
-                  </b>
-                  <button class="group relative inline-flex h-6 w-6 items-center justify-center  rounded-full bg-neutral-950 font-medium text-neutral-200">
-                    <div class="translate-x-0 transition group-hover:translate-x-[300%]">
-                      <svg
-                        width="10"
-                        height="10"
-                        viewBox="0 0 15 15"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-5 w-5"
-                      >
-                        <path
-                          d="M8.14645 3.14645C8.34171 2.95118 8.65829 2.95118 8.85355 3.14645L12.8536 7.14645C13.0488 7.34171 13.0488 7.65829 12.8536 7.85355L8.85355 11.8536C8.65829 12.0488 8.34171 12.0488 8.14645 11.8536C7.95118 11.6583 7.95118 11.3417 8.14645 11.1464L11.2929 8H2.5C2.22386 8 2 7.77614 2 7.5C2 7.22386 2.22386 7 2.5 7H11.2929L8.14645 3.85355C7.95118 3.65829 7.95118 3.34171 8.14645 3.14645Z"
-                          fill="currentColor"
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
-                        ></path>
-                      </svg>
-                    </div>
-                    <div class="absolute -translate-x-[300%] transition group-hover:translate-x-0 duration-1000">
-                      <svg
-                        width="15"
-                        height="15"
-                        viewBox="0 0 15 15"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-5 w-5"
-                      >
-                        <path
-                          d="M8.14645 3.14645C8.34171 2.95118 8.65829 2.95118 8.85355 3.14645L12.8536 7.14645C13.0488 7.34171 13.0488 7.65829 12.8536 7.85355L8.85355 11.8536C8.65829 12.0488 8.34171 12.0488 8.14645 11.8536C7.95118 11.6583 7.95118 11.3417 8.14645 11.1464L11.2929 8H2.5C2.22386 8 2 7.77614 2 7.5C2 7.22386 2.22386 7 2.5 7H11.2929L8.14645 3.85355C7.95118 3.65829 7.95118 3.34171 8.14645 3.14645Z"
-                          fill="currentColor"
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
-                        ></path>
-                      </svg>
-                    </div>
-                  </button>{" "}
-                </div>
-              </div>
+            <div className="w-[90%] overflow-hidden">
+              <SwiperCarousel />
             </div>
           </div>
-        </div>
-        <section className="pb-[100px] w-full overflow-hidden">
+        </section>
+        <section className=" pb-5 xl:pb-[100px] w-full overflow-hidden">
           <div className="title p-10">
             <h2 className="text-center text-[4vmin] font-bold">其他好文推薦</h2>
             <Link

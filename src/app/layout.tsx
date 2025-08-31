@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <ViewTransitions>
       <html lang="zh-Hant">
-        <body className="antialiased bg-white text-gray-900">
+        <body className="antialiased !overflow-hidden bg-white text-gray-900">
           <ExoApeOverlayMenu>
             <div className="hidden md:block fixed inset-x-0 top-0 z-[9999]">
               <Nav />
@@ -35,7 +35,7 @@ export default function RootLayout({
             <PageTransition>{children}</PageTransition>
             <Footer />
           </ExoApeOverlayMenu>
-          <div className="fixed right-8 bottom-[10%]">
+          <div className="fixed hidden sm:block right-8 bottom-[15%]">
             <a
               href="https://page.line.me/655cyzya?oat_content=url&openQrModal=true"
               target="_blank"
@@ -52,6 +52,7 @@ export default function RootLayout({
           </div>
 
           {/* Tawk.to */}
+
           <Script
             id="tawk-embed"
             strategy="afterInteractive"

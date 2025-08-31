@@ -83,11 +83,10 @@ export default function SwiperCardAbout() {
           pauseOnMouseEnter: false, // 我們在卡片 hover 時手動 stop
         }}
         speed={600}
-        pagination={{ clickable: true }}
         navigation={{ prevEl: ".js-prev", nextEl: ".js-next" }}
         observer
         observeParents
-        className="m-0 p-4 h-[560px] !overflow-hidden"
+        className="m-0 p-4 h-auto sm:h-[540px] !overflow-hidden"
       >
         {reels.map((item, idx) => (
           <SwiperSlide key={idx} style={{ width: "auto" }}>

@@ -35,7 +35,11 @@
     margin-bottom: 2rem;
   }
 }
-
+@media (max-width: 600px) {
+  #tawkchat-container, iframe[title="chat widget"] {
+    display: none !important;
+  }
+}
 /* Section padding */
 @layer utilities {
   .section-padding {

@@ -1,86 +1,115 @@
 "use client";
 
-import { Pagination, Scrollbar, A11y, Autoplay } from "swiper/modules";
+import React, { useMemo, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Card, CardBody } from "@nextui-org/react";
-import AnimatedLink from "../AnimatedLink";
-import { useRef, useEffect } from "react";
+import { Pagination, A11y, Autoplay, Navigation } from "swiper/modules";
+import FacebookReelsSection from "@/components/FacebookReelsSection";
 
 import "swiper/css";
 import "swiper/css/pagination";
-import "swiper/css/scrollbar";
+import "swiper/css/navigation";
 
-export default function SwiperCardAbout({ items = [] }) {
+export default function SwiperCardAbout() {
   const swiperRef = useRef(null);
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      window.swiperClick = (index) => {
-        const swiperInstance = document.querySelector(".swiper").swiper;
-        setTimeout(() => {
-          swiperInstance.slideToLoop(index);
-        }, 400);
-      };
-    }
-  }, []);
+  const reels = useMemo(
+    () => [
+      { url: "https://www.facebook.com/reel/1108853487853555?locale=zh_TW" },
+      { url: "https://www.facebook.com/reel/792758949760796?locale=zh_TW" },
+      { url: "https://www.facebook.com/reel/1108853487853555?locale=zh_TW" },
+      { url: "https://www.facebook.com/reel/792758949760796?locale=zh_TW" },
+      { url: "https://www.facebook.com/reel/1108853487853555?locale=zh_TW" },
+      { url: "https://www.facebook.com/reel/792758949760796?locale=zh_TW" },
+    ],
+    []
+  );
+
+  const stopAutoplay = () => {
+    try {
+      swiperRef.current?.autoplay?.stop();
+    } catch {}
+  };
+  const startAutoplay = () => {
+    try {
+      swiperRef.current?.autoplay?.start();
+    } catch {}
+  };
 
   return (
-    <div className="w-[98%] mx-auto m-0 p-0">
-      <Swiper
-        ref={swiperRef}
-        modules={[Pagination, Scrollbar, A11y, Autoplay]}
-        autoplay={{ delay: 5000, disableOnInteraction: false }}
-        loop={true}
-        speed={2000}
-        grabCursor={true}
-        centeredSlides={true}
-        slidesPerView={1}
-        pagination={{
-          clickable: true,
-          renderBullet: (index, className) => {
-            return `<span class="${className}" onclick="swiperClick(${index})"></span>`;
-          },
-        }}
-        className="rounded-[40px] overflow-hidden"
-        style={{
-          "--swiper-pagination-color": "#fff",
-          "--swiper-navigation-color": "#fff",
-          "--swiper-transition-timing-function":
-            "cubic-bezier(0.645, 0.045, 0.355, 1)",
-        }}
+    <div className="relative w-full m-0 p-0">
+      {/* 左右箭頭（用 CSS 選擇器給 Navigation 綁定） */}
+      <button
+        type="button"
+        aria-label="上一張"
+        className="js-prev hidden md:flex absolute left-3 top-1/2 -translate-y-1/2 z-30 h-10 w-10 items-center justify-center rounded-full bg-black/50 hover:bg-black/70 transition"
       >
-        {items.map((item, index) => (
-          <SwiperSlide
-            key={index}
-            className="overflow-hidden group relative duration-1000"
-          >
-            <AnimatedLink href={item.href}>
-              <div className="absolute z-50 w-full h-full inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,_rgba(0,0,0,0)_0%,_rgba(0,0,0,0.7)_100%)] opacity-0 group-hover:opacity-100 transition-opacity duration-1000 ease-in-out" />
-              <Card
-                className="border-white pb-4 w-full h-[500px] md:h-[580px] lg:h-[600px] 2xl:h-[600px] max-h-[850px] border relative bg-no-repeat bg-center bg-cover shadow-none overflow-hidden transition-transform duration-1000 ease-in-out hover:scale-110"
-                style={{ backgroundImage: `url(${item.image})` }}
-              >
-                <CardBody className="flex relative flex-col h-full w-full px-0">
-                  <div className="title absolute top-5 left-5 z-[999]">
-                    <span className="text-white text-[.9rem]">
-                      {item.title}
-                    </span>
-                  </div>
-                  <div className="title absolute bottom-5 right-5 flex z-[999]">
-                    <button className="relative h-12 rounded-full bg-transparent px-4 group-hover:text-white text-neutral-950">
-                      <span className="relative inline-flex overflow-hidden">
-                        <div className="translate-y-0 skew-y-0 transition duration-500 group-hover:-translate-y-[110%] group-hover:skew-y-12">
-                          View More
-                        </div>
-                        <div className="absolute translate-y-[110%] skew-y-12 transition duration-500 group-hover:translate-y-0 group-hover:skew-y-0">
-                          View More
-                        </div>
-                      </span>
-                    </button>
-                  </div>
-                </CardBody>
-              </Card>
-            </AnimatedLink>
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+          <path
+            d="M15 6l-6 6 6 6"
+            stroke="white"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </button>
+      <button
+        type="button"
+        aria-label="下一張"
+        className="js-next hidden md:flex absolute right-3 top-1/2 -translate-y-1/2 z-30 h-10 w-10 items-center justify-center rounded-full bg-black/50 hover:bg-black/70 transition"
+      >
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+          <path
+            d="M9 6l6 6-6 6"
+            stroke="white"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </button>
+
+      <Swiper
+        modules={[Pagination, A11y, Autoplay, Navigation]}
+        onSwiper={(sw) => (swiperRef.current = sw)}
+        slidesPerView="auto" // ✅ 一次顯示多個
+        spaceBetween={12}
+        centeredSlides={false}
+        loop
+        loopAdditionalSlides={reels.length}
+        autoplay={{
+          delay: 4000,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: false, // 我們在卡片 hover 時手動 stop
+        }}
+        speed={600}
+        pagination={{ clickable: true }}
+        navigation={{ prevEl: ".js-prev", nextEl: ".js-next" }}
+        observer
+        observeParents
+        className="m-0 p-4 h-[560px] !overflow-hidden"
+      >
+        {reels.map((item, idx) => (
+          <SwiperSlide key={idx} style={{ width: "auto" }}>
+            {/* 每張卡片固定尺寸；hover 暫停、離開恢復 */}
+            <div
+              className="
+                relative 
+                w-[220px] sm:w-[240px] md:w-[260px] lg:w-[280px]
+                h-[380px] sm:h-[420px] md:h-[460px] lg:h-[520px]
+              "
+              onMouseEnter={stopAutoplay}
+              onMouseLeave={startAutoplay}
+              onTouchStart={stopAutoplay}
+              onTouchEnd={startAutoplay}
+            >
+              <FacebookReelsSection
+                items={[item]} // 每個 slide 一支影片
+                autoPlayOnHover
+                autoPlayOnTap
+                cardClassName="w-full h-full aspect-[9/16] rounded-2xl overflow-hidden"
+              />
+            </div>
           </SwiperSlide>
         ))}
       </Swiper>

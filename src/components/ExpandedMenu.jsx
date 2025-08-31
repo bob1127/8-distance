@@ -267,7 +267,7 @@ export default function ExpandedMenu() {
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 bg-black overflow-hidden z-50"
+      className="fixed inset-0 bg-black overflow-hidden !w-[300px]  z-50"
     >
       <nav className="fixed w-full p-8 flex items-center z-20">
         <div className="flex-1">

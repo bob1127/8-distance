@@ -43,23 +43,15 @@ export default function ExoApeOverlayMenu({ children }) {
     const setContainerMinHeight = () => {
       if (!container) return;
       if (window.matchMedia("(min-width: 768px)").matches) {
-        container.style.minHeight = ""; // 桌機移除任何 min-height
-        return;
+        container.style.minHeight = ""; // 桌機不用
+      } else {
+        // 手機 → 固定為視窗高度，避免被 transform 撐爆
+        container.style.minHeight = `${window.innerHeight}px`;
       }
-      const de = document.documentElement;
-      const body = document.body;
-      const docH = Math.max(
-        de.scrollHeight,
-        de.offsetHeight,
-        de.clientHeight,
-        body?.scrollHeight || 0,
-        body?.offsetHeight || 0
-      );
-      container.style.minHeight = `${docH}px`;
     };
 
     // 初次設定 + 監聽
-    setContainerMinHeight();
+    container.style.minHeight = "";
     const onResize = () => setContainerMinHeight();
     window.addEventListener("resize", onResize);
     window.addEventListener("load", onResize);
@@ -442,22 +434,6 @@ export default function ExoApeOverlayMenu({ children }) {
 
       {/* 保留你原本的樣式，外加「桌機重置」段，確保只有手機受影響 */}
       <style jsx>{`
-        :global(html, body, #__next) {
-          height: 100%;
-        }
-        :global(body) {
-          margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-            Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans",
-            "Helvetica Neue", sans-serif;
-        }
-
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-
         a,
         p {
           position: relative;
@@ -501,8 +477,8 @@ export default function ExoApeOverlayMenu({ children }) {
 
         .menu-overlay {
           position: fixed;
-          width: 100vw;
-          height: 100svh;
+          width: 100%;
+          height: auto;
           background-color: #0f0f0f;
           z-index: 50;
           clip-path: polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%);
