@@ -62,8 +62,8 @@ const Slider = () => {
     slideHeader.className =
       "slide-header absolute z-20 flex flex-col gap-3 " +
       // 全裝置：置中定位＋置中文字
-      "left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 " +
-      "items-center text-center px-4 md:max-w-[48rem]";
+      "left-1/2 top-[40%] -translate-x-1/2 -translate-y-1/2 " +
+      "items-center text-center px-4 text-[30px] md:max-w-[48rem]";
 
     const slideTitle = document.createElement("div");
     slideTitle.className = "slide-title leading-none";
@@ -85,7 +85,7 @@ const Slider = () => {
     slideLink.className = "slide-link mt-3 md:mt-4";
     const a = document.createElement("a");
     a.href = slideData.slideUrl;
-    a.textContent = "VIEW PROJECT";
+
     a.className =
       "inline-block text-white/95 underline underline-offset-4 " +
       "text-sm md:text-base lg:text-lg";

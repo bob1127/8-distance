@@ -46,9 +46,7 @@ export default function ProgressCircle({
           }}
         />
       </svg>
-      <div>
-        <p className="text-white text-md z-[999999]">WELCOME</p>
-      </div>
+      <div></div>
     </div>
   );
 }

@@ -10,6 +10,7 @@ import MobileMenu from "../ExoApeOverlayMenu";
 export default function Nav() {
   const [openSearch, setOpenSearch] = useState(false);
   const [openMobile, setOpenMobile] = useState(false);
+  const [atTop, setAtTop] = useState(true);
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -28,6 +29,14 @@ export default function Nav() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
+  // 監聽滾動：頂部透明、向下恢復
+  useEffect(() => {
+    const update = () => setAtTop(window.scrollY <= 2);
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    return () => window.removeEventListener("scroll", update);
+  }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const q = inputRef.current?.value?.trim();
@@ -35,8 +44,26 @@ export default function Nav() {
     window.location.href = `/search?q=${encodeURIComponent(q)}`;
   };
 
+  // 顏色樣式
+  const searchBtnTone = atTop
+    ? "border-white/50 text-white hover:bg-white/10"
+    : "border-gray-300 text-gray-700 hover:bg-gray-50";
+
+  // 改成（無底線）
+  const linkTone =
+    "no-underline transition-colors duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] " +
+    (atTop ? "text-white" : "text-gray-800");
+
   return (
-    <nav className="fixed inset-x-0 top-0 z-40 bg-white/90 backdrop-blur border-b border-gray-200">
+    <nav
+      className={[
+        "fixed inset-x-0 top-0 z-40 border-b",
+        atTop
+          ? "bg-transparent backdrop-blur-0 border-white/30 text-white"
+          : "bg-white/90 backdrop-blur border-gray-200 text-gray-900",
+        "transition-[background-color,backdrop-filter,border-color,color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
+      ].join(" ")}
+    >
       {/* NAV BAR */}
       <div className="relative w-full flex items-center justify-between px-4 py-3">
         {/* 左：Logo */}
@@ -49,46 +76,50 @@ export default function Nav() {
               loading="lazy"
               width={100}
               height={100}
-              className="w-[50px] h-auto"
+              className="w-[60px] h-auto"
             />
           </Link>
         </div>
 
         {/* 中：連結（桌機） */}
-        <div className="nav-links hidden md:flex w-[65%] items-center justify-center gap-8 text-gray-800">
-          <Link href="/awards" className="hover:opacity-70">
+        <div className="nav-links hidden md:flex w-[65%] items-center justify-center gap-8">
+          <Link href="/awards" className={linkTone}>
             最新動態
           </Link>
-          <Link href="/note" className="hover:opacity-70">
+          <Link href="/note" className={linkTone}>
             作品欣賞
           </Link>
-          <Link href="/service" className="hover:opacity-70">
+          <Link href="/service" className={linkTone}>
             服務流程
           </Link>
-          <Link href="/blog" className="hover:opacity-70">
-            設計札記
+          <Link href="/blog" className={linkTone}>
+            設計靈感
           </Link>
-          <Link href="/about" className="hover:opacity-70">
+          <Link href="/about" className={linkTone}>
             關於我們
           </Link>
-          <Link href="/qa" className="hover:opacity-70">
+          <Link href="/qa" className={linkTone}>
             QA
           </Link>
-          <Link href="/contact" className="hover:opacity-70">
+          <Link href="/contact" className={linkTone}>
             聯絡我們
           </Link>
         </div>
 
-        {/* 右：搜尋 + 漢堡（手機） / 只搜尋（桌機） */}
+        {/* 右：搜尋 + 漢堡 */}
         <div className="w-[20%] min-w-[120px] flex items-center justify-end gap-2">
-          {/* Search Button (all) */}
+          {/* Search Button */}
           <button
             type="button"
             onClick={() => setOpenSearch((s) => !s)}
             aria-expanded={openSearch}
             aria-controls="global-search-bar"
             aria-label={openSearch ? "Close search" : "Open search"}
-            className="inline-flex items-center gap-2 rounded-xl border border-gray-300 px-3 py-2 text-gray-700 hover:bg-gray-50 active:scale-[0.98] transition"
+            className={[
+              "inline-flex items-center gap-2 rounded-xl px-3 py-2 active:scale-[0.98] transition border",
+              searchBtnTone,
+              "duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
+            ].join(" ")}
           >
             <Search size={18} />
             <span className="hidden sm:inline">Search</span>
@@ -102,12 +133,12 @@ export default function Nav() {
             ariaControls="mobile-menu-panel"
             ariaLabelOpen="Close menu"
             ariaLabelClosed="Open menu"
+            tone={atTop ? "light" : "dark"}
           />
         </div>
       </div>
 
-      {/* 手機選單（只在手機渲染/顯示） */}
-
+      {/* 手機選單 */}
       <MobileMenu open={openMobile} onClose={() => setOpenMobile(false)} />
 
       {/* 底下滑出的搜尋列 */}
@@ -136,15 +167,14 @@ export default function Nav() {
                 <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-2">
                   <button
                     type="submit"
-                    className="rounded-xl border border-gray-300 px-3 py-2 text-sm hover:bg-gray-50"
+                    className="rounded-xl border border-gray-300 px-3 py-2 text-sm hover:bg-gray-50 transition-colors"
                   >
                     搜尋
                   </button>
-                  {/* 用點漢堡關閉整個 MobileMenu；Search 自己這裡只關 search */}
                   <button
                     type="button"
                     onClick={() => setOpenSearch(false)}
-                    className="rounded-xl border border-gray-300 px-3 py-2 text-sm hover:bg-gray-50"
+                    className="rounded-xl border border-gray-300 px-3 py-2 text-sm hover:bg-gray-50 transition-colors"
                   >
                     關閉
                   </button>
@@ -166,7 +196,14 @@ function HamburgerButton({
   ariaControls,
   ariaLabelOpen = "Close menu",
   ariaLabelClosed = "Open menu",
+  tone = "dark", // 'light'：白色（頂部）；'dark'：深色（滾動）
 }) {
+  const borderClass =
+    tone === "light"
+      ? "border-white/50 hover:bg-white/10"
+      : "border-gray-300 hover:bg-gray-50";
+  const barClass = tone === "light" ? "bg-white" : "bg-gray-800";
+
   return (
     <button
       type="button"
@@ -174,27 +211,27 @@ function HamburgerButton({
       aria-expanded={open}
       aria-controls={ariaControls}
       aria-label={open ? ariaLabelOpen : ariaLabelClosed}
-      className={`relative h-10 w-10 inline-flex items-center justify-center rounded-xl border border-gray-300 hover:bg-gray-50 active:scale-[0.98] transition ${className}`}
+      className={`relative h-10 w-10 inline-flex items-center justify-center rounded-xl border ${borderClass} active:scale-[0.98] transition duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${className}`}
     >
       {/* 3 條線動畫成 X */}
       <motion.span
         initial={false}
         animate={open ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }}
         transition={{ type: "spring", stiffness: 400, damping: 28 }}
-        className="absolute block h-[2px] w-6 bg-gray-800"
+        className={`absolute block h-[2px] w-6 ${barClass}`}
       />
       <motion.span
         initial={false}
         animate={open ? { opacity: 0 } : { opacity: 1 }}
         transition={{ duration: 0.15 }}
-        className="absolute block h-[2px] w-6 bg-gray-800"
+        className={`absolute block h-[2px] w-6 ${barClass}`}
         style={{ y: 0 }}
       />
       <motion.span
         initial={false}
         animate={open ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }}
         transition={{ type: "spring", stiffness: 400, damping: 28 }}
-        className="absolute block h-[2px] w-6 bg-gray-800"
+        className={`absolute block h-[2px] w-6 ${barClass}`}
       />
     </button>
   );

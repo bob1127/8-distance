@@ -2,13 +2,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@font-face {
-  font-family: "Ethnocentric";
-  src: url("/fonts/WOFF2/ethnocentric-rg.woff2") format("woff2");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
+
 /* Hero 動畫 */
 @layer utilities {
   @keyframes heroFadeIn {
@@ -1545,4 +1539,28 @@ https://oreillymedia.github.io/Using_SVG/extras/ch07-textpaths.html */
 /* 中間實心點 */
 .custom-bullet circle.dot {
   fill: #ffa23f;
+}
+/* === Force LINESeedTW as global font (Server-safe) === */
+:root {
+  --app-font: var(--font-line-seed), 'LINESeedTW', 'PingFang TC', 'Noto Sans TC',
+    -apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji', sans-serif;
+}
+
+/* 若你也把字體放在 public/ 供備援，可加 @font-face（可選）*/
+/*
+@font-face {
+  font-family: 'LINESeedTW';
+  src: url('/fonts/WOFF2/LINESeedTW_OTF_Rg.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+*/
+
+*, *::before, *::after {
+  font-family: var(--app-font) !important;
+}
+button, input, select, textarea {
+  font-family: inherit !important;
 }

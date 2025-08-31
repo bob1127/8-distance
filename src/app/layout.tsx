@@ -1,6 +1,8 @@
-// app/layout.tsx
+// src/app/layout.tsx
 import "./globals.css";
 import "yakuhanjp";
+
+import localFont from "next/font/local";
 import { ViewTransitions } from "next-view-transitions";
 import type { Metadata } from "next";
 import Script from "next/script";
@@ -9,6 +11,7 @@ import Footer from "../components/Footer/Footer1";
 import PageTransition from "../components/PageTransition/PageTransition";
 import ExoApeOverlayMenu from "../components/ExoApeOverlayMenu";
 import Image from "next/image";
+
 export const metadata: Metadata = {
   title: "寬越設計｜商業空間與住宅設計",
   description: "寬越設計專注於舊屋翻新、住宅裝修與商業空間的室內設計整合服務。",
@@ -19,6 +22,33 @@ export const metadata: Metadata = {
   },
 };
 
+// ⚠️ 確保字體檔案存在於：src/app/fonts/WOFF2/LINESeedTW_OTF_Rg.woff2
+const lineSeed = localFont({
+  src: [
+    {
+      path: "./fonts/WOFF2/LINESeedTW_OTF_Rg.woff2",
+      weight: "400",
+      style: "normal",
+    },
+  ],
+  display: "swap",
+  variable: "--font-line-seed",
+  fallback: [
+    "PingFang TC",
+    "Noto Sans TC",
+    "-apple-system",
+    "BlinkMacSystemFont",
+    "system-ui",
+    "Segoe UI",
+    "Roboto",
+    "Helvetica Neue",
+    "Arial",
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "sans-serif",
+  ],
+});
+
 export default function RootLayout({
   children,
 }: {
@@ -26,8 +56,10 @@ export default function RootLayout({
 }) {
   return (
     <ViewTransitions>
-      <html lang="zh-Hant">
-        <body className="antialiased bg-white text-gray-900">
+      <html lang="zh-Hant" className={lineSeed.variable}>
+        <body
+          className={`antialiased bg-white text-gray-900 ${lineSeed.className}`}
+        >
           <ExoApeOverlayMenu>
             <div className="hidden md:block fixed inset-x-0 top-0 z-[9999]">
               <Nav />
@@ -35,36 +67,51 @@ export default function RootLayout({
             <PageTransition>{children}</PageTransition>
             <Footer />
           </ExoApeOverlayMenu>
+
           <div className="fixed right-8 bottom-[15%]">
             <a
               href="https://page.line.me/655cyzya?oat_content=url&openQrModal=true"
               target="_blank"
+              rel="noopener noreferrer"
             >
-              {" "}
               <Image
                 src="/images/icon/line.png"
                 alt="line-icon"
                 width={200}
                 height={200}
-                className="max-w-[50px]"
-              ></Image>
+                className="max-w-[50px] w-auto h-auto"
+              />
             </a>
           </div>
 
-          {/* Tawk.to */}
+          {/* Tawk.to（下調 z-index） */}
           <Script
             id="tawk-embed"
             strategy="afterInteractive"
             dangerouslySetInnerHTML={{
               __html: `
-                var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-                (function(){
-                  var s1=document.createElement("script"), s0=document.getElementsByTagName("script")[0];
-                  s1.async=true;
-                  s1.src='https://embed.tawk.to/68b2c125109d7be2aa210cc6/1j3t44v66';
-                  s1.charset='UTF-8';
-                  s1.setAttribute('crossorigin','*');
-                  s0.parentNode.insertBefore(s1,s0);
+                (function () {
+                  window.Tawk_API = window.Tawk_API || {};
+                  window.Tawk_LoadStart = new Date();
+
+                  // 當 Tawk 載入完成後，降低 z-index
+                  window.Tawk_API.onLoad = function () {
+                    try {
+                      var root = document.getElementById('tawkchat-container');
+                      if (root) root.style.zIndex = '1'; // 低於你站上的 z-[9999]
+
+                      var ifr = document.querySelector('iframe[title="chat widget"]');
+                      if (ifr) ifr.style.zIndex = '1';
+                    } catch (e) {}
+                  };
+
+                  var s1 = document.createElement("script"),
+                      s0 = document.getElementsByTagName("script")[0];
+                  s1.async = true;
+                  s1.src = "https://embed.tawk.to/68b2c125109d7be2aa210cc6/1j3t44v66";
+                  s1.charset = "UTF-8";
+                  s1.setAttribute("crossorigin", "*");
+                  s0.parentNode.insertBefore(s1, s0);
                 })();
               `,
             }}

@@ -378,13 +378,13 @@ const Section2 = () => {
 
 const Nav = () => {
   return (
-    <div className=" shrink-0 gap-2 pt-20">
+    <div className=" shrink-0 gap-2 pt-10 ">
       <div className="middle flex  flex-col lg:flex-row">
         <div className=" w-full lg:w-[40%]">
           <div className="grid grid-cols-2">
             <div className="flex py-8 flex-col">
               <div className="flex flex-col">
-                <b className="text-gray-400 text-[.8rem]">設計類型</b>
+                <b className="text-gray-400 text-[16px]">設計類型</b>
                 <Link href="/note" className="mt-2">
                   {" "}
                   <span className="text-[.8rem] text-white mt-1">建築設計</span>
@@ -405,16 +405,8 @@ const Nav = () => {
             </div>
             <div className="flex pl-8 py-8 flex-col">
               <div className="flex flex-col">
-                <b className="text-gray-400 text-[.8rem]">關於我們</b>
-                <Link href="/contact" className="mt-2">
-                  {" "}
-                  <span className="text-[.8rem] text-white mt-1">立即聯絡</span>
-                </Link>
-                <Link href="/about" className="mt-2">
-                  <span className="text-[.8rem] text-white mt-1">
-                    我們的團隊
-                  </span>
-                </Link>
+                <b className="text-gray-400 text-[16px]">關於我們</b>
+
                 <span className="text-[.8rem] text-white mt-1">信箱：</span>
                 <span className="text-[.8rem] text-white mt-1">
                   室內設計｜8distancee@gmail.com

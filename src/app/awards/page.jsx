@@ -151,8 +151,87 @@ export default function Home() {
 
   return (
     <>
-      {/* HERO */}
-      <section className="section-hero py-20">
+      <section>
+        <div className="aspect-[9/12] sm:aspect-[1/1] md:aspect-[1024/576]  xl:aspect-[16/9] relative overflow-hidden">
+          <div className="bottom-bar left-[10%] top-[30%] sm:top-[20%] z-40  absolute  w-2/3 sm:w-1/2">
+            <h1 className=" text-[30px] tracking-widest m-0 leading-snug xl:text-[45px] font-normal text-white">
+              {" "}
+              捌程室內設計獲獎和最新動態
+            </h1>
+            <h1 className=" text-[20px] tracking-wider m-0 xl:text-[45px] font-normal text-white">
+              AWARDS & NEWS
+            </h1>
+          </div>
+          <div className="bottom-bar left-[10%] bottom-0 z-40 absolute max-w-[600px]">
+            <div className="grid w-full py-6 grid-cols-2 gap-8">
+              <div className="flex flex-col">
+                <b className="text-white text-[16px] sm:text-[22px]">NEWS</b>
+                <p className="text-[14px] text-gray-100">
+                  捌程室內設計最新消息
+                </p>
+              </div>
+              <div className="flex flex-col">
+                <b className="text-white text-[16px] sm:text-[22px]">NEWS</b>
+                <p className="text-[14px] text-gray-100">
+                  捌程室內設計最新消息
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="bar hidden sm:block bg-blur w-[30%] md:w-[17%] max-w-[330px] absolute z-40 right-0 sm:right-[10%] top-0 h-full ">
+            <div className="flex flex-col h-full justify-between">
+              <div className="top h-full pt-[70%] sm:pt-[40%] backdrop-blur-sm bg-white/20 border-b border-white/30 shadow-md ">
+                <div className="  mx-auto max-w-[130px] text-center p-2 border-1 border-[#ffbe6f] text-[#ffbe6f]">
+                  關於捌程
+                </div>
+              </div>
+              <div className="bottom bg-[#ffd59a] p-10">
+                <Image
+                  src="/images/awards-logo.png"
+                  alt="award-icon"
+                  placeholder="empty"
+                  loading="lazy"
+                  width={700}
+                  height={700}
+                  className="max-w-[350px] w-[80%] mx-auto"
+                />
+                <b className="text-stone-800 text-[20px]">GOLD.WINNER</b>
+                <p className="text-stone-800 text-[14px]">榮獲國際大獎的肯定</p>
+              </div>
+            </div>
+          </div>
+
+          <Image
+            src="/11a89f77-e272-4c13-8b86-92bb4e3be7cc.png"
+            alt="award-icon"
+            placeholder="empty"
+            loading="lazy"
+            fill
+            className="w-full  object-cover"
+          />
+        </div>
+      </section>
+      <div className="mobile sm:hidden flex">
+        <div className="w-full">
+          <div className="bottom flex flex-col justify-center items-center bg-[#ffd59a] p-10">
+            <Image
+              src="/images/awards-logo.png"
+              alt="award-icon"
+              placeholder="empty"
+              loading="lazy"
+              width={700}
+              height={700}
+              className="max-w-[350px] w-[70%] mx-auto"
+            />
+            <b className="text-stone-800 text-[20px]">GOLD.WINNER</b>
+            <p className="text-stone-800 text-[14px]">榮獲國際大獎的肯定</p>
+            <div className="  mx-auto max-w-[130px] text-center mt-8 p-2 border-1 border-[#232323] text-[#292929]">
+              關於捌程
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* <section className="section-hero py-20">
         <Image
           src="/images/awards-logo.png"
           alt="award-icon"
@@ -198,10 +277,10 @@ export default function Home() {
             </div>
           </div>
         </Marquee>
-      </section>
+      </section> */}
 
       {/* Parallax 區 */}
-      <main ref={container} className="relative">
+      <main ref={container} className="relative mt-12">
         {projects.map((project, i) => {
           const targetScale = 1 - (projects.length - i) * 0.05;
           return (
@@ -221,13 +300,13 @@ export default function Home() {
       {/* 文字 + 圖 */}
       <section className="section-award-item max-w-[1920px] mx-auto w-[80%]">
         <div className="flex py-[10vh] flex-col lg:flex-row">
-          <div className="w-1/2 items-center flex justify-center">
+          <div className=" w-full lg:w-1/2 items-center flex justify-center">
             <div className="w-full">
               <Image
                 src="/images/捌程-2024法國設計獎電子證書-員林胡宅.png"
                 placeholder="empty"
                 loading="lazy"
-                className="w-[90%]"
+                className=" w-full lg:w-[90%]"
                 alt=""
                 width={500}
                 height={800}
@@ -235,7 +314,7 @@ export default function Home() {
             </div>
           </div>
           <div className="w-full lg:w-1/2">
-            <div className="description max-w-[600px] p-10">
+            <div className="description  w-full lg:max-w-[600px] p-2 mt-10 lg:p-10">
               <TextGenerateEffect words={"榮獲國際大獎的肯定\n"} />
               <br />
               <p className="text-[.9rem] tracking-widest">
@@ -247,7 +326,7 @@ export default function Home() {
       </section>
 
       {/* 其他專案：點擊打開 Popup（fixed + 上一/下一張） */}
-      <section className="section-others-project mb-20 w-full">
+      <section className="section-others-project mb-20 overflow-hidden w-full">
         <Swiper
           modules={[Pagination, A11y, Autoplay]}
           autoplay={{ delay: 4000, disableOnInteraction: false }}

@@ -42,13 +42,13 @@ export default function Home() {
             className="text-[50px] font-normal mt-9 tracking-widest"
             ref={(el) => (taglineRef.current[0] = el)}
           >
-            We are building the
+            8-DISTANCE
           </h1>
           <h1
             className="text-[50px] font-normal tracking-widest"
             ref={(el) => (taglineRef.current[1] = el)}
           >
-            fundamentals of your life
+            捌程室內設計
           </h1>
         </div>
       </div>

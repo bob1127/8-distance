@@ -21,10 +21,7 @@ const categories = [
   { label: "商業空間", value: "commercial" },
 ];
 
-/* 你的原始 categoryContent 不含城市/坪數/預算/日期等欄位，下面的濾鏡會自動容錯。
-   若你之後在每個 item 補上：city / district / budgetWan / areaPing / type / style / date
-   就能完整使用所有條件。
-*/
+/* 你的原始 categoryContent 不含城市/坪數/預算/日期等欄位，下面的濾鏡會自動容錯。*/
 const categoryContent = {
   residential: [
     {
@@ -35,7 +32,6 @@ const categoryContent = {
       image: "/images/project-01/project04.jpg",
       url: "/portfolio-inner",
       tag: "住宅空間",
-      // 可選：city,district,budgetWan,areaPing,type,style,date
     },
     {
       title: "光影簡約宅",
@@ -46,7 +42,6 @@ const categoryContent = {
       url: "/portfolio-inner",
       tag: "住宅空間",
     },
-    // ...其餘略（保持原資料）
   ],
   renovation: [
     {
@@ -58,7 +53,6 @@ const categoryContent = {
       url: "/project/residential-1",
       tag: "住宅空間",
     },
-    // ...
   ],
   design: [
     {
@@ -71,7 +65,6 @@ const categoryContent = {
       url: "/project/design-1",
       tag: "純設計案",
     },
-    // ...
   ],
   commercial: [
     {
@@ -462,6 +455,10 @@ function FadeCard({ project }) {
 const QaClient = () => {
   const [activeCategory, setActiveCategory] = useState("residential");
 
+  // ✅ 新增：Filter 收合狀態（預設收合）
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const toggleFilter = () => setIsFilterOpen((v) => !v);
+
   // 依螢幕寬度切換 1/2/3 欄（純排版，不影響動畫）
   const [colsClass, setColsClass] = useState("grid-cols-1");
   useEffect(() => {
@@ -509,13 +506,13 @@ const QaClient = () => {
         areaPing: null,
         type: it.type ?? defaultTypeByCat[activeCategory] ?? null,
         style: it.style ?? null,
-        date: it.date ?? null, // "YYYY-MM-DD"；若未提供則排序時用原順序
+        date: it.date ?? null,
         ...it,
       })),
     [baseItems, activeCategory]
   );
 
-  /* ===== 和你「那頁」相同的 Filter 狀態/邏輯 ===== */
+  /* ===== Filter 狀態/邏輯 ===== */
   const [filters, setFilters] = useState({
     keyword: "",
     city: null,
@@ -527,7 +524,7 @@ const QaClient = () => {
     type: null,
     style: null,
     sort: "latest",
-    _searchTick: 0, // 供「搜尋」按鈕觸發用（選擇性）
+    _searchTick: 0,
   });
 
   const handleChange = (patch) => setFilters((f) => ({ ...f, ...patch }));
@@ -548,7 +545,7 @@ const QaClient = () => {
       _searchTick: (f._searchTick || 0) + 1,
     }));
 
-  // 濾鏡（和你那頁一致，缺資料時自動略過）
+  // 濾鏡
   const filtered = useMemo(() => {
     let list = [...items];
 
@@ -619,7 +616,6 @@ const QaClient = () => {
         );
         break;
       default: {
-        // latest：沒有 date 的維持原順序，有 date 的排在前面並照日期新→舊
         const withDate = list
           .filter((i) => i.date)
           .sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -628,7 +624,6 @@ const QaClient = () => {
       }
     }
     return list;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     items,
     filters.keyword,
@@ -644,7 +639,6 @@ const QaClient = () => {
     filters._searchTick,
   ]);
 
-  // 作品數字格式（若你要顯示預算/坪數）
   const formatWan = (n) =>
     typeof n === "number"
       ? new Intl.NumberFormat("zh-TW").format(n) + " 萬"
@@ -672,7 +666,7 @@ const QaClient = () => {
                 className={`px-6 py-2 rounded-full border transition-colors duration-300 ${
                   activeCategory === cat.value
                     ? "bg-[#E1A95F] text-white"
-                    : "bg-white text-black border-gray-300 hover:bg-[#E1A95F] hover:text-white"
+                    : "bg-white text-black border-gray-300 hover:bg[#E1A95F] hover:text-white"
                 }`}
               >
                 {cat.label}
@@ -680,13 +674,62 @@ const QaClient = () => {
             ))}
           </div>
 
-          {/* == 與另一頁「相同風格/行為」的 Filter Bar（放在 Tabs 下方） == */}
-          <CaseFilterBar
-            value={filters}
-            onChange={handleChange}
-            onSearch={handleSearch}
-            onClear={handleClear}
-          />
+          {/* ✅ Filter 控制列（新增） */}
+          <div className="mb-3 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="text-sm tracking-wide text-gray-700">
+                Filter
+              </span>
+            </div>
+
+            <button
+              type="button"
+              onClick={toggleFilter}
+              aria-expanded={isFilterOpen}
+              aria-controls="case-filter-panel"
+              className="inline-flex items-center gap-2 rounded-full border border-gray-300 bg-white px-3 py-1.5 text-sm hover:bg-gray-50 transition"
+            >
+              {isFilterOpen ? "收合" : "展開"}
+              <svg
+                className={`h-4 w-4 transition-transform ${
+                  isFilterOpen ? "rotate-180" : "rotate-0"
+                }`}
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M6 9l6 6 6-6"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
+
+          {/* ✅ Filter Panel 收合（新增） */}
+          <AnimatePresence initial={false}>
+            {isFilterOpen && (
+              <motion.div
+                id="case-filter-panel"
+                key="filter-panel"
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.2, ease: "easeInOut" }}
+                className="overflow-hidden"
+              >
+                <CaseFilterBar
+                  value={filters}
+                  onChange={handleChange}
+                  onSearch={handleSearch}
+                  onClear={handleClear}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <div className="mb-3 text-sm text-gray-600">
             共 {filtered.length} 個符合條件的作品

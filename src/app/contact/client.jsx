@@ -118,12 +118,64 @@ function LoanHelpModal({ open, onClose }) {
     if (open) window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
+  // ====== 來自 Excel 的內容（已整理）======
+  const loanNews = {
+    title: "最新消息 | 2025 全新裝修分期：輕鬆打造您的夢想家園！",
+    intro:
+      "夢想的家，不再遙不可及！捌程室內設計與和潤企業攜手合作，推出專為您量身打造的裝修分期付款專案。最高可享 200 萬元彈性分期額度，讓您輕鬆打造心目中的理想居住空間，無需為資金煩惱，幸福立即到家。",
+    partnerBlock: [
+      "捌程室內設計 X 和潤企業：您的理想家園，輕鬆入主！",
+      "我們深知裝修是實現美好生活的關鍵一步，但同時可能帶來資金壓力。因此，捌程室內設計與和潤企業合作，提供貼心、無負擔的裝修分期解決方案，讓您的裝修旅程更從容、更安心。",
+    ],
+    features: [
+      {
+        title: "免去繁瑣程序",
+        desc: "無需信用卡，也無需擔心聯徵紀錄，大幅簡化申辦流程。",
+      },
+      {
+        title: "資金運用更靈活",
+        desc: "最高 36 期分期選擇，分散裝修開支、降低每月負擔。",
+      },
+    ],
+    plan: {
+      amountLabel: "100 萬元",
+      rows: [
+        { term: "12 期", monthly: "87,090 元" },
+        { term: "18 期", monthly: "59,170 元" },
+        { term: "24 期", monthly: "45,420 元" },
+        { term: "36 期", monthly: "31,250 元" },
+      ],
+    },
+    chooseUs: [
+      {
+        title: "專業設計與品質保證",
+        desc: "秉持精湛工藝與嚴謹施工標準，確保裝修品質達到最高水準。",
+      },
+      {
+        title: "全程貼心服務",
+        desc: "以經驗與熱忱，陪你走完從規劃到落成的每一步，讓過程更愉悅。",
+      },
+      {
+        title: "完善售後",
+        desc: "提供完善保固與修繕服務，為居家空間提供長期保障。",
+      },
+    ],
+    ctas: [
+      { label: "預約諮詢表單", href: "/appointment" },
+      { label: "詢問客服", href: "/contact" },
+    ],
+    notes: [
+      "本分期方案適用於工程款項滿 100 萬元以上之裝修項目，最高可貸額度為 200 萬元。",
+      "分期貸款服務之申貸事宜皆由「和潤企業」提供與核定。",
+      "捌程室內設計保留對此專案最終解釋、修改及取消之權利。",
+    ],
+  };
 
   return (
     <AnimatePresence>
       {open && (
         <motion.div
-          className="fixed inset-0 z-[80] flex items-center justify-center"
+          className="fixed inset-0 z-[999999999] flex items-center justify-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -156,82 +208,162 @@ function LoanHelpModal({ open, onClose }) {
             </div>
 
             {/* Body */}
+            {/* Body */}
             <div className="overflow-y-auto px-6 py-5 space-y-6">
+              {/* 標題＋導言 */}
+              <section className="space-y-2">
+                <h4 className="text-lg font-semibold">{loanNews.title}</h4>
+                <p className="text-sm text-neutral-700 leading-relaxed">
+                  {loanNews.intro}
+                </p>
+              </section>
+
+              {/* 合作說明 */}
+              <section className="rounded-2xl border border-neutral-200  !bg-[#daa335] p-4 sm:p-5 bg-neutral-50/60">
+                <div className="mb-3 font-medium">
+                  {loanNews.partnerBlock[0]}
+                </div>
+                <p className="text-sm text-neutral-700 leading-relaxed">
+                  {loanNews.partnerBlock[1]}
+                </p>
+
+                <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                  {loanNews.features.map((f) => (
+                    <div
+                      key={f.title}
+                      className="rounded-xl border border-neutral-200 bg-white p-3.5"
+                    >
+                      <div className="text-sm font-medium">{f.title}</div>
+                      <p className="mt-1 text-sm text-neutral-700">{f.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+
+              {/* 分期方案（100 萬元示意） */}
               <section>
-                <h4 className="font-medium mb-2">我們如何協助你</h4>
+                <div className="mb-3 flex items-end justify-between gap-4">
+                  <h4 className="font-semibold">
+                    分期試算（{loanNews.plan.amountLabel} 示意）
+                  </h4>
+                  <span className="text-xs text-neutral-500">
+                    * 實際金額以核准為準
+                  </span>
+                </div>
+
+                <div className="grid gap-3 grid-cols-2 md:grid-cols-4">
+                  {loanNews.plan.rows.map((r) => (
+                    <div
+                      key={r.term}
+                      className="rounded-2xl border border-neutral-200 p-4 bg-white"
+                    >
+                      <div className="text-xs text-neutral-500">期數</div>
+                      <div className="mt-0.5 text-base font-semibold">
+                        {r.term}
+                      </div>
+                      <div className="mt-3 text-xs text-neutral-500">
+                        月付(約)
+                      </div>
+                      <div className="mt-0.5 text-lg font-semibold tracking-wide">
+                        {r.monthly}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+
+              {/* 為什麼選擇捌程 */}
+              <section>
+                <h4 className="font-semibold mb-2">
+                  選擇捌程，享受安心設計旅程
+                </h4>
+                <div className="grid gap-3 sm:grid-cols-3">
+                  {loanNews.chooseUs.map((c) => (
+                    <div
+                      key={c.title}
+                      className="rounded-2xl border border-neutral-200 p-4 bg-white"
+                    >
+                      <div className="text-sm font-medium">{c.title}</div>
+                      <p className="mt-1 text-sm text-neutral-700">{c.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+
+              {/* CTA */}
+              <section className="grid gap-3 sm:grid-cols-2">
+                {loanNews.ctas.map((a) => (
+                  <a
+                    key={a.label}
+                    href={a.href}
+                    className="rounded-xl bg-neutral-900 text-white px-4 py-3 text-center text-sm hover:opacity-90"
+                  >
+                    {a.label} →
+                  </a>
+                ))}
+              </section>
+
+              {/* 注意事項 */}
+              <section className="rounded-2xl border border-neutral-200 p-4">
+                <h4 className="font-medium mb-2">注意事項</h4>
                 <ul className="list-disc pl-5 space-y-1 text-sm text-neutral-700">
-                  <li>評估可貸額度、期數與每月還款金額（含裝修/設計費）。</li>
-                  <li>多家銀行方案比價，提供最適合的利率與配套。</li>
-                  <li>整理申貸資料與進度追蹤，縮短核貸時間。</li>
+                  {loanNews.notes.map((n, i) => (
+                    <li key={i}>{n}</li>
+                  ))}
                 </ul>
               </section>
 
-              <section>
-                <h4 className="font-medium mb-2">流程</h4>
-                <ol className="list-decimal pl-5 space-y-1 text-sm text-neutral-700">
-                  <li>留下聯絡方式與基本需求（坪數、預算、房屋狀況）。</li>
-                  <li>專員 1–2 個工作日內與你聯繫，初步試算。</li>
-                  <li>確認方案並收集資料（下方清單）。</li>
-                  <li>送件審核與核貸，安排撥款時程。</li>
-                </ol>
-              </section>
+              {/* 你原本的流程/準備資料 -> 保留，但預設折疊，避免資訊過長 */}
+              {/* 更多：流程與準備資料（移到注意事項前面，強化可見性） */}
+              <details
+                className="group border-t border-neutral-200 pt-4 rounded-lg"
+                open
+              >
+                <summary className="flex items-center justify-between cursor-pointer text-sm font-medium select-none px-2 py-2 rounded-lg hover:bg-neutral-50">
+                  <span>更多：流程與準備資料</span>
+                  {/* 自訂箭頭，避免瀏覽器把預設 marker 藏起來 */}
+                  <svg
+                    className="w-4 h-4 text-neutral-500 transition-transform group-open:rotate-180"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </summary>
 
-              <section>
-                <h4 className="font-medium mb-2">準備資料</h4>
-                <div className="grid gap-3 sm:grid-cols-2 text-sm text-neutral-700">
-                  <ul className="list-disc pl-5 space-y-1">
-                    <li>身分證/第二證件</li>
-                    <li>近 6 個月薪資或收入證明</li>
-                    <li>近 3–6 個月銀行往來明細</li>
-                  </ul>
-                  <ul className="list-disc pl-5 space-y-1">
-                    <li>房屋權狀或買賣契約（如適用）</li>
-                    <li>裝修/設計估價單</li>
-                    <li>其他銀行要求之文件</li>
-                  </ul>
+                <div className="mt-3 space-y-6 text-sm text-neutral-700 px-2">
+                  <section>
+                    <h5 className="font-medium mb-1">流程</h5>
+                    <ol className="list-decimal pl-5 space-y-1">
+                      <li>留下聯絡方式與基本需求（坪數、預算、房屋狀況）。</li>
+                      <li>專員 1–2 個工作日內與你聯繫，初步試算。</li>
+                      <li>確認方案並收集資料（下方清單）。</li>
+                      <li>送件審核與核貸，安排撥款時程。</li>
+                    </ol>
+                  </section>
+
+                  <section>
+                    <h5 className="font-medium mb-1">準備資料</h5>
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>身分證/第二證件</li>
+                        <li>近 6 個月薪資或收入證明</li>
+                        <li>近 3–6 個月銀行往來明細</li>
+                      </ul>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>房屋權狀或買賣契約（如適用）</li>
+                        <li>裝修/設計估價單</li>
+                        <li>其他銀行要求之文件</li>
+                      </ul>
+                    </div>
+                  </section>
                 </div>
-              </section>
-
-              <section>
-                <h4 className="font-medium mb-2">常見問題</h4>
-                <div className="space-y-2 text-sm text-neutral-700">
-                  <p>
-                    <span className="font-medium">
-                      Q：設計費可以併入貸款嗎？
-                    </span>
-                    <br />
-                    A：多數方案可併入，將視房屋條件與額度評估。
-                  </p>
-                  <p>
-                    <span className="font-medium">Q：大約利率與年限？</span>
-                    <br />
-                    A：視個人條件，常見 1.8%–3.5%，年限 5–20
-                    年（實際以核准為準）。
-                  </p>
-                  <p>
-                    <span className="font-medium">Q：核貸時間多久？</span>
-                    <br />
-                    A：資料齊全下約 5–10 個工作日。
-                  </p>
-                </div>
-              </section>
-
-              <section className="grid gap-3 sm:grid-cols-2">
-                <a
-                  href="https://www.google.com/search?q=%E8%B2%B8%E6%AC%BE%E8%A9%A6%E7%AE%97"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="rounded-xl border border-neutral-300 px-4 py-3 text-sm text-center hover:border-neutral-900"
-                >
-                  立即前往貸款試算 →
-                </a>
-                <a
-                  href="tel:+886-2-0000-0000"
-                  className="rounded-xl bg-neutral-900 text-white px-4 py-3 text-sm text-center hover:opacity-90"
-                >
-                  直接致電專員
-                </a>
-              </section>
+              </details>
             </div>
           </motion.div>
         </motion.div>

@@ -291,36 +291,36 @@ function HomeClient({ specialPosts }) {
   const projects = projectsData ?? [];
   const slidesA = [
     {
-      image: "/images/index/住宅空間-程宅.jpg",
+      image: "/images/index/住宅空間-程宅.webp",
     },
     {
-      image: "/images/index/住宅空間-程宅.jpg",
+      image: "/images/index/住宅空間-程宅.webp",
     },
   ];
   const slidesB = [
     {
-      image: "/images/index/商業空間-桃園招待所.jpg",
+      image: "/images/index/商業空間-桃園招待所.webp",
     },
     {
-      image: "/images/index/商業空間-桃園招待所.jpg",
+      image: "/images/index/商業空間-桃園招待所.webp",
     },
   ];
 
   const slidesC = [
     {
-      image: "/images/index/純設計案-和美.png",
+      image: "/images/index/純設計案-和美.webp",
     },
     {
-      image: "/images/index/純設計案-和美.png",
+      image: "/images/index/純設計案-和美.webp",
     },
   ];
 
   const slidesD = [
     {
-      image: "/images/index/老屋翻新-李宅.jpg",
+      image: "/images/index/老屋翻新-李宅.webp",
     },
     {
-      image: "/images/index/老屋翻新-李宅.jpg",
+      image: "/images/index/老屋翻新-李宅.webp",
     },
   ];
   // 客戶好評區塊
@@ -337,12 +337,12 @@ function HomeClient({ specialPosts }) {
       <div className="">
         <div
           id="dark-section"
-          className="relative w-full aspect-[16/11] md:aspect-[1920/1080] overflow-hidden  min-h-[90vh] sm:min-h-[85vh] md:min-h-[100vh] lg:min-h-[1000px] xl:min-h-[1000px]"
+          className="relative w-full aspect-[500/700] sm:aspect-[500/700] md:aspect-[1024/576] xl:aspect-[1920/768] 2xl:aspect-[1920/1080] !overflow-hidden  "
         >
           <Preloader01 />
         </div>
 
-        <section id="dark-section" className="section-padding">
+        <div className="">
           <div
             id="dark-section"
             className="flex flex-col justify-center w-full mx-auto"
@@ -360,7 +360,7 @@ function HomeClient({ specialPosts }) {
               <section className="section-portfolio w-full pb-5 xl:pb-20">
                 <div className="grid relative grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4 w-full ">
                   <div className=" border ">
-                    <Link href="/KuankoshiProjectInner">
+                    <Link href="/note">
                       <HoverItem
                         slides={slidesC}
                         overlayTitle="建築設計 "
@@ -376,7 +376,7 @@ function HomeClient({ specialPosts }) {
                     </Link>
                   </div>
                   <div className=" border ">
-                    <Link href="/KuankoshiProjectInner">
+                    <Link href="/note">
                       <HoverItem
                         slides={slidesD}
                         overlayTitle="老屋改造 "
@@ -392,7 +392,7 @@ function HomeClient({ specialPosts }) {
                     </Link>
                   </div>
                   <div className=" border ">
-                    <Link href="/KuankoshiProjectInner">
+                    <Link href="/note">
                       <HoverItem
                         slides={slidesA}
                         overlayTitle="住宅空間"
@@ -408,7 +408,7 @@ function HomeClient({ specialPosts }) {
                     </Link>
                   </div>
                   <div className=" border ">
-                    <Link href="/KuankoshiProjectInner">
+                    <Link href="/note">
                       <HoverItem
                         slides={slidesB}
                         overlayTitle="商業空間 "
@@ -434,7 +434,7 @@ function HomeClient({ specialPosts }) {
                   <div className="left  w-full lg:w-[30%] pr-5">
                     <div className="sticky top-20">
                       <img
-                        src="https://i0.wp.com/tjda.com/wp/wp-content/uploads/2024/11/14_Hibiya_02.jpg?fit=2880%2C1920&quality=85&strip=all&ssl=1"
+                        src="/images/員林胡宅獎盃/A7400023.webp"
                         className="w-[90%] h-auto"
                         alt=""
                       />
@@ -462,16 +462,15 @@ function HomeClient({ specialPosts }) {
                         <div className="flex lg:flex-row flex-col justify-between">
                           <div className="flex flex-col">
                             <h2 className="news-title font-normal text-gray-900">
-                              紐約建築設計獎-2024
+                              法國設計GOLD.WINNER
                             </h2>
                             <span className="news-sub text-[14px] text-gray-800">
-                              NY ARCHITECTURAL DESIGN AWARDS 紐約建築設計獎-2024
-                              ​金獎
+                              員林胡宅獎杯
                             </span>
                           </div>
                           <div className="img h-full mt-7 justify-start items-start lg:justify-center flex lg:items-center">
                             <img
-                              src="https://static.wixstatic.com/media/b69ff1_5832419ae5d64e72afacdadad35c78bd~mv2.jpg/v1/fill/w_787,h_444,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/%E5%B0%81%E9%9D%A2%20%E6%8B%B7%E8%B2%9D.jpg"
+                              src="/images/員林胡宅獎盃/A7400023.webp"
                               className="news-thumb max-w-full lg:max-w-[150px]" // ⬅️ 不放任何 opacity 類別，由 GSAP 控制
                               alt=""
                             />
@@ -572,7 +571,7 @@ function HomeClient({ specialPosts }) {
                 </div>
               </section>
 
-              <section className="section-others-project overflow-hidden w-full">
+              <section className="section-others-project mb-10 overflow-hidden w-full">
                 <Swiper
                   modules={[Pagination, A11y, Autoplay]}
                   autoplay={{ delay: 4000, disableOnInteraction: false }}
@@ -651,7 +650,7 @@ function HomeClient({ specialPosts }) {
               </section>
             </div>
           </div>
-        </section>
+        </div>
 
         {/* 下方 ThreeDSlider 保持 */}
       </div>
