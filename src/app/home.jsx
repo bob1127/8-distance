@@ -579,10 +579,24 @@ function HomeClient({ specialPosts }) {
                   loop
                   speed={1200}
                   spaceBetween={16}
-                  pagination={{ clickable: true }}
+                  pagination={{
+                    el: ".custom-pagination",
+                    clickable: true,
+                    renderBullet: (index, className) => {
+                      return `
+        <span class="${className} custom-bullet">
+          <svg class="bullet-svg" width="22" height="22" viewBox="0 0 22 22">
+            <circle class="bg" cx="11" cy="11" r="9" />
+            <circle class="progress" cx="11" cy="11" r="9" />
+            <circle class="dot" cx="11" cy="11" r="4" />
+          </svg>
+        </span>
+      `;
+                    },
+                  }}
                   breakpoints={{
-                    0: { slidesPerView: 1.2 },
-                    480: { slidesPerView: 2 },
+                    0: { slidesPerView: 1 },
+                    480: { slidesPerView: 1 },
                     640: { slidesPerView: 2 },
                     768: { slidesPerView: 2.5 },
                     1024: { slidesPerView: 2.5 },
@@ -593,7 +607,7 @@ function HomeClient({ specialPosts }) {
                   {staticSlides.map((slide, idx) => (
                     <SwiperSlide
                       key={idx}
-                      className="mx-2 overflow-hidden group relative duration-1000"
+                      className="px-3 overflow-hidden group relative duration-1000"
                     >
                       <div className="title absolute top-5 left-5 z-[999]">
                         <span className="text-white text-[.9rem]">
@@ -632,6 +646,7 @@ function HomeClient({ specialPosts }) {
                       </AnimatedLink>
                     </SwiperSlide>
                   ))}
+                  <div className="custom-pagination flex justify-center gap-3 mt-6"></div>
                 </Swiper>
               </section>
             </div>

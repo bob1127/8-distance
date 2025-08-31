@@ -1496,3 +1496,53 @@ https://oreillymedia.github.io/Using_SVG/extras/ch07-textpaths.html */
     transform: rotate(360deg);
   }
 }
+
+/* 重置預設圓點 */
+.swiper-pagination-bullet {
+  width: 22px !important;
+  height: 22px !important;
+  margin: 0 6px !important;
+  background: transparent !important;
+  opacity: 1 !important;
+  border-radius: 50% !important;
+  display: inline-flex !important;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+}
+
+.custom-bullet svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+/* 背景灰圓 */
+.custom-bullet circle.bg {
+  stroke: #ccc;
+  stroke-width: 2;
+  fill: none;
+}
+
+/* 進度動畫圈 */
+.custom-bullet circle.progress {
+  stroke: #ffa23f; /* 你要的藍色 */
+  stroke-width: 2;
+  fill: none;
+  stroke-dasharray: 56.5;
+  stroke-dashoffset: 56.5;
+}
+
+.custom-bullet.swiper-pagination-bullet-active circle.progress {
+  animation: dash 4s linear forwards;
+}
+
+@keyframes dash {
+  from { stroke-dashoffset: 56.5; }
+  to { stroke-dashoffset: 0; }
+}
+
+/* 中間實心點 */
+.custom-bullet circle.dot {
+  fill: #ffa23f;
+}
