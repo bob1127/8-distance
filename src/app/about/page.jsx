@@ -2,41 +2,43 @@ import Client from "./about";
 import Script from "next/script";
 
 export const metadata = {
-  title: "關於寬越設計｜空間規劃、品牌合作與設計理念介紹",
+  title: "關於捌程｜8 Distance｜室內・景觀設計品牌與服務介紹",
   description:
-    "寬越設計專注於小坪數住宅、商業空間與跨界合作，打造兼具機能與美感的生活場域。了解我們的設計理念與合作模式。",
+    "捌程是一間室內與景觀設計的專業公司，擅長將室內、室外的景色融合；以人為本，創造功能合理、舒適優美、滿足物質與精神需求的空間。",
   keywords: [
-    "關於寬越設計",
-    "品牌設計理念",
+    "捌程",
+    "8 Distance",
+    "捌程室內設計",
+    "室內設計",
+    "景觀設計",
     "商業空間設計",
-    "跨界合作",
-    "室內設計公司介紹",
-    "空間規劃服務",
-    "設計團隊",
-    "室內設計理念",
+    "住宅設計",
+    "台中室內設計",
   ],
   icons: {
+    // 依你專案實際檔案調整（此為站內相對路徑）
     icon: "/images/logo/company-logo.ico",
   },
   openGraph: {
     type: "website",
     locale: "zh_TW",
-    url: "https://www.kuankoshi.com/about",
-    siteName: "寬越設計 Kuankoshi Design",
-    title: "關於寬越設計｜空間規劃、品牌合作與設計理念介紹",
+    url: "https://www.8distance.com/%E9%97%9C%E6%96%BC%E6%88%91%E5%80%91",
+    siteName: "捌程景觀及室內設計 8 Distance",
+    title: "關於捌程｜8 Distance｜室內・景觀設計品牌與服務介紹",
     description:
-      "從設計初衷到空間實踐，寬越設計致力於打造每一個貼近生活的理想空間，歡迎了解我們的設計風格與合作模式。",
+      "捌程是一間室內與景觀設計的專業公司，擅長將室內、室外的景色融合；以人為本，創造功能合理、舒適優美、滿足物質與精神需求的空間。",
     images: [
       {
-        url: "https://www.kuankoshi.com/images/og/about-cover.jpg",
+        // 建議放你站內實體圖檔，這裡提供可替換示意路徑
+        url: "https://www.8distance.com/images/og/about-cover.jpg",
         width: 1200,
         height: 630,
-        alt: "寬越設計品牌介紹封面",
+        alt: "捌程景觀及室內設計 8 Distance 品牌介紹",
       },
     ],
   },
   alternates: {
-    canonical: "https://www.kuankoshi.com/about",
+    canonical: "https://www.8distance.com/%E9%97%9C%E6%96%BC%E6%88%91%E5%80%91",
   },
 };
 
@@ -45,28 +47,32 @@ export const revalidate = 60;
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  name: "寬越設計 Kuankoshi Design",
-  url: "https://www.kuankoshi.com",
-  logo: "https://www.kuankoshi.com/images/logo/company-logo.png",
+  name: "捌程景觀及室內設計 8 Distance",
+  url: "https://www.8distance.com",
+  // 建議換成你站內實際 LOGO 圖檔（需為絕對網址）
+  logo: "https://www.8distance.com/images/logo/company-logo.png",
   description:
-    "寬越設計專注於老屋翻新、商業空間與住宅設計，融合風格與機能，打造舒適與美感並存的空間。",
+    "捌程是一間室內與景觀設計的專業公司，擅長將室內、室外的景色融合；以人為本，創造功能合理、舒適優美、滿足生活所需的室內環境。",
   address: {
     "@type": "PostalAddress",
-    streetAddress: "NTC國家商貿中心",
-    addressLocality: "台中市",
-    addressRegion: "台灣",
-    postalCode: "407",
+    streetAddress: "五權三街273號",
+    addressLocality: "西區",
+    addressRegion: "台中市",
     addressCountry: "TW",
+    // postalCode 可加上 403（台中西區），若要避免不一致可留白
+    // postalCode: "403",
   },
   contactPoint: {
     "@type": "ContactPoint",
     contactType: "客戶服務",
     availableLanguage: ["zh-TW"],
-    url: "https://www.kuankoshi.com/contact",
+    telephone: "+886-4-23720128",
+    email: "8distancee@gmail.com",
+    url: "https://www.8distance.com/%E8%81%AF%E7%B5%A1%E6%88%91%E5%80%91",
   },
   sameAs: [
-    "https://www.facebook.com/profile.php?id=61550958051323",
-    "https://www.instagram.com/kuankoshi.design",
+    "https://www.instagram.com/8_distance/",
+    "https://www.facebook.com/8Distancee/",
   ],
 };
 

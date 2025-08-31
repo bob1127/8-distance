@@ -13,8 +13,9 @@ import ExoApeOverlayMenu from "../components/ExoApeOverlayMenu";
 import Image from "next/image";
 
 export const metadata: Metadata = {
-  title: "寬越設計｜商業空間與住宅設計",
-  description: "寬越設計專注於舊屋翻新、住宅裝修與商業空間的室內設計整合服務。",
+  title: "捌程室內設計｜商業空間與住宅設計",
+  description:
+    "捌程室內設計專注於舊屋翻新、住宅裝修與商業空間的室內設計整合服務。",
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",

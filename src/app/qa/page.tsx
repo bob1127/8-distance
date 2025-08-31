@@ -4,41 +4,42 @@ import Client from "./client";
 // /app/news/metadata.js
 // /app/about/metadata.js
 export const metadata = {
-  title: "聯絡我們｜寬越設計｜空間規劃、品牌合作",
+  title: "常見問題（QA）｜捌程 8 Distance｜服務流程・報價・聯絡方式",
   description:
-    "寬越設計專注於小坪數住宅、商業空間與跨界合作，打造兼具機能與美感的生活場域。了解我們的設計理念與合作模式。",
+    "捌程景觀及室內設計常見問題：合作流程、估價與費用、工期與保固、場勘與諮詢方式等，一次看懂。",
   keywords: [
-    "關於寬越設計",
-    "品牌設計理念",
-    "商業空間設計",
-    "跨界合作",
-    "室內設計公司介紹",
-    "空間規劃服務",
-    "設計團隊",
-    "室內設計理念",
+    "捌程",
+    "8 Distance",
+    "常見問題",
+    "QA",
+    "室內設計 FAQ",
+    "設計流程",
+    "估價",
+    "台中室內設計",
+    "景觀設計",
   ],
   icons: {
-    icon: "/images/logo/company-logo.ico",
+    icon: "/images/logo/company-logo.ico", // 若有專屬 icon，可改你的實際路徑
   },
   openGraph: {
     type: "website",
     locale: "zh_TW",
-    url: "https://www.kuankoshi.com/contact",
-    siteName: "寬越設計 Kuankoshi Design",
-    title: "關於寬越設計｜空間規劃、品牌合作與設計理念介紹",
+    url: "https://www.8distance.com/QA", // 若你的實際路徑不同，改成對應 slug
+    siteName: "捌程景觀及室內設計 8 Distance",
+    title: "常見問題（QA）｜捌程 8 Distance｜服務流程・報價・聯絡方式",
     description:
-      "從設計初衷到空間實踐，寬越設計致力於打造每一個貼近生活的理想空間，歡迎了解我們的設計風格與合作模式。",
+      "捌程景觀及室內設計常見問題：合作流程、估價與費用、工期與保固、場勘與諮詢方式等，一次看懂。",
     images: [
       {
-        url: "https://www.kuankoshi.com/images/og/about-cover.jpg",
+        url: "https://www.8distance.com/images/og/qa-cover.jpg", // 換成實際存在的 OG 圖檔
         width: 1200,
         height: 630,
-        alt: "寬越設計品牌介紹封面",
+        alt: "捌程 8 Distance 常見問題封面",
       },
     ],
   },
   alternates: {
-    canonical: "https://www.kuankoshi.com/contact",
+    canonical: "https://www.8distance.com/QA", // 同上，依你的實際網址調整
   },
 };
 

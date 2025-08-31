@@ -112,13 +112,13 @@ function HomeClient({ specialPosts }) {
   const homeStructuredData = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    name: "寬越設計｜室內設計首選品牌",
+    name: "捌程室內設計｜室內設計首選品牌",
     url: "https://www.kuankoshi.com/",
     description:
-      "寬越設計提供專業室內設計服務，專精於住宅、商業空間與老屋翻新。從50萬小資裝潢到千萬豪宅設計，皆有豐富經驗與客製提案。",
+      "捌程室內設計提供專業室內設計服務，專精於住宅、商業空間與老屋翻新。從50萬小資裝潢到千萬豪宅設計，皆有豐富經驗與客製提案。",
     publisher: {
       "@type": "Organization",
-      name: "寬越設計",
+      name: "捌程室內設計",
       url: "https://www.kuankoshi.com/",
       logo: {
         "@type": "ImageObject",
