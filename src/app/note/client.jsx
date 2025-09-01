@@ -13,7 +13,7 @@ import Link from "next/link";
 import ProjectSlider from "../../components/Project-Slider/Slider.jsx";
 import JanusButton from "../../components/JanusButton.jsx";
 
-/* -------------------- 類別與資料（原樣保留） -------------------- */
+/* -------------------- 類別與資料（已新增多筆專案；大標/副標用 overlayTitle/overlaySubtitle 直接自訂） -------------------- */
 const categories = [
   { label: "住宅空間", value: "residential" },
   { label: "老屋翻新", value: "renovation" },
@@ -22,6 +22,7 @@ const categories = [
 ];
 
 /* 你的原始 categoryContent 不含城市/坪數/預算/日期等欄位，下面的濾鏡會自動容錯。*/
+/* ✅ 已新增多筆示範專案，方便一次看到「兩個一排、多列」的效果 */
 const categoryContent = {
   residential: [
     {
@@ -32,6 +33,7 @@ const categoryContent = {
       image: "/images/project-01/project04.jpg",
       url: "/portfolio-inner",
       tag: "住宅空間",
+      date: "2025-06-01",
     },
     {
       title: "光影簡約宅",
@@ -41,6 +43,27 @@ const categoryContent = {
       image: "/images/project-01/project04.jpg",
       url: "/portfolio-inner",
       tag: "住宅空間",
+      date: "2025-05-20",
+    },
+    {
+      title: "柔霧奶油宅",
+      subtitle: "26坪｜米白層次 × 緩慢日常",
+      overlayTitle: "南屯簡宅",
+      overlaySubtitle: "靜謐色溫下的生活節奏",
+      image: "/images/project-01/project04.jpg",
+      url: "/portfolio-inner",
+      tag: "住宅空間",
+      date: "2025-04-12",
+    },
+    {
+      title: "石紋調性宅",
+      subtitle: "32坪｜石材紋理 × 金屬點綴",
+      overlayTitle: "七期沈宅",
+      overlaySubtitle: "材質拼接的俐落高級感",
+      image: "/images/project-01/project04.jpg",
+      url: "/portfolio-inner",
+      tag: "住宅空間",
+      date: "2025-03-02",
     },
   ],
   renovation: [
@@ -52,6 +75,27 @@ const categoryContent = {
       image: "/images/project-01/project04.jpg",
       url: "/project/residential-1",
       tag: "住宅空間",
+      date: "2025-05-10",
+    },
+    {
+      title: "格局翻新",
+      subtitle: "28坪｜動線重塑 × 收納優化",
+      overlayTitle: "西屯吳宅",
+      overlaySubtitle: "中古屋的全新呼吸",
+      image: "/images/project-01/project04.jpg",
+      url: "/project/residential-2",
+      tag: "住宅空間",
+      date: "2025-04-05",
+    },
+    {
+      title: "復古混搭",
+      subtitle: "24坪｜老件 × 新材質共存",
+      overlayTitle: "北屯黃宅",
+      overlaySubtitle: "時間感與機能並存",
+      image: "/images/project-01/project05.jpg",
+      url: "/project/residential-3",
+      tag: "住宅空間",
+      date: "2025-03-22",
     },
   ],
   design: [
@@ -64,6 +108,29 @@ const categoryContent = {
         "https://www.rebita.co.jp/wp-content/uploads/2025/06/rakuro_mv-640x427.jpg",
       url: "/project/design-1",
       tag: "純設計案",
+      date: "2025-05-28",
+    },
+    {
+      title: "純設計｜日式無印",
+      subtitle: "原木 × 霧面白 × 關西調光",
+      overlayTitle: "無印慢生活",
+      overlaySubtitle: "留白與秩序的平衡",
+      image:
+        "https://www.rebita.co.jp/wp-content/uploads/2025/06/rakuro_mv-640x427.jpg",
+      url: "/project/design-2",
+      tag: "純設計案",
+      date: "2025-03-18",
+    },
+    {
+      title: "純設計｜工業感",
+      subtitle: "清水模 × 黑鐵 × 大面採光",
+      overlayTitle: "Loft Style",
+      overlaySubtitle: "粗獷材質下的通透",
+      image:
+        "https://www.rebita.co.jp/wp-content/uploads/2025/06/rakuro_mv-640x427.jpg",
+      url: "/project/design-3",
+      tag: "純設計案",
+      date: "2025-02-06",
     },
   ],
   commercial: [
@@ -76,6 +143,29 @@ const categoryContent = {
         "https://www.rebita.co.jp/wp-content/uploads/2025/06/wbkamata_mv-640x427.jpg",
       url: "/project/commercial-1",
       tag: "商業空間",
+      date: "2025-07-01",
+    },
+    {
+      title: "精品咖啡廳",
+      subtitle: "吧台中島 × 陽光天井",
+      overlayTitle: "拾光咖啡",
+      overlaySubtitle: "香氣與光影的交會",
+      image:
+        "https://www.rebita.co.jp/wp-content/uploads/2025/06/wbkamata_mv-640x427.jpg",
+      url: "/project/commercial-2",
+      tag: "商業空間",
+      date: "2025-05-15",
+    },
+    {
+      title: "複合選品店",
+      subtitle: "流線動線 × 展示系統",
+      overlayTitle: "Daily Select",
+      overlaySubtitle: "逛起來順手的動線學",
+      image:
+        "https://www.rebita.co.jp/wp-content/uploads/2025/06/wbkamata_mv-640x427.jpg",
+      url: "/project/commercial-3",
+      tag: "商業空間",
+      date: "2025-04-01",
     },
   ],
 };
@@ -388,7 +478,7 @@ function CaseFilterBar({ value, onChange, onSearch, onClear }) {
   );
 }
 
-/* -------------------- 卡片：scroll-linked fade-up（原樣） -------------------- */
+/* -------------------- 卡片：scroll-linked fade-up（維持原動畫；加上漸層遮罩、標題可自訂） -------------------- */
 function FadeCard({ project }) {
   const ref = useRef(null);
 
@@ -407,6 +497,7 @@ function FadeCard({ project }) {
     mass: 0.4,
   });
 
+  // ✅ 大標/副標可直接在資料用 overlayTitle / overlaySubtitle 自訂
   const ovTitle = project.overlayTitle ?? project.title;
   const ovSub = project.overlaySubtitle ?? project.subtitle ?? "";
 
@@ -419,67 +510,46 @@ function FadeCard({ project }) {
           opacity: oSpring,
           willChange: "transform, opacity",
         }}
-        className="border group hover:bg-transparent p-5 bg-gray-200 relative h-[650px] overflow-hidden transition"
+        className="group relative overflow-hidden"
       >
-        <div className="relative w-full overflow-hidden h-[500px]">
-          <div className="txt left-4 bottom-3 z-50 absolute flex flex-col justify-center items-start">
-            <h2 className="text-white leading-tight tracking-tight text-[30px] font-normal">
-              {ovTitle}
-            </h2>
-            <p className="text-white text-base">{ovSub}</p>
+        <div className="relative w-full h-[590px] sm:h-[650px] xl:h-[1000px]">
+          {/* 漸層遮罩，讓文字對比更好 */}
+          <div className="absolute inset-0 z-10 bg-gradient-to-t from-[rgba(0,0,0,0.55)] via-[rgba(0,0,0,0.20)] to-transparent pointer-events-none" />
+
+          {/* 文字：水平垂直置中 */}
+          <div className="absolute inset-0 z-20 flex items-center justify-center p-6 pointer-events-none">
+            <div className="text-center max-w-[80%]">
+              <h2 className="text-white leading-tight tracking-tight text-[28px] md:text-[32px] font-medium">
+                {ovTitle}
+              </h2>
+              {!!ovSub && (
+                <p className="text-white/90 text-sm md:text-base mt-2">
+                  {ovSub}
+                </p>
+              )}
+            </div>
           </div>
 
           <Image
             src={project.image}
             alt={project.title}
             fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className="object-cover group-hover:scale-105 transition-transform duration-500"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+            priority={false}
           />
-        </div>
-
-        <div className="p-4 text-xl tracking-wide font-semibold group-hover:text-gray-700">
-          {project.title}
-        </div>
-        <div className="tag">
-          <span className="border text-xs rounded-[20px] px-4 py-2">
-            {project.tag ?? "Title"}
-          </span>
         </div>
       </motion.div>
     </Link>
   );
 }
 
-/* -------------------- 主元件：加入「同款」Filter（Tabs 下方） -------------------- */
+/* -------------------- 主元件：固定兩欄、容器 95% 置中 -------------------- */
 const QaClient = () => {
   const [activeCategory, setActiveCategory] = useState("residential");
 
-  // ✅ 新增：Filter 收合狀態（預設收合）
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const toggleFilter = () => setIsFilterOpen((v) => !v);
-
-  // 依螢幕寬度切換 1/2/3 欄（純排版，不影響動畫）
-  const [colsClass, setColsClass] = useState("grid-cols-1");
-  useEffect(() => {
-    const mqMd = window.matchMedia("(min-width: 768px)");
-    const mqLg = window.matchMedia("(min-width: 1024px)");
-    const update = () =>
-      setColsClass(
-        mqLg.matches
-          ? "grid-cols-3"
-          : mqMd.matches
-          ? "grid-cols-2"
-          : "grid-cols-1"
-      );
-    update();
-    mqMd.addEventListener("change", update);
-    mqLg.addEventListener("change", update);
-    return () => {
-      mqMd.removeEventListener("change", update);
-      mqLg.removeEventListener("change", update);
-    };
-  }, []);
+  // ✅ 改成固定兩欄（行動裝置 1 欄、md 以上 2 欄）
+  const colsClass = "grid-cols-1 md:grid-cols-2";
 
   // Tabs 的原資料
   const baseItems = useMemo(
@@ -639,11 +709,6 @@ const QaClient = () => {
     filters._searchTick,
   ]);
 
-  const formatWan = (n) =>
-    typeof n === "number"
-      ? new Intl.NumberFormat("zh-TW").format(n) + " 萬"
-      : "—";
-
   /* -------------------- Render -------------------- */
   return (
     <>
@@ -656,17 +721,16 @@ const QaClient = () => {
           <h2 className="text-2xl">作品欣賞</h2>
         </div>
 
-        <div className="max-w-[1920px] w-[95%] 2xl:w-[85%] mx-auto px-4">
-          {/* Tabs（原樣） */}
+        {/* ✅ 整體容器：寬度 95%、置中（2XL 時 85% 仍可保留） */}
+        <div className="max-w-[1920px] w-[95%] 2xl:w-[95%] mx-auto px-4">
+          {/* Tabs */}
           <div className="flex flex-wrap justify-center gap-4 mb-6">
             {categories.map((cat) => (
               <button
                 key={cat.value}
                 onClick={() => setActiveCategory(cat.value)}
-                className={`px-6 py-2 rounded-full border transition-colors duration-300 ${
-                  activeCategory === cat.value
-                    ? "bg-[#E1A95F] text-white"
-                    : "bg-white text-black border-gray-300 hover:bg[#E1A95F] hover:text-white"
+                className={`border-r-1 border-black pr-5 ${
+                  cat.value === activeCategory ? "font-semibold" : ""
                 }`}
               >
                 {cat.label}
@@ -674,68 +738,19 @@ const QaClient = () => {
             ))}
           </div>
 
-          {/* ✅ Filter 控制列（新增） */}
-          <div className="mb-3 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="text-sm tracking-wide text-gray-700">
-                Filter
-              </span>
-            </div>
-
-            <button
-              type="button"
-              onClick={toggleFilter}
-              aria-expanded={isFilterOpen}
-              aria-controls="case-filter-panel"
-              className="inline-flex items-center gap-2 rounded-full border border-gray-300 bg-white px-3 py-1.5 text-sm hover:bg-gray-50 transition"
-            >
-              {isFilterOpen ? "收合" : "展開"}
-              <svg
-                className={`h-4 w-4 transition-transform ${
-                  isFilterOpen ? "rotate-180" : "rotate-0"
-                }`}
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden="true"
-              >
-                <path
-                  d="M6 9l6 6 6-6"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
-          </div>
-
-          {/* ✅ Filter Panel 收合（新增） */}
-          <AnimatePresence initial={false}>
-            {isFilterOpen && (
-              <motion.div
-                id="case-filter-panel"
-                key="filter-panel"
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.2, ease: "easeInOut" }}
-                className="overflow-hidden"
-              >
-                <CaseFilterBar
-                  value={filters}
-                  onChange={handleChange}
-                  onSearch={handleSearch}
-                  onClear={handleClear}
-                />
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {/* Filter 區 */}
+          <FilterToggleAndPanel
+            filters={filters}
+            onChange={handleChange}
+            onSearch={handleSearch}
+            onClear={handleClear}
+          />
 
           <div className="mb-3 text-sm text-gray-600">
             共 {filtered.length} 個符合條件的作品
           </div>
 
-          {/* Grid：切換/搜尋時 crossfade；卡片沿用原 scroll-linked 動畫 */}
+          {/* Grid：固定兩欄；卡片沿用 scroll-linked 動畫 */}
           <div className="category-item min-h-[200px]">
             <AnimatePresence mode="wait">
               <motion.div
@@ -760,15 +775,74 @@ const QaClient = () => {
                 </div>
               </motion.div>
             </AnimatePresence>
-
-            <div className="mt-10 flex gap-4 justify-center">
-              <JanusButton label="更多作品" />
-            </div>
           </div>
         </div>
       </section>
     </>
   );
 };
+
+/* 小元件：Filter 展開/收合 */
+function FilterToggleAndPanel({ filters, onChange, onSearch, onClear }) {
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const toggleFilter = () => setIsFilterOpen((v) => !v);
+
+  return (
+    <>
+      <div className="mb-3 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <span className="text-sm tracking-wide text-gray-700">Filter</span>
+        </div>
+
+        <button
+          type="button"
+          onClick={toggleFilter}
+          aria-expanded={isFilterOpen}
+          aria-controls="case-filter-panel"
+          className="inline-flex items-center gap-2 rounded-full border border-gray-300 bg-white px-3 py-1.5 text-sm hover:bg-gray-50 transition"
+        >
+          {isFilterOpen ? "收合" : "展開"}
+          <svg
+            className={`h-4 w-4 transition-transform ${
+              isFilterOpen ? "rotate-180" : "rotate-0"
+            }`}
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M6 9l6 6 6-6"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <AnimatePresence initial={false}>
+        {isFilterOpen && (
+          <motion.div
+            id="case-filter-panel"
+            key="filter-panel"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2, ease: "easeInOut" }}
+            className="overflow-hidden"
+          >
+            <CaseFilterBar
+              value={filters}
+              onChange={onChange}
+              onSearch={onSearch}
+              onClear={onClear}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
 
 export default QaClient;
