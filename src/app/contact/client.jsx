@@ -190,14 +190,14 @@ function LoanHelpModal({ open, onClose }) {
           <motion.div
             role="dialog"
             aria-modal="true"
-            className="relative z-[81] w-[min(820px,92vw)] max-h-[88svh] overflow-hidden rounded-2xl bg-white shadow-xl border border-neutral-200"
+            className="relative z-[81] w-[min(820px,92vw)] max-h-[88svh] overflow-y-scroll rounded-2xl bg-white shadow-xl border border-neutral-200"
             initial={{ y: 16, scale: 0.98, opacity: 0 }}
             animate={{ y: 0, scale: 1, opacity: 1 }}
             exit={{ y: 16, scale: 0.98, opacity: 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 28 }}
           >
             {/* Header */}
-            <div className="flex items-center justify-between border-b border-neutral-200 px-6 py-4">
+            <div className="flex items-center justify-between  border-b border-neutral-200 px-6 py-4">
               <h3 className="text-base font-semibold">協助貸款資訊</h3>
               <button
                 onClick={onClose}
@@ -296,7 +296,7 @@ function LoanHelpModal({ open, onClose }) {
                   <a
                     key={a.label}
                     href={a.href}
-                    className="rounded-xl bg-neutral-900 text-white px-4 py-3 text-center text-sm hover:opacity-90"
+                    className="rounded-xl bg-[#daa335] text-white px-4 py-3 text-center text-sm hover:opacity-90"
                   >
                     {a.label} →
                   </a>
@@ -523,7 +523,7 @@ export default function AppointmentFormPage() {
         {/* 進度條（第一版風格） */}
         <div className="h-2 w-full rounded-full bg-neutral-100 mb-6 overflow-hidden">
           <div
-            className="h-full bg-neutral-900 transition-all duration-500"
+            className="h-full bg-[#daa335] transition-all duration-500"
             style={{ width: `${progress}%` }}
           />
         </div>

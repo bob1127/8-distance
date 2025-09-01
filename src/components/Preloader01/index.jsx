@@ -272,8 +272,8 @@ export default function Home() {
       </div>
 
       {/* 指標數字區（保持在漸層之上） */}
-      <div className="absolute bottom-[20%] ml-[40px] sm:ml-[100px] text-4xl font-bold z-40 flex">
-        <div className="grid grid-cols-3 w-[500px] md:w-[800px] ">
+      <div className="absolute bottom-[10%] sm:bottom-[20%] ml-[40px] sm:ml-[100px] text-4xl font-bold z-40 flex">
+        <div className="grid grid-cols-3 w-[400px] md:w-[800px] ">
           <div>
             <div className="number flex flex-col">
               <span className="text-[30px] md:text-[55px] font-extrabold text-white">
@@ -323,17 +323,29 @@ export default function Home() {
             捌程室內設計
           </h1>
           <p className="text-[14px] text-gray-200 max-w-[550px] leading-normal mt-4 font-extralight">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Reprehenderit saepe minima quam cupiditate velit ut aliquid. Eveniet
-            dolore incidunt hic odio commodi, quia blanditiis obcaecati, velit
-            voluptatibus, sunt fugit et!
+            捌程是一間室內與景觀設計的專業公司,擅長將室內、室外的景色融合。
+            <br></br>每個空間會因為不同的人所屬,而有著獨有的設計。
           </p>
           <div className="mt-8">
             <Link href="/contact">
               <div className="max-w-[150px] bg-white px-3 flex items-center justify-between text-center rounded-xl">
                 <span className="text-stone-800 font-normal">Contac Us</span>
                 <div className="circle w-[20px] h-[20px] rounded-full bg-stone-800 text-white flex justify-center items-center">
-                  ~
+                  <svg
+                    class="w-6 h-6 text-gray-800 dark:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="#ffffff"
+                    viewBox="0 0 14 10"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M1 5h12m0 0L9 1m4 4L9 9"
+                    />
+                  </svg>
                 </div>
               </div>
             </Link>

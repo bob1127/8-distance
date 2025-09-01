@@ -125,17 +125,20 @@ const SORTS = [
 ];
 
 /* ===== 共用 Select ===== */
+/* ===== 共用 Select（修正版） ===== */
 function SelectField({
   id,
   label,
   value,
   onChange,
-  options,
+  options = [],
   placeholder,
   disabled = false,
   className = "",
 }) {
   const ph = placeholder ?? (options?.[0]?.label || "請選擇");
+  const displayOptions = Array.isArray(options) ? options : [];
+
   return (
     <div className={`flex flex-col min-w-0 ${className}`}>
       {label && (
@@ -161,18 +164,22 @@ function SelectField({
                       }
                       border-gray-200 focus:ring-2 focus:ring-purple-200`}
         >
+          {/* placeholder 選項 */}
           <option value="">{ph}</option>
-          {options
-            .filter((o, i) => !(i === 0 && o.value === "")) // 避免重複 placeholder
+
+          {/* 真正的選項（只渲染一次，沒有多餘的陣列裸輸出） */}
+          {displayOptions
+            .filter((o, i) => !(i === 0 && o.value === "")) // 避免與 placeholder 重複
             .map((opt) => (
               <option
-                key={`${id}-${opt.value ?? "null"}`}
+                key={`${id}-${String(opt.value ?? "")}`}
                 value={opt.value ?? ""}
               >
                 {opt.label}
               </option>
             ))}
         </select>
+
         <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
             <path
@@ -495,6 +502,10 @@ export default function Home() {
   // Filter 收折狀態
   const [filterOpen, setFilterOpen] = useState(true);
 
+  // 分享 / 複製用
+  const [pageUrl, setPageUrl] = useState("");
+  const [toast, setToast] = useState(null); // { type: 'ok'|'warn', text: string }
+
   useEffect(() => {
     const lenis = new Lenis();
     let rafId;
@@ -504,6 +515,12 @@ export default function Home() {
     };
     rafId = requestAnimationFrame(raf);
     return () => cancelAnimationFrame(rafId);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setPageUrl(window.location.href);
+    }
   }, []);
 
   const filtered = useMemo(() => {
@@ -565,7 +582,6 @@ export default function Home() {
         )
       )
       .slice(0, 6);
-    // 如想配合左側篩選，用 filtered 取代 cases 即可
   }, [sideQ]);
 
   const handleChange = (patch) => setFilters((f) => ({ ...f, ...patch }));
@@ -587,8 +603,48 @@ export default function Home() {
   const formatWan = (n) =>
     new Intl.NumberFormat("zh-TW").format(Number(n || 0)) + " 萬";
 
+  // ===== 分享功能 =====
+  const openFBShare = () => {
+    const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+      pageUrl || (typeof window !== "undefined" ? window.location.href : "")
+    )}`;
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
+
+  const shareToIG = async () => {
+    // IG 沒有官方網頁版「帶連結」分享介面；改用 Web Share API（行動裝置支援）
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: document?.title || "分享連結",
+          url: pageUrl,
+        });
+      } catch (e) {
+        // 使用者取消就不提示
+      }
+    } else {
+      setToast({
+        type: "warn",
+        text: "此裝置不支援直接分享至 Instagram，請改用手機分享或使用下方複製連結。",
+      });
+      setTimeout(() => setToast(null), 2800);
+    }
+  };
+
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(pageUrl);
+      setToast({ type: "ok", text: "連結已複製！" });
+      setTimeout(() => setToast(null), 1800);
+    } catch {
+      setToast({ type: "warn", text: "複製失敗，請手動選取網址列複製。" });
+      setTimeout(() => setToast(null), 2800);
+    }
+  };
+
   return (
-    <div className="bg-[#f6f6f7] py-20 w-full overflow-hidden">
+    // 重要：sticky 會被任何祖先的 overflow 隱藏打破；把 overflow-hidden 拿掉/改 visible
+    <div className="bg-[#f6f6f7] py-20 w-full overflow-visible">
       <section className="flex pt-[100px] max-w-[1920px] py-20 w-[90%] mx-auto flex-col lg:flex-row">
         {/* 左半部 */}
         <div className="left w-full pr-0 sm:pr-8 lg:w-[70%]">
@@ -665,8 +721,9 @@ export default function Home() {
         </div>
 
         {/* 右半部（保持不動） */}
-        <div className="right w-full pt-10 lg:pt-0 lg:w-[30%] ">
-          <div className="right-bar bg-white sticky top-20 py-8 rounded-2xl border border-gray-100">
+        <div className="right w-full pt-10 lg:pt-0 lg:w-[30%] h-full">
+          {/* sticky 寫在卡片容器上；注意不要放 !sticky */}
+          <div className="right-bar bg-white sticky top-20 py-8 rounded-2xl border border-gray-100 h-fit">
             <div className="mx-auto rounded-[22px] relative bg-black p-4 flex justify-center max-w-[120px] items-center">
               <div className="absolute color bg-[#323936] w-full h-full rounded-[22px] rotate-12"></div>
               <Image
@@ -679,6 +736,7 @@ export default function Home() {
                 loading="lazy"
               />
             </div>
+
             <div className="txt flex justify-center flex-col items-center mt-5 px-8">
               <b>捌程室內設計 | 8 Distance</b>
               <p className="text-[14px] text-gray-700 text-center">
@@ -686,97 +744,120 @@ export default function Home() {
                 Voluptatem fugiat quasi quis consequatur.
               </p>
             </div>
-            <div className="social flex justify-center mt-4 mx-auto">
-              {/* IG */}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="40"
-                height="40"
-                viewBox="0 0 48 48"
+
+            {/* 社群＋分享 */}
+            <div className="social flex justify-center mt-4 mx-auto gap-2">
+              {/* IG（用 Web Share API） */}
+              <button
+                onClick={shareToIG}
+                aria-label="分享至 Instagram"
+                className="transition hover:opacity-90"
+                type="button"
               >
-                <radialGradient
-                  id="ig1"
-                  cx="19.38"
-                  cy="42.035"
-                  r="44.899"
-                  gradientUnits="userSpaceOnUse"
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="40"
+                  height="40"
+                  viewBox="0 0 48 48"
                 >
-                  <stop offset="0" stopColor="#fd5" />
-                  <stop offset=".328" stopColor="#ff543f" />
-                  <stop offset=".348" stopColor="#fc5245" />
-                  <stop offset=".504" stopColor="#e64771" />
-                  <stop offset=".643" stopColor="#d53e91" />
-                  <stop offset=".761" stopColor="#cc39a4" />
-                  <stop offset=".841" stopColor="#c837ab" />
-                </radialGradient>
-                <path
-                  fill="url(#ig1)"
-                  d="M34.017,41.99l-20,0.019c-4.4,0.004-8.003-3.592-8.008-7.992l-0.019-20 c-0.004-4.4,3.592-8.003,7.992-8.008l20-0.019c4.4-0.004,8.003,3.592,8.008,7.992l0.019,20 C42.014,38.383,38.417,41.986,34.017,41.99z"
-                />
-                <path
-                  fill="#fff"
-                  d="M24,31c-3.859,0-7-3.14-7-7s3.141-7,7-7s7,3.14,7,7S27.859,31,24,31z M24,19c-2.757,0-5,2.243-5,5 s2.243,5,5,5s5-2.243,5-5S26.757,19,24,19z"
-                />
-                <circle cx="31.5" cy="16.5" r="1.5" fill="#fff" />
-                <path
-                  fill="#fff"
-                  d="M30,37H18c-3.859,0-7-3.14-7-7V18c0-3.86,3.141-7,7-7h12c3.859,0,7,3.14,7,7v12 C37,33.86,33.859,37,30,37z M18,13c-2.757,0-5,2.243-5,5v12c0,2.757,2.243,5,5,5h12c2.757,0,5-2.243,5-5V18c0-2.757-2.243-5-5-5H18z"
-                />
-              </svg>
-              {/* FB */}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="40"
-                height="40"
-                viewBox="0 0 48 48"
+                  <radialGradient
+                    id="ig1"
+                    cx="19.38"
+                    cy="42.035"
+                    r="44.899"
+                    gradientUnits="userSpaceOnUse"
+                  >
+                    <stop offset="0" stopColor="#fd5" />
+                    <stop offset=".328" stopColor="#ff543f" />
+                    <stop offset=".348" stopColor="#fc5245" />
+                    <stop offset=".504" stopColor="#e64771" />
+                    <stop offset=".643" stopColor="#d53e91" />
+                    <stop offset=".761" stopColor="#cc39a4" />
+                    <stop offset=".841" stopColor="#c837ab" />
+                  </radialGradient>
+                  <path
+                    fill="url(#ig1)"
+                    d="M34.017,41.99l-20,0.019c-4.4,0.004-8.003-3.592-8.008-7.992l-0.019-20 c-0.004-4.4,3.592-8.003,7.992-8.008l20-0.019c4.4-0.004,8.003,3.592,8.008,7.992l0.019,20 C42.014,38.383,38.417,41.986,34.017,41.99z"
+                  />
+                  <path
+                    fill="#fff"
+                    d="M24,31c-3.859,0-7-3.14-7-7s3.141-7,7-7s7,3.14,7,7S27.859,31,24,31z M24,19c-2.757,0-5,2.243-5,5 s2.243,5,5,5s5-2.243,5-5S26.757,19,24,19z"
+                  />
+                  <circle cx="31.5" cy="16.5" r="1.5" fill="#fff" />
+                  <path
+                    fill="#fff"
+                    d="M30,37H18c-3.859,0-7-3.14-7-7V18c0-3.86,3.141-7,7-7h12c3.859,0,7,3.14,7,7v12 C37,33.86,33.859,37,30,37z M18,13c-2.757,0-5,2.243-5,5v12c0,2.757,2.243,5,5,5h12c2.757,0,5-2.243,5-5V18c0-2.757-2.243-5-5-5H18z"
+                  />
+                </svg>
+              </button>
+
+              {/* FB 分享 */}
+              <button
+                onClick={openFBShare}
+                aria-label="分享至 Facebook"
+                className="transition hover:opacity-90"
+                type="button"
               >
-                <linearGradient
-                  id="fb1"
-                  x1="9.993"
-                  x2="40.615"
-                  y1="9.993"
-                  y2="40.615"
-                  gradientUnits="userSpaceOnUse"
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="40"
+                  height="40"
+                  viewBox="0 0 48 48"
                 >
-                  <stop offset="0" stopColor="#2aa4f4" />
-                  <stop offset="1" stopColor="#007ad9" />
-                </linearGradient>
-                <path
-                  fill="url(#fb1)"
-                  d="M24,4C12.954,4,4,12.954,4,24s8.954,20,20,20s20-8.954,20-20S35.046,4,24,4z"
-                />
-                <path
-                  fill="#fff"
-                  d="M26.707,29.301h5.176l0.813-5.258h-5.989v-2.874c0-2.184,0.714-4.121,2.757-4.121h3.283V12.46 c-0.577-0.078-1.797-0.248-4.102-0.248c-4.814,0-7.636,2.542-7.636,8.334v3.498H16.06v5.258h4.948v14.452 C21.988,43.9,22.981,44,24,44c0.921,0,1.82-0.084,2.707-0.204V29.301z"
-                />
-              </svg>
-              {/* LINE-like */}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="40"
-                height="40"
-                viewBox="0 0 48 48"
+                  <linearGradient
+                    id="fb1"
+                    x1="9.993"
+                    x2="40.615"
+                    y1="9.993"
+                    y2="40.615"
+                    gradientUnits="userSpaceOnUse"
+                  >
+                    <stop offset="0" stopColor="#2aa4f4" />
+                    <stop offset="1" stopColor="#007ad9" />
+                  </linearGradient>
+                  <path
+                    fill="url(#fb1)"
+                    d="M24,4C12.954,4,4,12.954,4,24s8.954,20,20,20s20-8.954,20-20S35.046,4,24,4z"
+                  />
+                  <path
+                    fill="#fff"
+                    d="M26.707,29.301h5.176l0.813-5.258h-5.989v-2.874c0-2.184,0.714-4.121,2.757-4.121h3.283V12.46 c-0.577-0.078-1.797-0.248-4.102-0.248c-4.814,0-7.636,2.542-7.636,8.334v3.498H16.06v5.258h4.948v14.452 C21.988,43.9,22.981,44,24,44c0.921,0,1.82-0.084,2.707-0.204V29.301z"
+                  />
+                </svg>
+              </button>
+
+              {/* 複製連結 */}
+              <button
+                onClick={copyLink}
+                aria-label="複製此頁連結"
+                className="transition hover:opacity-90"
+                type="button"
+                title="複製連結"
               >
-                <linearGradient
-                  id="ln1"
-                  x1="4.522"
-                  x2="45.203"
-                  y1="2.362"
-                  y2="47.554"
-                  gradientUnits="userSpaceOnUse"
+                {/* link icon */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="40"
+                  height="40"
+                  viewBox="0 0 24 24"
+                  fill="none"
                 >
-                  <stop offset="0" stopColor="#33c481" />
-                  <stop offset="1" stopColor="#21a366" />
-                </linearGradient>
-                <path
-                  fill="url(#ln1)"
-                  d="M8,42h32c1.105,0,2-0.895,2-2V8c0-1.105-0.895-2-2-2H8C6.895,6,6,6.895,6,8v32  C6,41.105,6.895,42,8,42z"
-                />
-                <path
-                  fill="#fff"
-                  d="M37.113,22.417c0-5.865-5.88-10.637-13.107-10.637s-13.108,4.772-13.108,10.637 c0,5.258,4.663,9.662,10.962,10.495c0.427,0.092,1.008,0.282,1.155,0.646c0.132,0.331,0.086,0.85,0.042,1.185 c0,0-0.153,0.925-0.187,1.122c-0.057,0.331-0.263,1.296,1.135,0.707c1.399-0.589,7.548-4.445,10.298-7.611 C36.203,26.879,37.113,24.764,37.113,22.417z"
-                />
-              </svg>
+                  <path
+                    d="M10.59 13.41a1.998 1.998 0 0 0 2.82 0l3.59-3.59a2 2 0 0 0-2.83-2.83l-.88.88"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M13.41 10.59a1.998 1.998 0 0 0-2.82 0l-3.59 3.59a2 2 0 0 0 2.83 2.83l.88-.88"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
             </div>
 
             <div className="others-article mt-5">
@@ -896,6 +977,19 @@ export default function Home() {
               </div>
               {/* ===== /右側欄搜尋 ===== */}
             </div>
+
+            {/* Toast */}
+            {toast && (
+              <div
+                className={`mx-6 mt-4 rounded-lg px-3 py-2 text-sm ${
+                  toast.type === "ok"
+                    ? "bg-green-50 text-green-700 border border-green-200"
+                    : "bg-yellow-50 text-yellow-700 border border-yellow-200"
+                }`}
+              >
+                {toast.text}
+              </div>
+            )}
           </div>
         </div>
       </section>
