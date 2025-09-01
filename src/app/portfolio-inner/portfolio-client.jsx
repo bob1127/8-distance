@@ -14,7 +14,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import SwiperCarousel from "../../components/SwiperCarousel/SwiperCard";
 import FacebookReelsSection from "@/components/FacebookReelsSection";
-
 // ✅ 引入你的 MiniMapGallery（依實際路徑調整）
 import MiniMapGallery from "../../components/MiniMapGallery";
 
@@ -25,15 +24,19 @@ const Photos = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
+
+  // 主畫廊圖片
   const galleryImages = [
-    { src: "/images/project-01/img06.jpg", alt: "關於寬越設計的設計理念" },
-    { src: "/images/project-01/img08.jpg", alt: "Blog-001 另一角度" },
+    { src: "/images/project-01/img06.jpg", alt: "" },
+    { src: "/images/project-01/img08.jpg", alt: "" },
     {
       src: "/images/project-01/img05.jpg",
       alt: "和風の木格子を使ったカフェ空間",
     },
-    { src: "/images/project-01/img04.jpg", alt: "都會極簡甜點店" },
-    { src: "/images/project-01/img01.jpg", alt: "Blog-001 專案大圖" },
+    { src: "/images/project-01/img04.jpg", alt: "" },
+    { src: "/images/project-01/img01.jpg", alt: "" },
+    { src: "/images/project-01/img03.jpg", alt: "" },
+    // 也可把側欄圖片加進來，確保 openGalleryAt 都能找到
   ];
 
   const [galleryOpen, setGalleryOpen] = useState(false);
@@ -44,12 +47,12 @@ const Photos = () => {
     setGalleryOpen(true);
   };
 
+  // HERO 旋轉背景
   const backgroundImages = [
     "/images/index/b69ff1_ed3d1e1ab1e14db4bd8ad2c8f3b9c3de~mv2.jpg.avif",
     "/images/index/b69ff1_2e8beb67f7c64ad9aaab0271e8d9a385~mv2.jpg.avif",
     "/images/index/b69ff1_dbf0d0c42626415881135b9768235d8f~mv2.jpg.avif",
   ];
-
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % backgroundImages.length);
@@ -57,263 +60,313 @@ const Photos = () => {
     return () => clearInterval(timer);
   }, [backgroundImages.length]);
 
+  // ✅ 側邊欄資料（可自行替換圖片與文字）
+  const sidebarCases = [
+    {
+      title: "總太東方",
+      subtitle: "Modern Oriental",
+      src: "/images/index/老屋翻新-李宅.webp",
+      href: "/project/renovation-li", // ← 你的內頁路徑
+    },
+    {
+      title: "總太東方",
+      subtitle: "Modern Oriental",
+      src: "/images/index/老屋翻新-李宅.webp",
+      href: "/project/renovation-li", // ← 你的內頁路徑
+    },
+    {
+      title: "總太東方",
+      subtitle: "Modern Oriental",
+      src: "/images/index/老屋翻新-李宅.webp",
+      href: "/project/renovation-li", // ← 你的內頁路徑
+    },
+  ];
+
   return (
     <ReactLenis root>
       <div className="bg-[#f1f1f1]">
-        {/* ====== Hero 區（原樣保留） ====== */}
-        <section className="section-hero relative mt-[28vh] h-[70vh]">
-          <div className="white-section border rounded-tr-[60px] bg-[#ffc59c] absolute top-[-90px] left-0 w-[88%] h-full "></div>
-
-          <section className="section-hero w-full aspect-[500/500] relative  h-full md:aspect-[1024/576] xl:aspect-[1920/700] color-section">
-            {/* 旋轉徽章 */}
-            <div className="absolute z-40 left-1/2 bottom-[-110px]  w-[200px] h-[200px] flex items-center justify-center transform -translate-x-1/2">
-              <div className="absolute inset-0 animate-spin-slow flex items-center justify-center">
-                <svg className="w-full h-full" viewBox="0 0 200 200">
-                  <defs>
-                    <path
-                      id="circlePath"
-                      d="M 100, 100 m -60, 0 a 60,60 0 1,1 120,0 a 60,60 0 1,1 -120,0"
-                    />
-                  </defs>
-                  <text fill="#ffffff" fontSize="12" fontWeight="bold">
-                    <textPath href="#circlePath" startOffset="0">
-                      設計靈感 • 空間美學 • 設計靈感 • 美好生活 • 空間美學 •
-                      設計靈感
-                    </textPath>
-                  </text>
-                </svg>
-              </div>
-              <div className="circle bg-[#ffc59c]  text-white text-md w-[100px] h-[100px] flex justify-center items-center text-[1.2rem] font-bold rounded-full ">
-                design
-              </div>
-            </div>
-
-            <style jsx>{`
-              .animate-spin-slow {
-                animation: spin 20s linear infinite;
-              }
-              @keyframes spin {
-                0% {
-                  transform: rotate(0deg);
-                }
-                100% {
-                  transform: rotate(360deg);
-                }
-              }
-            `}</style>
-
-            {/* 背景輪播 */}
-            <div className="relative w-full h-full overflow-hidden">
-              {backgroundImages.map((bg, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, scale: 1 }}
-                  animate={{
-                    opacity: i === currentIndex ? 1 : 0,
-                    scale: i === currentIndex ? 1.15 : 1,
-                  }}
-                  transition={{
-                    opacity: { duration: 1.5, ease: "easeInOut" },
-                    scale: { duration: 20, ease: "linear" },
-                  }}
-                  className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
-                  style={{ backgroundImage: `url(${bg})` }}
-                />
-              ))}
-            </div>
-
-            {/* 遮罩 + 文字 */}
-            <div className="bg-black opacity-10 w-full h-full absolute top-0 left-0 z-10" />
-            <div className="hero-title w-1/2 absolute left-[4%] top-[90%] z-20">
-              <div className="text-center px-4">
-                <GsapText
-                  text="作品展示"
-                  id="gsap-intro"
-                  fontSize="2rem"
-                  fontWeight="200"
-                  color="#fff"
-                  lineHeight="60px"
-                  className="text-center tracking-widest !text-white inline-block mb-0 h-auto"
-                />
-              </div>
-              <div className="text-center px-4">
-                <GsapText
-                  text="PORTFOLIO"
-                  id="gsap-intro"
-                  fontSize="1rem"
-                  fontWeight="200"
-                  color="#fff"
-                  lineHeight="30px"
-                  className="text-center !text-white tracking-widest inline-block mb-0 h-auto"
-                />
-              </div>
-            </div>
-          </section>
+        <section className="pt-[150px] pb-[100px] bg-[#c1c1c1]">
+          <div className="title flex justify-center text-2xl">
+            心域之所 - 三房兩廳現代輕暖境域 台中磐鈺晰晰裏山
+          </div>
         </section>
 
-        {/* ====== 卡片區：onClick 一律改用 openGalleryAt ====== */}
-        <section className="section-grid-item mt-[10vh] px-4 py-8">
-          <div className="max-w-[1920px] w-[90%] mx-auto grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 items-stretch">
-            {/* LEFT */}
-            <div className="h-full gap-4 flex flex-col">
-              {/* 卡片 A */}
+        {/* ====== Info 條塊（照你上一版） ====== */}
+        <section className="info bg-[#f4ede9]">
+          <div className="w-[95%] max-w-[1200px] mx-auto py-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-x-8 gap-y-5 text-gray-800">
+              <div className="lg:col-span-3">
+                <div className="text-[13px] tracking-widest text-gray-500">
+                  作品名稱
+                </div>
+                <div className="mt-1 text-[18px] leading-none">心域之所</div>
+              </div>
+              <div className="lg:col-span-3">
+                <div className="text-[13px] tracking-widest text-gray-500">
+                  風格
+                </div>
+                <div className="mt-1 text-[18px] leading-none">現代風格</div>
+              </div>
+              <div className="lg:col-span-3">
+                <div className="text-[13px] tracking-widest text-gray-500">
+                  原況格局
+                </div>
+                <div className="mt-1 text-[18px] leading-none">—</div>
+              </div>
+              <div className="lg:col-span-3">
+                <div className="text-[13px] tracking-widest text-gray-500">
+                  所在地區
+                </div>
+                <div className="mt-1 text-[18px] leading-none">中部</div>
+              </div>
+              <div className="lg:col-span-3">
+                <div className="text-[13px] tracking-widest text-gray-500">
+                  格局
+                </div>
+                <div className="mt-1 text-[18px] leading-none">三房兩廳</div>
+              </div>
+              <div className="lg:col-span-3">
+                <div className="text-[13px] tracking-widest text-gray-500">
+                  空間性質
+                </div>
+                <div className="mt-1 text-[18px] leading-none">作品集</div>
+              </div>
+              <div className="lg:col-span-3">
+                <div className="text-[13px] tracking-widest text-gray-500">
+                  建設公司
+                </div>
+                <div className="mt-1 text-[18px] leading-none">堃鉦建設</div>
+              </div>
+              <div className="lg:col-span-3">
+                <div className="text-[13px] tracking-widest text-gray-500">
+                  坪數
+                </div>
+                <div className="mt-1 text-[18px] leading-none">20</div>
+              </div>
+              <div className="lg:col-span-3">
+                <div className="text-[13px] tracking-widest text-gray-500">
+                  色系方案
+                </div>
+                <div className="mt-2 flex items-center gap-2">
+                  <span
+                    className="inline-block h-4 w-4 rounded-full"
+                    style={{ background: "#EEE3D3" }}
+                  />
+                  <span
+                    className="inline-block h-4 w-4 rounded-full"
+                    style={{ background: "#F6EFE7" }}
+                  />
+                  <span
+                    className="inline-block h-4 w-4 rounded-full"
+                    style={{ background: "#6B4A3A" }}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="mt-6 border-t border-gray-700/60" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mt-8">
               <div>
-                <div
-                  className="card-item group hover:shadow-xl w-full border relative overflow-hidden cursor-zoom-in"
-                  onClick={() => openGalleryAt("/images/project-01/img06.jpg")}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) =>
-                    (e.key === "Enter" || e.key === " ") &&
-                    openGalleryAt("/images/project-01/img06.jpg")
-                  }
-                >
-                  <div className="mask pointer-events-none z-10 opacity-20 absolute inset-0 bg-black group-hover:opacity-50 duration-300" />
-                  <div className="card-content pointer-events-none duration-300 group-hover:opacity-100 opacity-100 sm:opacity-0 absolute z-20 left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-center">
-                    <h3 className="text-white text-[1.5rem] font-bold">
-                      Blog-001
-                    </h3>
-                    <span className="text-xs font-light mt-2 text-white">
-                      關於寬越設計的設計理念
-                    </span>
-                  </div>
-                  <div className="relative w-full h-full min-h-[600px]">
-                    <Image
-                      src="/images/project-01/img06.jpg"
-                      alt="card-img"
-                      fill
-                      className="object-cover group-hover:scale-125 duration-3000"
-                    />
-                  </div>
+                <div className="text-[13px] tracking-widest text-gray-500 mb-3">
+                  簡介
+                </div>
+                <p className="whitespace-pre-line leading-8 text-gray-800/90">
+                  漫走於世界地圖每個角落的流光婉轉，
+                  將對世界的初心融入居家美學， 賦予這個家獨一無二的故事與靈魂。
+                </p>
+              </div>
+              <div>
+                <div className="text-[13px] tracking-widest text-gray-500 mb-3">
+                  得獎紀錄
+                </div>
+                <ul className="space-y-2 text-gray-800/90">
+                  {/* 留白或填入清單 */}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ====== 主卡片區 + Sticky 側邊欄 ====== */}
+        <section className="section-grid-item mt-[10vh] px-4 py-8">
+          {/* xl 以上變 4 欄：前三欄維持原布局，右側多一欄作為 sticky 側邊欄 */}
+          <div className="max-w-[1920px] w-[98%] mx-auto grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-6 items-start">
+            {/* LEFT */}
+            <div className="h-full gap-4 flex flex-col xl:col-span-1">
+              {/* 卡片 A */}
+              <div
+                className="card-item group hover:shadow-xl w-full border relative overflow-hidden cursor-zoom-in"
+                onClick={() => openGalleryAt("/images/project-01/img06.jpg")}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) =>
+                  (e.key === "Enter" || e.key === " ") &&
+                  openGalleryAt("/images/project-01/img06.jpg")
+                }
+              >
+                <div className="mask pointer-events-none z-10 opacity-20 absolute inset-0 bg-black group-hover:opacity-50 duration-300" />
+                <div className="relative w-full h-full min-h-[600px]">
+                  <Image
+                    src="/images/project-01/img06.jpg"
+                    alt="card-img"
+                    fill
+                    className="object-cover group-hover:scale-110 duration-700"
+                  />
                 </div>
               </div>
 
               {/* 卡片 B */}
-              <div>
-                <div>
-                  <div
-                    className="card-item group hover:shadow-xl w-full border relative overflow-hidden cursor-zoom-in"
-                    onClick={() =>
-                      openGalleryAt("/images/project-01/img08.jpg")
-                    }
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) =>
-                      (e.key === "Enter" || e.key === " ") &&
-                      openGalleryAt("/images/project-01/img08.jpg")
-                    }
-                  >
-                    <div className="mask pointer-events-none z-10 opacity-20 absolute inset-0 bg-black group-hover:opacity-50 duration-500" />
-                    <div className="card-content pointer-events-none duration-700 group-hover:opacity-100 opacity-100 sm:opacity-0 absolute z-20 left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-center">
-                      <h3 className="text-white text-[1.5rem] font-bold">
-                        Blog-001
-                      </h3>
-                      <span className="text-xs font-light mt-2 text-white">
-                        關於寬越設計的設計理念
-                      </span>
-                    </div>
-                    <div className="relative w-full h-full min-h-[600px]">
-                      <Image
-                        src="/images/project-01/img08.jpg"
-                        alt="card-img"
-                        fill
-                        className="object-cover group-hover:scale-125 duration-3000"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Middle */}
-            <div className="flex flex-col gap-4">
-              <div className="card-item group hover:shadow-xl aspect-square w-full border relative overflow-hidden">
-                <div className="mask z-10 opacity-20 absolute inset-0 bg-black group-hover:opacity-50 duration-500" />
-                <div className="card-content duration-700 group-hover:opacity-100 opacity-100 sm:opacity-0 absolute z-20 left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-center">
-                  <h3 className="text-white text-[1.5rem] font-bold">
-                    Blog-002
-                  </h3>
-                  <span className="text-xs font-light mt-2 text-white">
-                    和風の木格子を使ったカフェ空間
-                  </span>
-                </div>
-                <Image
-                  src="/images/project-01/img05.jpg"
-                  alt="card-img-2"
-                  fill
-                  className="object-cover group-hover:scale-125 duration-3000 cursor-zoom-in"
-                  onClick={() => openGalleryAt("/images/project-01/img05.jpg")}
-                />
-              </div>
-
-              <div className="card-item group hover:shadow-xl aspect-square w-full border relative overflow-hidden">
-                <div className="mask z-10 opacity-20 absolute inset-0 bg-black group-hover:opacity-50 duration-500" />
-                <div className="card-content duration-700 group-hover:opacity-100 opacity-100 sm:opacity-0 absolute z-20 left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-center">
-                  <h3 className="text-white text-[1.5rem] font-bold">
-                    Blog-003
-                  </h3>
-                  <span className="text-xs font-light mt-2 text-white">
-                    都會極簡甜點店
-                  </span>
-                </div>
-                <Image
-                  src="/images/project-01/img04.jpg"
-                  alt="card-img-3"
-                  fill
-                  className="object-cover group-hover:scale-125 duration-3000 cursor-zoom-in"
-                  onClick={() => openGalleryAt("/images/project-01/img04.jpg")}
-                />
-              </div>
-            </div>
-
-            {/* RIGHT */}
-            <div className="h-full">
-              <div className="card-item group hover:shadow-xl w-full border relative overflow-hidden">
-                <div className="mask z-10 opacity-20 absolute inset-0 bg-black group-hover:opacity-50 duration-500" />
-                <div className="card-content duration-700 group-hover:opacity-100 opacity-100 sm:opacity-0 absolute z-20 left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-center">
-                  <h3 className="text-white text-[1.5rem] font-bold">
-                    Blog-001
-                  </h3>
-                  <span className="text-xs font-light mt-2 text-white">
-                    關於寬越設計的設計理念
-                  </span>
-                </div>
+              <div
+                className="card-item group hover:shadow-xl w-full border relative overflow-hidden cursor-zoom-in"
+                onClick={() => openGalleryAt("/images/project-01/img08.jpg")}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) =>
+                  (e.key === "Enter" || e.key === " ") &&
+                  openGalleryAt("/images/project-01/img08.jpg")
+                }
+              >
+                <div className="mask pointer-events-none z-10 opacity-20 absolute inset-0 bg-black group-hover:opacity-50 duration-500" />
                 <div className="relative w-full h-full min-h-[600px]">
+                  <Image
+                    src="/images/project-01/img08.jpg"
+                    alt="card-img"
+                    fill
+                    className="object-cover group-hover:scale-110 duration-700"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* MIDDLE */}
+            <div className="flex flex-col gap-4 xl:col-span-1">
+              <div
+                className="card-item group hover:shadow-xl w-full border relative overflow-hidden cursor-zoom-in"
+                onClick={() => openGalleryAt("/images/project-01/img05.jpg")}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) =>
+                  (e.key === "Enter" || e.key === " ") &&
+                  openGalleryAt("/images/project-01/img05.jpg")
+                }
+              >
+                <div className="mask pointer-events-none z-10 opacity-20 absolute inset-0 bg-black group-hover:opacity-50 duration-500" />
+                <div className="relative w-full h-full min-h-[360px]">
+                  <Image
+                    src="/images/project-01/img05.jpg"
+                    alt="card-img"
+                    fill
+                    className="object-cover group-hover:scale-110 duration-700"
+                  />
+                </div>
+              </div>
+              <div
+                className="card-item group hover:shadow-xl w-full border relative overflow-hidden cursor-zoom-in"
+                onClick={() => openGalleryAt("/images/project-01/img04.jpg")}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) =>
+                  (e.key === "Enter" || e.key === " ") &&
+                  openGalleryAt("/images/project-01/img04.jpg")
+                }
+              >
+                <div className="mask pointer-events-none z-10 opacity-20 absolute inset-0 bg-black group-hover:opacity-50 duration-500" />
+                <div className="relative w-full h-full min-h-[600px]">
+                  <Image
+                    src="/images/project-01/img04.jpg"
+                    alt="card-img"
+                    fill
+                    className="object-cover group-hover:scale-110 duration-700"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* RIGHT（原第三欄） */}
+            <div className="h-full xl:col-span-1">
+              <div
+                className="card-item group hover:shadow-xl w-full border relative overflow-hidden cursor-zoom-in"
+                onClick={() => openGalleryAt("/images/project-01/img01.jpg")}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) =>
+                  (e.key === "Enter" || e.key === " ") &&
+                  openGalleryAt("/images/project-01/img01.jpg")
+                }
+              >
+                <div className="mask pointer-events-none z-10 opacity-20 absolute inset-0 bg-black group-hover:opacity-50 duration-500" />
+                <div className="relative w-full h-full min-h-[760px]">
                   <Image
                     src="/images/project-01/img01.jpg"
                     alt="card-img"
                     fill
-                    className="object-cover group-hover:scale-125 duration-3000 cursor-zoom-in"
-                    onClick={() =>
-                      openGalleryAt("/images/project-01/img01.jpg")
-                    }
+                    className="object-cover group-hover:scale-110 duration-700"
                   />
                 </div>
               </div>
-
-              <div className="card-item group hover:shadow-xl w-full border relative overflow-hidden mt-4">
-                <div className="mask z-10 opacity-20 absolute inset-0 bg-black group-hover:opacity-50 duration-500" />
-                <div className="card-content duration-700 group-hover:opacity-100 opacity-100 sm:opacity-0 absolute z-20 left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-center">
-                  <h3 className="text-white text-[1.5rem] font-bold">
-                    Blog-001
-                  </h3>
-                  <span className="text-xs font-light mt-2 text-white">
-                    關於寬越設計的設計理念
-                  </span>
-                </div>
-                <div className="relative w-full h-full min-h-[600px]">
+              <div
+                className="card-item group hover:shadow-xl w-full border relative overflow-hidden cursor-zoom-in"
+                onClick={() => openGalleryAt("/images/project-01/img03.jpg")}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) =>
+                  (e.key === "Enter" || e.key === " ") &&
+                  openGalleryAt("/images/project-01/img03.jpg")
+                }
+              >
+                <div className="mask pointer-events-none z-10 opacity-20 absolute inset-0 bg-black group-hover:opacity-50 duration-500" />
+                <div className="relative w-full h-full min-h-[460px]">
                   <Image
                     src="/images/project-01/img03.jpg"
                     alt="card-img"
                     fill
-                    className="object-cover group-hover:scale-125 duration-3000 cursor-zoom-in"
-                    onClick={() =>
-                      openGalleryAt("/images/project-01/img03.jpg")
-                    }
+                    className="object-cover group-hover:scale-110 duration-700"
                   />
                 </div>
               </div>
             </div>
+
+            {/* ✅ NEW：Sticky 側邊欄（第 4 欄） */}
+            {/* ✅ NEW：Sticky 側邊欄（第 4 欄；md 起就會出現） */}
+            <aside className="md:col-span-1 h-full xl:col-span-1 ">
+              <div className="sticky top-24 space-y-4">
+                {" "}
+                {/* 如需可滾動再加 max-h/overflow */}
+                {sidebarCases.map((c) => {
+                  // 若有內部路由，用 Link；若要外部連結，換成 <a href={c.href} target="_blank" rel="noopener noreferrer">
+                  const href = c.href ?? "#";
+                  return (
+                    <Link key={c.src} href={href}>
+                      {/* 長方形比例 16:9 */}
+                      <div className="relative w-full aspect-[9/12]  overflow-hidden my-2">
+                        {/* 置中文字（水平垂直置中） */}
+                        <div className="absolute inset-0 z-20 flex items-center justify-center text-center p-4 pointer-events-none">
+                          <div className="max-w-[90%]">
+                            <h4 className="text-white text-lg md:text-xl font-semibold leading-tight">
+                              {c.title}
+                            </h4>
+                            {c.subtitle && (
+                              <p className="text-white/90 text-xs md:text-sm mt-1">
+                                {c.subtitle}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                        {/* 漸層遮罩提升對比 */}
+                        <div className="absolute inset-0 z-10 bg-gradient-to-t from-[rgba(0,0,0,0.55)] via-[rgba(0,0,0,0.25)] to-transparent" />
+                        {/* 圖片 */}
+                        <Image
+                          src={c.src}
+                          alt={c.title}
+                          fill
+                          className="object-cover bg-black  transition-transform duration-500 group-hover:scale-[1.04]"
+                          priority={false}
+                        />
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </aside>
           </div>
         </section>
 
@@ -381,6 +434,7 @@ const Photos = () => {
 
 export default Photos;
 
+/* ====== Optional: Demo 區塊（若不需要可刪） ====== */
 const DummyContent = ({ title, description, imageUrl }) => {
   return (
     <div className="bg-[#F5F5F7] dark:bg-neutral-800 p-8 md:p-14 mb-4">
