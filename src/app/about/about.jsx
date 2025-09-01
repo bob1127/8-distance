@@ -108,9 +108,9 @@ export default async function AboutPage() {
           <div className="mask absolute top-0 left-0 z-10 w-full h-[80vh] bg-black/30"></div>
           <div className="content absolute w-full h-full top-0 left-0 z-20">
             <div className="flex h-[80vh] flex-row ">
-              <div className="left w-1/2  flex  justify-center items-center  ">
+              {/* <div className="left w-1/2  flex  justify-center items-center  ">
                 <h1 className="text-white font-normal text-7xl">NEW</h1>
-              </div>
+              </div> */}
             </div>
           </div>
           <Video
