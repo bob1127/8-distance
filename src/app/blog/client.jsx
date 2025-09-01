@@ -675,11 +675,8 @@ export default function Home() {
           <div className="blog-grid grid pl-0 lg:pr-10 grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-4">
             {filtered.map((item) => (
               <Link key={item.id} href={item.link}>
-                <div className="item overflow-hidden relative group bg-white transition-all duration-300 rounded-2xl border border-gray-100">
-                  <div className="!absolute hidden group-hover:block w-[90px] h-[90px] bottom-3 right-5">
-                    <JanusButton02 />
-                  </div>
-                  <div className="img mx-5 overflow-hidden mt-5 relative rounded-xl aspect-[4/3]">
+                <div className="item overflow-hidden relative group bg-white transition-all duration-300  border border-gray-100">
+                  <div className="img mx-5 overflow-hidden mt-2 relative  aspect-[4/3]">
                     <Image
                       src={item.image}
                       alt={item.title}
@@ -723,7 +720,7 @@ export default function Home() {
         {/* 右半部（保持不動） */}
         <div className="right w-full pt-10 lg:pt-0 lg:w-[30%] h-full">
           {/* sticky 寫在卡片容器上；注意不要放 !sticky */}
-          <div className="right-bar bg-white sticky top-20 py-8 rounded-2xl border border-gray-100 h-fit">
+          <div className="right-bar bg-white sticky top-20 py-8  border border-gray-100 h-fit">
             <div className="mx-auto rounded-[22px] relative bg-black p-4 flex justify-center max-w-[120px] items-center">
               <div className="absolute color bg-[#323936] w-full h-full rounded-[22px] rotate-12"></div>
               <Image
