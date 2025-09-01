@@ -858,10 +858,24 @@ export default function Home() {
             </div>
 
             <div className="others-article mt-5">
-              <div className="article-item px-8 group flex">
-                <div className="txt w-full transition duration-400">
-                  <b>Article Title</b>
-                  <p className="text-[14px] text-gray-800">
+              <div className="article-item px-8 flex-col group flex">
+                <div className="txt w-full transition duration-400 mt-2">
+                  <b>近期文章</b>
+                  <p className="text-[14px] text-gray-800 w-[80%]">
+                    Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                    Aliquid vero praesentium iusto illo, consectetur quae?
+                  </p>
+                </div>
+                <div className="txt w-full transition duration-400 mt-2">
+                  <b>近期文章</b>
+                  <p className="text-[14px] text-gray-800 w-[80%]">
+                    Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                    Aliquid vero praesentium iusto illo, consectetur quae?
+                  </p>
+                </div>
+                <div className="txt w-full transition duration-400 mt-2">
+                  <b>近期文章</b>
+                  <p className="text-[14px] text-gray-800 w-[80%]">
                     Lorem ipsum dolor sit, amet consectetur adipisicing elit.
                     Aliquid vero praesentium iusto illo, consectetur quae?
                   </p>

@@ -238,7 +238,7 @@ export default function About() {
     <ReactLenis root>
       <div className="bg-[#f8f8f8] pt-20" ref={containerRef}>
         {/* 麵包屑 */}
-        <div className="navgation pl-[5%] mt-[90px] flex">
+        <div className="navgation max-w-[1920px] !w-[85%] mt-[90px] mx-auto  flex">
           <div className="border bg-white/20 hover:bg-white/90 transition duration-300 rounded-md px-4 py-2 flex">
             <Link href="/blog">
               <span>Blog文章總覽</span>
@@ -249,6 +249,18 @@ export default function About() {
             <Link href="/">
               <span>雲林虎尾</span>
             </Link>
+          </div>
+        </div>
+        <div className="max-w-[1920px] w-[85%] mx-auto flex mt-10 justify-between ">
+          <div className="flex text-[14px] justify-center items-center">
+            {" "}
+            <b>發布日期:</b>
+            <span>2025/05/23</span>
+          </div>
+          <div className="flex text-[14px] justify-center items-center">
+            {" "}
+            <b>觀看次數:</b>
+            <span>45</span>
           </div>
         </div>
 
