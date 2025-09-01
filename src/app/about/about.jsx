@@ -93,7 +93,7 @@ export default async function AboutPage() {
     { src: "/images/staff/蘇蘇.jpg.avif", alt: "封面 1" },
   ];
   return (
-    <main className="min-h-screen bg-[#f5f6f6] dark:bg-neutral-950">
+    <main className="min-h-screen bg-[#f5f6f6] dark:bg-neutral-950 overflow-hidden">
       {/* JSON-LD：加強 SEO */}
       <Script
         id="org-jsonld"
