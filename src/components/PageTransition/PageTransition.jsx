@@ -6,6 +6,9 @@ import { gsap } from "gsap";
 import Logo from "./Logo";
 
 const PageTransition = ({ children }) => {
+  // ===== 中間速度係數：1 = 原速；0.8 = 中間值 =====
+  const SPEED = 0.8;
+
   const router = useRouter();
   const pathname = usePathname();
   const overlayRef = useRef(null);
@@ -16,7 +19,6 @@ const PageTransition = ({ children }) => {
   const pathLengthRef = useRef(0);
   const revealTimeoutRef = useRef(null);
 
-  // 只在需要時讓 overlay 可互動，其它時候完全穿透
   const setOverlayInteractive = useCallback((active) => {
     const pe = active ? "auto" : "none";
     if (overlayRef.current) {
@@ -78,28 +80,26 @@ const PageTransition = ({ children }) => {
       clearTimeout(revealTimeoutRef.current);
     }
 
-    // 收闔開場格
     gsap.set(blocksRef.current, { scaleX: 1, transformOrigin: "right" });
     gsap.to(blocksRef.current, {
       scaleX: 0,
-      duration: 0.4,
-      stagger: 0.02,
+      duration: 0.4 * SPEED,
+      stagger: 0.02 * SPEED,
       ease: "power2.out",
       transformOrigin: "right",
       onComplete: () => {
         isTransitioning.current = false;
-        setOverlayInteractive(false); // ← 統一走這裡，確保關閉
+        setOverlayInteractive(false);
       },
     });
 
-    // 安全網：若動畫被中斷，1 秒後仍強制關閉互動
     revealTimeoutRef.current = setTimeout(() => {
       if (blocksRef.current.length > 0) {
         const firstBlock = blocksRef.current[0];
         if (firstBlock && gsap.getProperty(firstBlock, "scaleX") > 0) {
           gsap.to(blocksRef.current, {
             scaleX: 0,
-            duration: 0.2,
+            duration: 0.2 * SPEED,
             ease: "power2.out",
             transformOrigin: "right",
             onComplete: () => {
@@ -113,7 +113,7 @@ const PageTransition = ({ children }) => {
       } else {
         setOverlayInteractive(false);
       }
-    }, 1000);
+    }, 1000 * SPEED);
   }, [setOverlayInteractive]);
 
   useEffect(() => {
@@ -121,7 +121,7 @@ const PageTransition = ({ children }) => {
       if (!overlayRef.current) return;
       overlayRef.current.innerHTML = "";
       blocksRef.current = [];
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < 16; i++) {
         const block = document.createElement("div");
         block.className = "block";
         overlayRef.current.appendChild(block);
@@ -131,11 +131,9 @@ const PageTransition = ({ children }) => {
 
     createBlocks();
 
-    // 初始狀態：格子縮回、overlay 不可互動
     gsap.set(blocksRef.current, { scaleX: 0, transformOrigin: "left" });
     setOverlayInteractive(false);
 
-    // 準備 logo path
     if (logoRef.current) {
       const path = logoRef.current.querySelector("path");
       if (path) {
@@ -148,10 +146,8 @@ const PageTransition = ({ children }) => {
       }
     }
 
-    // 首屏：收闔動畫
     revealPage();
 
-    // 攔站內連結做轉場
     const links = Array.from(document.querySelectorAll('a[href^="/"]'));
     links.forEach((link) => {
       link.addEventListener("click", onAnchorClick);
@@ -167,7 +163,7 @@ const PageTransition = ({ children }) => {
   }, [router, pathname, onAnchorClick, revealPage, setOverlayInteractive]);
 
   const coverPage = (url) => {
-    setOverlayInteractive(true); // ← 只在轉場期間開啟攔截
+    setOverlayInteractive(true);
 
     const tl = gsap.timeline({
       onComplete: () => router.push(url),
@@ -175,37 +171,36 @@ const PageTransition = ({ children }) => {
 
     tl.to(blocksRef.current, {
       scaleX: 1,
-      duration: 0.4,
-      stagger: 0.02,
+      duration: 0.4 * SPEED,
+      stagger: 0.02 * SPEED,
       ease: "power2.out",
       transformOrigin: "left",
     })
       .set(logoOverlayRef.current, { opacity: 1 }, "-=0.2")
       .set(
-        logoRef.current.querySelector("path"),
+        logoRef.current?.querySelector("path"),
         { strokeDashoffset: pathLengthRef.current, fill: "transparent" },
         "-=0.25"
       )
       .to(
-        logoRef.current.querySelector("path"),
-        { strokeDashoffset: 0, duration: 2, ease: "power2.inOut" },
-        "-=0.5"
+        logoRef.current?.querySelector("path"),
+        { strokeDashoffset: 0, duration: 2 * SPEED, ease: "power2.inOut" },
+        "-=0.6"
       )
       .to(
-        logoRef.current.querySelector("path"),
-        { fill: "#e3e4d8", duration: 1, ease: "power2.out" },
+        logoRef.current?.querySelector("path"),
+        { fill: "#e3e4d8", duration: 1 * SPEED, ease: "power2.out" },
         "-=0.5"
       )
       .to(logoOverlayRef.current, {
         opacity: 0,
-        duration: 0.25,
+        duration: 0.25 * SPEED,
         ease: "power2.out",
       });
   };
 
   return (
     <>
-      {/* 預設就不可互動，避免遮擋 */}
       <div
         ref={overlayRef}
         className="transition-overlay"
@@ -227,7 +222,6 @@ const PageTransition = ({ children }) => {
 
       {children}
 
-      {/* 保險：強制讓 overlay 預設穿透（不改你原本 CSS，只添加） */}
       <style jsx global>{`
         .transition-overlay,
         .logo-overlay {
