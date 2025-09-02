@@ -85,9 +85,25 @@ const Photos = () => {
   return (
     <ReactLenis root>
       <div className="bg-[#f1f1f1]">
-        <section className="pt-[150px] pb-[100px] bg-[#c1c1c1]">
-          <div className="title flex justify-center text-2xl">
-            心域之所 - 三房兩廳現代輕暖境域 台中磐鈺晰晰裏山
+        <section className="relative pt-[150px] pb-[100px]">
+          {/* 背景圖 */}
+          <div className="absolute inset-0">
+            <Image
+              src="/images/index/b69ff1_ed3d1e1ab1e14db4bd8ad2c8f3b9c3de~mv2.jpg.avif"
+              alt="背景圖"
+              fill
+              priority={false}
+              className="object-cover"
+            />
+            {/* 可選：加一層遮罩提升可讀性 */}
+            <div className="absolute inset-0 bg-black/30" />
+          </div>
+
+          {/* 內容 */}
+          <div className="relative z-10">
+            <div className="title py-20 flex justify-center text-2xl text-white">
+              心域之所 - 三房兩廳現代輕暖境域 台中磐鈺晰晰裏山
+            </div>
           </div>
         </section>
 

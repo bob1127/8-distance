@@ -205,12 +205,12 @@ export default function MiniMapGallery({
       </button>
 
       {/* 主圖 + ALT（下方顯示文字） */}
-      <div className="absolute top-[40%] left-1/2 w-[75%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+      <div className="absolute top-[40%] mt-20 left-1/2 w-[75%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
         <img
           ref={previewImageRef}
           src={images[currentImageIndex]?.src}
           alt={images[currentImageIndex]?.alt || ""}
-          className="w-full h-[60vh] object-contain"
+          className="w-full h-[60vh] object-contain scale-150"
         />
         {images[currentImageIndex]?.alt ? (
           <p className=" text-base text-neutral-600 text-[14px] !text-left mt-2">

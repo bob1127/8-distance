@@ -3,6 +3,7 @@
 import React from "react";
 import { useEffect } from "react";
 import Marquee from "react-fast-marquee";
+import Image from "next/image";
 import Link from "next/link";
 // import { PlaceholdersAndVanishInput } from "../ui/placeholders-and-vanish-input";
 export default function Content() {
@@ -426,6 +427,12 @@ const Nav = () => {
           </div>
         </div>
         <div className=" w-full lg:w-[60%] pb-5 flex justify-start lg:justify-end">
+          <div className="map pr-8">
+            <img
+              src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*KaEGyehJJqsOupp7wpmBXA.png"
+              className="w-[500px] h-[250px] "
+            />
+          </div>
           <div className=" flex flex-col items-end justify-end">
             <div className="w-full flex justify-end">
               {" "}
@@ -463,7 +470,7 @@ const Nav = () => {
             </div>
             <div className="flex group flex-row items-center">
               <span className="text-[14px] mr-2 mt-1 text-gray-400 location">
-                雲林設計辦公室
+                員林設計辦公室
               </span>
               <button class=" relative text-[14px] h-5 rounded-full   text-neutral-50">
                 <span class="relative inline-flex overflow-hidden">
