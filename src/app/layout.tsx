@@ -89,7 +89,7 @@ export default function RootLayout({
           </div>
 
           {/* Tawk.to（下調 z-index） */}
-          <Script
+          {/* <Script
             id="tawk-embed"
             strategy="afterInteractive"
             dangerouslySetInnerHTML={{
@@ -115,7 +115,7 @@ export default function RootLayout({
                 })();
               `,
             }}
-          />
+          /> */}
         </body>
       </html>
     </ViewTransitions>

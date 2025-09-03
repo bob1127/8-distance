@@ -15,7 +15,7 @@ export default function BackgroundSlider({ images = [], duration = 5 }) {
   }, [currentIndex, images.length, duration]);
 
   return (
-    <section className="section-hero relative w-full h-screen overflow-hidden">
+    <section className=" relative w-full h-screen overflow-hidden">
       {images.map((bg, i) => (
         <motion.div
           key={i}
@@ -32,9 +32,6 @@ export default function BackgroundSlider({ images = [], duration = 5 }) {
           style={{ backgroundImage: `url(${bg})` }}
         />
       ))}
-
-      {/* 黑色遮罩 */}
-      <div className="bg-black opacity-40 w-full h-full absolute top-0 left-0 z-10" />
     </section>
   );
 }

@@ -534,14 +534,14 @@ function HomeClient({ specialPosts }) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homeStructuredData) }}
       />
 
-      <div className="">
+      <div className="w-full overflow-hidden">
         {/* <div
           id="dark-section"
           className="relative w-full aspect-[500/700] sm:aspect-[500/700] md:aspect-[1024/576] xl:aspect-[1920/768] 2xl:aspect-[1920/1080] !overflow-hidden  "
         >
           <Preloader01 />
         </div> */}
-        <div className="relative">
+        <div className="relative ">
           <div className="">
             <div className="">
               <BackgroundSlider images={backgroundImages} duration={5} />
@@ -562,7 +562,7 @@ function HomeClient({ specialPosts }) {
 
           {/* 指標數字區（保持在漸層之上） */}
           <div className="absolute bottom-[6%] sm:bottom-[10%] ml-[40px] sm:ml-[100px] text-4xl font-bold z-40 flex">
-            <div className="grid grid-cols-3 w-[400px] md:w-[800px] ">
+            <div className="grid grid-cols-3 w-full md:w-[700px] ">
               <div>
                 <div className="number flex flex-col">
                   <span className="text-[30px] md:text-[55px] font-extrabold text-white">
