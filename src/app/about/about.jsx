@@ -280,7 +280,7 @@ export default async function AboutPage() {
                 src="/images/staff/捌程室內設計胡萬福.jpeg.avif"
                 width={1200}
                 height={1800}
-                className="w-full h-auto "
+                className="max-w-[600px] mx-auto h-auto "
                 alt="staff"
                 priority={false}
               />
@@ -292,7 +292,7 @@ export default async function AboutPage() {
                 src="https://static.wixstatic.com/media/b69ff1_b341c8c3f39e420abf4a4f626868096e~mv2.jpg/v1/crop/x_0,y_0,w_4000,h_5143/fill/w_289,h_372,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/捌程室內設計張佩甄.jpg"
                 width={1200}
                 height={1800}
-                className="w-full h-auto "
+                className="max-w-[600px] mx-auto h-auto "
                 alt="staff"
                 priority={false}
               />
@@ -342,7 +342,7 @@ export default async function AboutPage() {
                 src="/images/staff/蕭廷羽.jpg.avif"
                 width={1200}
                 height={1800}
-                className="w-full h-auto "
+                className="max-w-[600px] mx-auto h-auto "
                 alt="staff"
                 priority={false}
               />
