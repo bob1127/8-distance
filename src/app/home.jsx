@@ -782,7 +782,7 @@ function HomeClient({ specialPosts }) {
               <section className="section-video !w-full">
                 <div className="w-full ">
                   <Video
-                    src="https://videos.files.wordpress.com/Kut81xya/0_pc.mp4"
+                    src="https://video.wixstatic.com/video/b69ff1_143f9b33dccf44eea83413490c5a1713/2160p/mp4/file.mp4"
                     poster="/images/video-poster.jpg"
                     caption=""
                   />
@@ -801,28 +801,14 @@ function HomeClient({ specialPosts }) {
                       </div>
                       <div className="aspect-[4/3] w-full lg:w-[85%] relative overflow-hidden">
                         <Image
-                          src="https://i0.wp.com/tjda.com/wp-content/uploads/2024/01/05_plus-shift_pj_cover.jpg?fit=2880%2C1920&quality=85&strip=all&ssl=1"
+                          src="/images/project-01/1.jpg"
                           className="object-cover "
                           alt=""
                           fill
                         />
                       </div>
-                      <div className="info grid lg:grid-cols-1 grid-cols-2 py-4">
-                        {[
-                          ["LOCATION", "台中市-TAICHUNG"],
-                          ["ADDRESS", "台中市五權三街273號"],
-                          ["LOCATION", "台中市-TAICHUNG"],
-                          ["ADDRESS", "台中市五權三街273號"],
-                        ].map(([k, v], idx) => (
-                          <div className="flex my-2 flex-col" key={idx}>
-                            <b className="text-gray-300 font-bold text-[12px]">
-                              {k}
-                            </b>
-                            <span className="font-normal text-gray-700 text-[14px]">
-                              {v}
-                            </span>
-                          </div>
-                        ))}
+                      <div className="info grid lg:grid-cols-1 text-[14px] w-2/3  grid-cols-2 py-4">
+                        捌程是一間室內與景觀設計的專業公司,擅長將室內、室外的景色融合。每個空間會因為不同的人所屬,而有著獨有的設計。
                       </div>
                     </div>
                   </div>

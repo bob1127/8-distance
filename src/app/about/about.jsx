@@ -103,9 +103,9 @@ export default async function AboutPage() {
       />
 
       {/* HERO 視訊區（保留你的原樣） */}
-      <section className="section-video over !w-full">
+      <section className="section-video aspect-[1/1] md:aspect-[1024/576] xl:aspect-[1920/768] relative overflow-hidden">
         <div className="w-full ">
-          <div className="mask absolute top-0 left-0 z-10 w-full h-[80vh] bg-black/30"></div>
+          <div className="mask absolute top-0 left-0 z-10 w-full h-full bg-black/30"></div>
           <div className="content absolute w-full h-full top-0 left-0 z-20">
             <div className="flex h-[80vh] flex-row ">
               {/* <div className="left w-1/2  flex  justify-center items-center  ">
@@ -113,11 +113,68 @@ export default async function AboutPage() {
               </div> */}
             </div>
           </div>
-          <Video
-            src="https://video.wixstatic.com/video/b69ff1_143f9b33dccf44eea83413490c5a1713/2160p/mp4/file.mp4"
-            poster="/images/video-poster.jpg"
-            caption=""
-          />
+          <section>
+            <div className="aspect-[1/1] md:aspect-[1024/576] xl:aspect-[1920/768] relative overflow-hidden">
+              <Image
+                src="/images/about/公司歷程-hero.jpg"
+                priority
+                placeholder="empty"
+                fill
+                className="object-cover w-full"
+              ></Image>
+            </div>
+          </section>
+        </div>
+      </section>
+      <section className="section-story flex lg:flex-row flex-col max-w-[1920px] w-[90%] md:w-[85%] 2xl:w-[80%] mx-auto">
+        <div className=" w-full p-3 lg:w-1/2 lg:p-8">
+          <div className="max-w-[750px]">
+            <h1 className="text-3xl">公司故事: </h1>
+            <p className="tetx-[14px] leading-loose tracking-wider">
+              捌程的起源，源於三位志同道合的兄弟姊妹。當初，一人專注於景觀設計，一人投入室內規劃，另一人則負責人事管理；在彼此的信任與默契下，共同奠定了捌程的基石。隨著業務逐步拓展，團隊分別成立了捌程室內設計、捌程景觀，以及專責園區管理的捌程悠旅，三大領域相輔相成，為每個案場注入完整而精緻的服務體驗。{" "}
+            </p>
+            <br></br>
+            <p className="tetx-[14px] leading-loose tracking-wider">
+              捌程室內設計深信空間本身即是一首無聲詩，透過結構比例與光影節奏的微妙交織，以質樸木紋、石材肌理為語彙，雕琢出流動且溫潤的生活場域。從概念發想至細節落實，匠心工藝與材質對話，讓每一處角落都蘊藏專屬的故事與情感。{" "}
+            </p>
+            <br></br>
+            <p className="tetx-[14px] leading-loose tracking-wider">
+              從構想到落成，捌程始終堅守用心聆聽、細膩打磨的初衷。每一個家，每一處庭院，都承載著對美好生活的想像──捌程邀請您，一同見證從設計萌芽到完美落成的每一段旅程。
+            </p>
+          </div>
+        </div>
+        <div className=" w-full p-3 lg:w-1/2 lg:p-8">
+          <div className="max-w-[750px]">
+            <h1 className="text-3xl">Story: </h1>
+            <p className="tetx-[14px]">
+              The origin of 8distance began with three like-minded siblings. One
+              devoted to landscape design, another to interior planning, and the
+              other to personnel management. Built upon trust and a shared sense
+              of purpose, they laid the foundation for 8distance. As their work
+              expanded, the team established three branches: 8distance Interior
+              Design, 8distance Landscape, and 8distance Leisure—These three
+              sectors complement one another, delivering a seamless and refined
+              service experience for every project.
+            </p>
+            <br></br>
+            <p className="tetx-[14px]">
+              8distance Interior Design believes that space itself is a silent
+              poem. Through the subtle interplay of structural proportions and
+              shifting light, and using the language of natural wood grains and
+              stone textures, each environment is shaped into a fluid and gentle
+              living experience. From conceptualization to execution,
+              craftsmanship and material dialogue come together to imbue every
+              corner with its own story and emotion.
+            </p>
+            <br></br>
+            <p className="tetx-[14px]">
+              From vision to completion, 8distance stays true to its commitment
+              to careful listening and thoughtful execution. Every home, every
+              garden, carries a shared dream of a better life—8distance invites
+              you to witness every step of the journey, from the first spark of
+              design to its graceful realization.
+            </p>
+          </div>
         </div>
       </section>
 
