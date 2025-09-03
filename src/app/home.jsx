@@ -1,72 +1,43 @@
+// app/(或 pages 專案就放對應路徑)/home-client.jsx
 "use client";
 
 import React, { useRef, useEffect, useState, useCallback } from "react";
-import dynamic from "next/dynamic"; // ⬅️ 新增：關閉 SSR 用
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
 import Link from "next/link";
-import BackgroundSlider from "@/components/BackgroundSlider";
+import Nav from "../components/PageTransition/Nav";
 import ParallaxCard from "../components/ParallaxCardIndex/page";
 import { useScroll } from "framer-motion";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { ReactLenis } from "@studio-freight/react-lenis";
-import CustomEase from "gsap/CustomEase";
-import GsapText from "../components/RevealText/index";
-// import Preloader01 from "../components/Preloader01/index";
-// import Preloader from "../components/LogoIntro/index";
+
 import AnimatedLink from "../components/AnimatedLink";
 import HoverItem from "../components/Slider/Slider.jsx";
 import Video from "../components/Video";
 import Script from "next/script";
 
-import { Card, CardBody } from "@nextui-org/react";
+import { Card } from "@nextui-org/react";
 import { Pagination, A11y, Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { projects as projectsData } from "@/components/ParallaxCardIndex/data";
 import AnimatedListFeed from "@/components/AnimatedListFeed";
 import "swiper/css";
 import "swiper/css/pagination";
-const customEase = CustomEase.create("custom", ".87,0,.13,1");
-const notifications = [
-  {
-    name: "Payment received",
-    description:
-      "我們家有長輩和小孩，設計師特地為我們規劃了許多安全又貼心的設計，像是圓弧邊角、防滑地板等。整個過程中，服務態度始終如一，有任何問題都能迅速回應，真的很負責。",
-    time: "15m ago",
-    icon: "💸",
-    color: "#00C9A7",
-  },
-  {
-    name: "User signed up",
-    description: "Magic UI",
-    time: "10m ago",
-    icon: "👤",
-    color: "#FFB800",
-  },
-  {
-    name: "New message",
-    description: "Magic UI",
-    time: "5m ago",
-    icon: "💬",
-    color: "#FF3D71",
-  },
-  {
-    name: "New event",
-    description: "Magic UI",
-    time: "2m ago",
-    icon: "🗞️",
-    color: "#1E86FF",
-  },
-];
+
 gsap.registerPlugin(ScrollTrigger);
 
 function HomeClient({ specialPosts }) {
   const [posts, setPosts] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(1);
+
+  // ✅ 所有 hooks 必須放在元件裡
   const imageRefs = useRef([]);
   const containerRef = useRef(null);
   const container = useRef(null);
+  const heroSectionRef = useRef(null);
+  const arrowRef = useRef(null);
+
   const { scrollYProgress } = useScroll({
     target: container,
     offset: ["start start", "end end"],
@@ -203,58 +174,33 @@ function HomeClient({ specialPosts }) {
       initGSAPAnimations();
     });
   };
+
+  // ✅ Hero 區塊下方箭頭動畫（尊重 reduce-motion）
   useEffect(() => {
-    const items = gsap.utils.toArray(".news-item");
+    if (!arrowRef.current) return;
 
-    items.forEach((item) => {
-      const underline = item.querySelector(".news-underline");
-      const thumb =
-        item.querySelector(".news-thumb img") || // 支援 Next <Image />
-        item.querySelector(".news-thumb");
-      const title = item.querySelector(".news-title");
-      const sub = item.querySelector(".news-sub");
+    const prefersReduced =
+      typeof window !== "undefined" &&
+      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 
-      if (!underline) return;
+    if (prefersReduced) return;
 
-      // 初始
-      gsap.set(underline, { scaleX: 0, transformOrigin: "left center" });
-      if (thumb) gsap.set(thumb, { opacity: 0.3 });
-      if (title) gsap.set(title, { opacity: 0.3 });
-      if (sub) gsap.set(sub, { opacity: 0.3 });
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        arrowRef.current,
+        { y: 0, opacity: 0.6 },
+        {
+          y: 14,
+          opacity: 1,
+          duration: 1.2,
+          ease: "power1.inOut",
+          repeat: -1,
+          yoyo: true,
+        }
+      );
+    }, heroSectionRef);
 
-      const enter = () => {
-        gsap.to(underline, { scaleX: 1, duration: 1.5, ease: "power3.out" });
-        if (thumb)
-          gsap.to(thumb, { opacity: 1, duration: 0.5, ease: "power2.out" });
-        if (title)
-          gsap.to(title, { opacity: 1, duration: 0.5, ease: "power2.out" });
-        if (sub)
-          gsap.to(sub, { opacity: 1, duration: 0.5, ease: "power2.out" });
-      };
-
-      const leave = () => {
-        gsap.to(underline, { scaleX: 0, duration: 0.6, ease: "power3.in" });
-        if (thumb)
-          gsap.to(thumb, { opacity: 0.3, duration: 0.5, ease: "power2.in" });
-        if (title)
-          gsap.to(title, { opacity: 0.3, duration: 0.5, ease: "power2.in" });
-        if (sub)
-          gsap.to(sub, { opacity: 0.3, duration: 0.5, ease: "power2.in" });
-      };
-
-      ScrollTrigger.create({
-        trigger: item,
-        start: "top 40%",
-        end: "bottom 30%",
-        onEnter: enter,
-        onEnterBack: enter,
-        onLeave: leave,
-        onLeaveBack: leave,
-      });
-    });
-
-    ScrollTrigger.refresh();
-    return () => ScrollTrigger.getAll().forEach((st) => st.kill());
+    return () => ctx.revert();
   }, []);
 
   const staticSlides = [
@@ -291,239 +237,74 @@ function HomeClient({ specialPosts }) {
 
   const projects = projectsData ?? [];
   const slidesA = [
-    {
-      image: "/images/index/住宅空間-程宅.webp",
-    },
-    {
-      image: "/images/index/住宅空間-程宅.webp",
-    },
+    { image: "/images/index/住宅空間-程宅.webp" },
+    { image: "/images/index/住宅空間-程宅.webp" },
   ];
   const slidesB = [
-    {
-      image: "/images/index/商業空間-桃園招待所.webp",
-    },
-    {
-      image: "/images/index/商業空間-桃園招待所.webp",
-    },
+    { image: "/images/index/商業空間-桃園招待所.webp" },
+    { image: "/images/index/商業空間-桃園招待所.webp" },
   ];
-
   const slidesC = [
-    {
-      image: "/images/index/純設計案-和美.webp",
-    },
-    {
-      image: "/images/index/純設計案-和美.webp",
-    },
+    { image: "/images/index/純設計案-和美.webp" },
+    { image: "/images/index/純設計案-和美.webp" },
   ];
-
   const slidesD = [
-    {
-      image: "/images/index/老屋翻新-李宅.webp",
-    },
-    {
-      image: "/images/index/老屋翻新-李宅.webp",
-    },
-  ];
-  // 客戶好評區塊
-  // const container = useRef(null);
-  const customEase = CustomEase.create("custom", ".87,0,.13,1");
-  const taglineRef = useRef([]);
-
-  // ✅ 最終要停在頂部下方 520px
-  const FINAL_TOP = 520;
-
-  const backgroundImages = [
-    "/images/index/b69ff1_8d67d2bc26bd45529c4848f4343ccecc~mv2.jpg.avif",
-    "/images/index/b69ff1_dfadbd53c3e2460c85392dc940a6c899~mv2.jpg.avif",
-    "/images/index/b69ff1_5fbc029839a748f18ca1e1ac09bd662e~mv2.jpg.avif",
-    "/images/index/b69ff1_2e8beb67f7c64ad9aaab0271e8d9a385~mv2.jpg.avif",
-    "/images/index/b69ff1_ed3d1e1ab1e14db4bd8ad2c8f3b9c3de~mv2.jpg.avif",
-    "/images/index/b69ff1_dbf0d0c42626415881135b9768235d8f~mv2.jpg.avif",
+    { image: "/images/index/老屋翻新-李宅.webp" },
+    { image: "/images/index/老屋翻新-李宅.webp" },
   ];
 
-  useGSAP(
-    () => {
-      if (typeof window === "undefined") return;
-
-      const prefersReducedMotion =
-        !!window.matchMedia &&
-        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-      const alreadySeen =
-        prefersReducedMotion ||
-        window.localStorage.getItem("home_intro_done") === "1";
-
-      // ✅ 僅保留實際會用到的元素
-      const heroElement = document.querySelector(".hero");
-      const videoContainer = document.querySelector(".video-container");
-      const logo = document.querySelector(".logo");
-      const animOutChars = document.querySelectorAll(".char.anim-out h1");
-      const animInChars = document.querySelectorAll(".char.anim-in h1");
-      const headerSpans = document.querySelectorAll(".header span");
-      const coordinatesSpans = document.querySelectorAll(".coordinates span");
-      const preloader = document.querySelector(".preloader-screen");
-      const spans = [...headerSpans, ...coordinatesSpans];
-
-      const setFinalState = () => {
-        if (heroElement) {
-          gsap.set(heroElement, {
-            clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-            backgroundColor: "#ffffff",
-          });
-        }
-        if (videoContainer) {
-          gsap.set(videoContainer, {
-            scale: 1,
-            rotation: 0,
-            clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-            top: `${FINAL_TOP}px`,
-            position: "absolute",
-          });
-        }
-        if (logo) gsap.set(logo, { left: "0%", xPercent: 0 });
-        if (animOutChars.length) gsap.set(animOutChars, { y: "100%" });
-        if (animInChars.length) gsap.set(animInChars, { x: "-1200%" });
-        if (spans.length) gsap.set(spans, { y: 0, opacity: 1 });
-        if (taglineRef.current?.length)
-          gsap.set(taglineRef.current, { y: 0, opacity: 1 });
-
-        // 只移除 fixed，不要 display:none
-        if (preloader) preloader.classList.remove("fixed");
-      };
-
-      // 🛑 已看過（或偏好減少動作）→ 直接套完成態
-      if (alreadySeen) {
-        setFinalState();
-        return;
-      }
-
-      // ⏳ 第一次：跑入場動畫（已去除 loading 圓圈／進度條）
-      if (document.readyState === "complete") {
-        if (videoContainer) {
-          gsap.set(videoContainer, {
-            scale: 0,
-            rotation: -20,
-            top: "0px",
-            position: "absolute",
-          });
-        }
-
-        if (heroElement) {
-          // 1) 先把視窗夾成中間一道細縫
-          gsap.to(heroElement, {
-            clipPath: "polygon(0% 45%, 25% 45%, 25% 55%, 0% 55%)",
-            duration: 1.2,
-            ease: customEase,
-            delay: 0.6,
-          });
-
-          // 2) 擴展為整條水平帶
-          gsap.to(heroElement, {
-            clipPath: "polygon(0% 45%, 100% 45%, 100% 55%, 0% 55%)",
-            duration: 1.6,
-            ease: customEase,
-            delay: 2.0,
-          });
-
-          // 3) 全開 + 視覺物件進場
-          gsap.to(heroElement, {
-            clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-            duration: 0.9,
-            ease: customEase,
-            delay: 3.8,
-            onStart: () => {
-              if (videoContainer) {
-                gsap.to(videoContainer, {
-                  scale: 1,
-                  rotation: 0,
-                  clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-                  duration: 1.0,
-                  ease: customEase,
-                  onComplete: () => {
-                    // ✅ 最終位移
-                    gsap.to(videoContainer, {
-                      top: `${FINAL_TOP}px`,
-                      duration: 1.2,
-                      ease: customEase,
-                    });
-
-                    gsap.to(heroElement, {
-                      backgroundColor: "#ffffff",
-                      duration: 0.8,
-                      ease: customEase,
-                    });
-                  },
-                });
-              }
-              if (logo) {
-                gsap.to(logo, {
-                  left: "0%",
-                  transform: "translateX(0%)",
-                  duration: 1.0,
-                  ease: customEase,
-                  onStart: () => {
-                    if (animOutChars.length > 0) {
-                      gsap.to(animOutChars, {
-                        y: "100%",
-                        duration: 0.9,
-                        stagger: -0.075,
-                        ease: customEase,
-                      });
-                    }
-                    if (animInChars.length > 0) {
-                      gsap.to(animInChars, {
-                        x: "-1200%",
-                        duration: 0.9,
-                        ease: customEase,
-                        delay: 0.2,
-                      });
-                    }
-                  },
-                });
-              }
-            },
-          });
-        }
-
-        if (spans.length > 0) {
-          gsap.fromTo(
-            spans,
-            { y: 50, opacity: 0 },
-            {
-              y: 0,
-              opacity: 1,
-              duration: 0.9,
-              stagger: 0.125,
-              ease: "power3.out",
-              delay: 4.4, // 時序往前調，因為移除 loading 等待
-              onComplete: () => {
-                if (preloader) preloader.classList.remove("fixed");
-              },
-            }
-          );
-        }
-
-        if (taglineRef.current?.length > 0) {
-          gsap.fromTo(
-            taglineRef.current,
-            { y: 30, opacity: 0 },
-            {
-              y: 0,
-              opacity: 1,
-              duration: 1.0,
-              ease: "power4.out",
-              delay: 6.0, // 同步提前
-              stagger: 0.2,
-              onComplete: () => {
-                window.localStorage.setItem("home_intro_done", "1");
-              },
-            }
-          );
-        }
-      }
+  // 客戶好評
+  const testimonials = [
+    {
+      name: "王先生",
+      role: "住宅業主",
+      content:
+        "我們家有長輩和小孩，設計師特地為我們規劃了許多安全又貼心的設計，像是圓弧邊角、防滑地板等。整個過程中，服務態度始終如一，有任何問題都能迅速回應，真的很負責。 ",
+      avatar: "/images/testimonials/user1.jpg",
     },
-    { scope: container, dependencies: [] }
-  );
+    {
+      name: "林小姐",
+      role: "咖啡廳老闆",
+      content:
+        "從一開始的諮詢到最後的驗收，每個環節都讓人感到安心。設計師不僅專業，還會細心聆聽我們的需求，把家裡的每一個小角落都規劃得超乎想像！真的非常感謝團隊的用心。 ",
+      avatar: "/images/testimonials/user2.jpg",
+    },
+    {
+      name: "張經理",
+      role: "辦公室管理者",
+      content:
+        "從第一次接觸開始，設計師就很有耐心傾聽需求，過程中不厭其煩地解釋每一個細節，讓我們對新家的樣貌逐漸清晰。施工團隊也相當專業，每個步驟都會主動回報，讓人很安心。最後成果比想像還要更好，住進來後的舒適感，真的讓人覺得一切都值得。 ",
+      avatar: "/images/testimonials/user3.jpg",
+    },
+    {
+      name: "張經理",
+      role: "辦公室管理者",
+      content:
+        "家裡坪數不大，原本很擔心空間不足，沒想到設計師透過巧妙的動線規劃和收納設計，讓每個角落都能發揮作用。成品不僅美觀，實際使用起來也非常便利。每天回家都覺得空間更寬敞、明亮，這份貼心的設計感受得到專業與細心。 ",
+      avatar: "/images/testimonials/user3.jpg",
+    },
+    {
+      name: "張經理",
+      role: "辦公室管理者",
+      content:
+        "設計不只是漂亮而已，更兼顧了我們日常生活的需求。家裡收納空間變多，但卻不會讓人覺得壓迫。整體氛圍輕盈舒適，家人每天回家都心情很好。謝謝設計師將功能性和美感結合，真的超乎預期！ ",
+      avatar: "/images/testimonials/user3.jpg",
+    },
+    {
+      name: "張經理",
+      role: "辦公室管理者",
+      content:
+        "設計師真的超有耐心，從討論到完工一路陪著我們，很多細節都幫忙想到！住進來後覺得家變得更舒服，每天回家都好放鬆，真的很感謝這個團隊 ❤️  ",
+      avatar: "/images/testimonials/user3.jpg",
+    },
+    {
+      name: "張經理",
+      role: "辦公室管理者",
+      content:
+        "從簽約到交屋，進度掌握得很不錯，每個階段都會主動跟我們確認，像是水電和木工的時間都有提前告知，完全不會突然通知就開工。整體來說，比我們原先預期的還快一點。團隊分工清楚，讓我們不用每天盯著工地，也能隨時知道最新狀況，對忙碌的上班族來說真的很方便。",
+      avatar: "/images/testimonials/user3.jpg",
+    },
+  ];
 
   return (
     <ReactLenis root>
@@ -534,108 +315,80 @@ function HomeClient({ specialPosts }) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homeStructuredData) }}
       />
 
-      <div className="">
-        {/* <div
-          id="dark-section"
-          className="relative w-full aspect-[500/700] sm:aspect-[500/700] md:aspect-[1024/576] xl:aspect-[1920/768] 2xl:aspect-[1920/1080] !overflow-hidden  "
-        >
-          <Preloader01 />
-        </div> */}
-        <div className="relative ">
-          <div className="">
-            <div className="w-full overflow-hidden">
-              <BackgroundSlider images={backgroundImages} duration={5} />
-            </div>
+      {/* HERO 區塊 */}
+      <section
+        ref={heroSectionRef}
+        className="section-hero-video relative h-screen overflow-hidden"
+      >
+        <video
+          src="https://videos.files.wordpress.com/FkZ9MbMc/e9a696e9a081e5bdb1e78987.mp4"
+          loop
+          autoPlay
+          muted
+          playsInline
+          className="w-full h-full object-cover"
+        />
 
-            {/* ✅ 左下角 → 右上角 黑色漸層陰影（在背景之上、標題之下） */}
-            <div
-              className="pointer-events-none absolute inset-0 z-30"
-              style={{
-                // 底部左側較濃，往右上漸淡；疊兩個漸層讓邊緣更柔和
-                backgroundImage:
-                  "radial-gradient(120% 120% at 0% 100%, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.45) 25%, rgba(0,0,0,0.15) 55%, rgba(0,0,0,0) 75%), linear-gradient(45deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 40%, rgba(0,0,0,0.0) 75%)",
-              }}
-            />
-
-            <div className="header absolute !bg-transparent bottom-20 left-10 z-30 text-white leading-tight space-y-1" />
-          </div>
-
-          {/* 指標數字區（保持在漸層之上） */}
-          <div className="absolute bottom-[6%] sm:bottom-[10%] ml-[40px] sm:ml-[100px] text-4xl font-bold z-40 flex">
-            <div className="grid grid-cols-3 w-full md:w-[700px] ">
-              <div>
-                <div className="number flex flex-col">
-                  <span className="text-[30px] md:text-[55px] font-extrabold text-white">
-                    50+
-                  </span>
-                  <span className="text-[14px] text-white font-extralight">
-                    累積案件數量
-                  </span>
-                </div>
-              </div>
-              <div>
-                <div className="number flex flex-col">
-                  <span className="text-[30px] md:text-[55px] font-extrabold text-white">
-                    20y
-                  </span>
-                  <span className="text-[14px] text-white font-extralight">
-                    業界經營
-                  </span>
-                </div>
-              </div>
-              <div>
-                <div className="number flex flex-col">
-                  <span className="text-[30px] md:text-[55px] font-extrabold text-white">
-                    150+
-                  </span>
-                  <span className="text-[14px] text-white font-extralight">
-                    好評數量
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* 標題與 CTA（保持在漸層之上） */}
-          <div className="absolute top-[15%] ml-[40px] sm:ml-[100px] text-4xl font-bold z-40 flex">
-            <div className="flex flex-col">
-              <h1
-                className="text-[32px] md:text-[50px] text-white !font-900 mt-9 tracking-widest"
-                ref={(el) => (taglineRef.current[0] = el)}
-              >
-                8-DISTANCE
-              </h1>
-              <h1
-                className="text-[32px] md:text-[50px] text-white !font-extrabold m-0 tracking-widest"
-                ref={(el) => (taglineRef.current[1] = el)}
-              >
-                捌程室內設計
-              </h1>
-              <p className="text-[14px] text-gray-200 max-w-[550px] leading-normal mt-4 font-extralight">
-                捌程是一間室內與景觀設計的專業公司,擅長將室內、室外的景色融合。
-                <br></br>每個空間會因為不同的人所屬,而有著獨有的設計。
-              </p>
-            </div>
-          </div>
+        {/* 文字與按鈕 overlay */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white px-4">
+          <h2 className="mb-4 text-3xl md:text-4xl text-slate-50 font-semibold">
+            8-DISTANCE
+          </h2>
+          <h1 className="mb-3 text-xl md:text-2xl text-slate-50 font-medium">
+            室內設計・商業空間・建築設計
+          </h1>
+          <p className="mb-6 text-sm md:text-base text-slate-50">
+            室內設計・商業空間・建築設計
+          </p>
         </div>
-        <div className="">
+
+        {/* Scroll Arrow */}
+        <button
+          ref={arrowRef}
+          onClick={() => {
+            document.getElementById("dark-section")?.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }}
+          aria-label="Scroll down"
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/70 text-white/90 hover:text-white hover:border-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+        >
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M6 9l6 6 6-6"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </button>
+      </section>
+
+      {/* 你原本的 Nav（如果首頁不想顯示，請改成 ConditionalNav 做路徑判斷） */}
+      {/* 讓 Nav 捲到上緣時黏住；回捲時回原位 */}
+      <div className="sm:block sticky top-0 hidden  z-[9999] bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+        <Nav />
+      </div>
+
+      <div>
+        <div>
           <div
             id="dark-section"
             className="flex flex-col justify-center w-full mx-auto"
           >
             <div className="flex flex-col w-full justify-center mx-auto items-center mt-4">
-              <div className="flex flex-col mb-5 justify-center items-center px-4 sm:px-8">
-                <GsapText
-                  text="最新作品"
-                  id="headline"
-                  className="text-[5vw] font-mode sm:text-[2.5vw] md:text-[2vw] lg:text-[1.8vw] leading-snug text-white text-center"
-                />
-                <h2 className="font-normal text-[20px]">PORTFOLIO</h2>
-              </div>
-
+              {/* 四格入口 */}
               <section className="section-portfolio w-full pb-5 xl:pb-20">
-                <div className="grid relative grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4 w-full ">
-                  <div className=" border ">
+                <div className="grid relative grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4 w-full">
+                  <div className="border">
                     <Link href="/note">
                       <HoverItem
                         slides={slidesC}
@@ -644,14 +397,14 @@ function HomeClient({ specialPosts }) {
                         overlayDesc="專屬你的生活動線與材質表情。"
                         showOverlay
                         intervalMs={5000}
-                        overlayContainerClass="top-[45%] group-hover:top-[40%]" // ✅ 加回 hover 效果
-                        overlayTitleClass="text-[35px] text-center text-white m-0 font-extrabold  transition-all duration-300"
+                        overlayContainerClass="top-[45%] group-hover:top-[40%]"
+                        overlayTitleClass="text-[35px] text-center text-white m-0 font-extrabold transition-all duration-300"
                         overlaySubtitleClass="text-[18px] text-white text-center font-extrabold group-hover:opacity-80 transition-all duration-300"
                         overlayDescClass="text-[14px] max-w-[420px] opacity-0 group-hover:opacity-100 transition duration-400 delay-75"
                       />
                     </Link>
                   </div>
-                  <div className=" border ">
+                  <div className="border">
                     <Link href="/note">
                       <HoverItem
                         slides={slidesD}
@@ -660,14 +413,14 @@ function HomeClient({ specialPosts }) {
                         overlayDesc="專屬你的生活動線與材質表情。"
                         showOverlay
                         intervalMs={5000}
-                        overlayContainerClass="top-[45%] group-hover:top-[40%]" // ✅ 加回 hover 效果
-                        overlayTitleClass="text-[35px] text-center text-white m-0 font-extrabold  transition-all duration-300"
+                        overlayContainerClass="top-[45%] group-hover:top-[40%]"
+                        overlayTitleClass="text-[35px] text-center text-white m-0 font-extrabold transition-all duration-300"
                         overlaySubtitleClass="text-[18px] text-white text-center font-extrabold group-hover:opacity-80 transition-all duration-300"
                         overlayDescClass="text-[14px] max-w-[420px] opacity-0 group-hover:opacity-100 transition duration-400 delay-75"
                       />
                     </Link>
                   </div>
-                  <div className=" border ">
+                  <div className="border">
                     <Link href="/note">
                       <HoverItem
                         slides={slidesA}
@@ -676,14 +429,14 @@ function HomeClient({ specialPosts }) {
                         overlayDesc="專屬你的生活動線與材質表情。"
                         showOverlay
                         intervalMs={5000}
-                        overlayContainerClass="top-[45%] group-hover:top-[40%]" // ✅ 加回 hover 效果
-                        overlayTitleClass="text-[35px] text-center text-white m-0 font-extrabold  transition-all duration-300"
+                        overlayContainerClass="top-[45%] group-hover:top-[40%]"
+                        overlayTitleClass="text-[35px] text-center text-white m-0 font-extrabold transition-all duration-300"
                         overlaySubtitleClass="text-[18px] text-white text-center font-extrabold group-hover:opacity-80 transition-all duration-300"
                         overlayDescClass="text-[14px] max-w-[420px] opacity-0 group-hover:opacity-100 transition duration-400 delay-75"
                       />
                     </Link>
                   </div>
-                  <div className=" border ">
+                  <div className="border">
                     <Link href="/note">
                       <HoverItem
                         slides={slidesB}
@@ -692,8 +445,8 @@ function HomeClient({ specialPosts }) {
                         overlayDesc="專屬你的生活動線與材質表情。"
                         showOverlay
                         intervalMs={5000}
-                        overlayContainerClass="top-[45%] group-hover:top-[40%]" // ✅ 加回 hover 效果
-                        overlayTitleClass="text-[35px] text-center text-white m-0 font-extrabold  transition-all duration-300"
+                        overlayContainerClass="top-[45%] group-hover:top-[40%]"
+                        overlayTitleClass="text-[35px] text-center text-white m-0 font-extrabold transition-all duration-300"
                         overlaySubtitleClass="text-[18px] text-white text-center font-extrabold group-hover:opacity-80 transition-all duration-300"
                         overlayDescClass="text-[14px] max-w-[420px] opacity-0 group-hover:opacity-100 transition duration-400 delay-75"
                       />
@@ -701,139 +454,13 @@ function HomeClient({ specialPosts }) {
                   </div>
                 </div>
               </section>
-              <section className="section_our_commit flex lg:flex-row flex-col py-5 2xl:py-20 w-[80%] ">
-                <div className="flex  lg:flex-row flex-col w-full mt-10">
-                  <div className="title lg:pr-3">
-                    <h2 className="m-0">NEWS</h2>
-                    <p>最新消息</p>
-                  </div>
-                  <div className="left  w-full lg:w-[30%] pr-5">
-                    <div className="sticky top-20">
-                      <img
-                        src="/images/員林胡宅獎盃/A7400023.webp"
-                        className="w-[90%] h-auto"
-                        alt=""
-                      />
-                    </div>
-                  </div>
 
-                  <div className="right lg:mt-0 mt-4 w-full lg:w-[70%] ">
-                    {[1, 2, 3, 4].map((n) => (
-                      <div
-                        key={n}
-                        className="news-item relative w-full py-10" // ⬅️ 移除 group / hover / border 類別
-                      >
-                        {/* 頂部動畫線：scaleX 0→1 等同寬度 0→100% */}
-                        <div className="news-underline pointer-events-none absolute left-0 top-0 w-full !h-[1px] bg-gray-400 block origin-left scale-x-0" />
-
-                        <div className="tag flex justify-between">
-                          <span className="text-gray-400">(0{n})</span>
-                          <div>
-                            <span className="bg-[#E1A95F] text-[13px] font-normal text-gray-600 px-4 py-1 rounded-[20px]">
-                              TAG
-                            </span>
-                          </div>
-                        </div>
-
-                        <div className="flex lg:flex-row flex-col justify-between">
-                          <div className="flex flex-col">
-                            <h2 className="news-title font-normal text-gray-900">
-                              法國設計GOLD.WINNER
-                            </h2>
-                            <span className="news-sub text-[14px] text-gray-800">
-                              員林胡宅獎杯
-                            </span>
-                          </div>
-                          <div className="img h-full mt-7 justify-start items-start lg:justify-center flex lg:items-center">
-                            <img
-                              src="/images/員林胡宅獎盃/A7400023.webp"
-                              className="news-thumb max-w-full lg:max-w-[150px]" // ⬅️ 不放任何 opacity 類別，由 GSAP 控制
-                              alt=""
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+              {/* 客戶好評 */}
+              <section className="section-others-project mb-10 px-4 sm:px-0 overflow-hidden w-full">
+                <div className="title flex justify-center">
+                  <h2 className="text-2xl">客戶好評</h2>
                 </div>
-              </section>
 
-              <section
-                ref={container}
-                className="section-portfolio w-full  relative"
-              >
-                <div className="">
-                  {(projects || []).map((project, i) => {
-                    const targetScale = 1 - (projects.length - i) * 0.05;
-                    return (
-                      <ParallaxCard
-                        key={`card-${i}`}
-                        i={i}
-                        total={projects.length}
-                        progress={scrollYProgress}
-                        range={[i * 0.25, 1]}
-                        targetScale={targetScale}
-                        {...project}
-                      />
-                    );
-                  })}
-                </div>
-              </section>
-              <section className="section-video !w-full">
-                <div className="w-full ">
-                  <Video
-                    src="https://video.wixstatic.com/video/b69ff1_143f9b33dccf44eea83413490c5a1713/2160p/mp4/file.mp4"
-                    poster="/images/video-poster.jpg"
-                    caption=""
-                  />
-                </div>
-              </section>
-
-              <section className="section-company-intro w-full py-20">
-                <div className=" w-[95%] flex lg:flex-row flex-col mx-auto">
-                  <div className="left w-full lg:w-[40%] flex justify-start pl-10 items-center">
-                    <div className="flex flex-col w-full">
-                      <div className="title">
-                        <div className="flex flex-row">
-                          <b className="text-[15.5px] mr-2">+景觀設計</b>
-                          <b className="text-[15.5px] mr-2">+室內設計</b>
-                        </div>
-                      </div>
-                      <div className="aspect-[4/3] w-full lg:w-[85%] relative overflow-hidden">
-                        <Image
-                          src="/images/project-01/1.jpg"
-                          className="object-cover "
-                          alt=""
-                          fill
-                        />
-                      </div>
-                      <div className="info grid lg:grid-cols-1 text-[14px] w-2/3  grid-cols-2 py-4">
-                        捌程是一間室內與景觀設計的專業公司,擅長將室內、室外的景色融合。每個空間會因為不同的人所屬,而有著獨有的設計。
-                      </div>
-                    </div>
-                  </div>
-                  <div className="p-6">
-                    <AnimatedListFeed
-                      items={notifications}
-                      heightClassName="h-[420px]"
-                    />
-                  </div>
-
-                  <div className="right w-full px-3 sm:px-8 lg:px-0 lg:w-[60%] flex justify-center items-center">
-                    <div className="max-w-[600px]">
-                      <h2 className="font-normal text-2xl">捌程室內設計</h2>
-                      <p className="text-[14px] lg:text-[15px] leading-relaxed tracking-widest">
-                        捌程是一間室內與景觀設計的專業公司,擅長將室內、室外的景色融合。每個空間會因為不同的人所屬,而有著獨有的設計。程,以人為本為中心,創造功能合理、舒適優美、滿足物質和精神生活需要的室內環境,打造属於每個案件的獨有設計是捌程的理念,細心、用心與完美是捌程的宗旨!
-                      </p>
-                      <p className="text-[14px] lg:text-[15px] mt-4 leading-relaxed tracking-widest">
-                        ,以人為本為中心,創造功能合理、舒適優美、滿足物質和精神生活需要的室內環境,打造属於每個案件的獨有設計是捌程的理念,細心、用心與完美是捌程的宗旨!
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </section>
-
-              <section className="section-others-project mb-10 overflow-hidden w-full">
                 <Swiper
                   modules={[Pagination, A11y, Autoplay]}
                   autoplay={{ delay: 4000, disableOnInteraction: false }}
@@ -845,14 +472,14 @@ function HomeClient({ specialPosts }) {
                     clickable: true,
                     renderBullet: (index, className) => {
                       return `
-        <span class="${className} custom-bullet">
-          <svg class="bullet-svg" width="22" height="22" viewBox="0 0 22 22">
-            <circle class="bg" cx="11" cy="11" r="9" />
-            <circle class="progress" cx="11" cy="11" r="9" />
-            <circle class="dot" cx="11" cy="11" r="4" />
-          </svg>
-        </span>
-      `;
+                        <span class="${className} custom-bullet">
+                          <svg class="bullet-svg" width="22" height="22" viewBox="0 0 22 22">
+                            <circle class="bg" cx="11" cy="11" r="9" />
+                            <circle class="progress" cx="11" cy="11" r="9" />
+                            <circle class="dot" cx="11" cy="11" r="4" />
+                          </svg>
+                        </span>
+                      `;
                     },
                   }}
                   breakpoints={{
@@ -865,48 +492,96 @@ function HomeClient({ specialPosts }) {
                   }}
                   className="m-0 p-0 !overflow-visible sm:!overflow-hidden"
                 >
-                  {staticSlides.map((slide, idx) => (
+                  {testimonials.map((item, idx) => (
                     <SwiperSlide
                       key={idx}
-                      className="px-3 overflow-hidden group relative duration-1000"
+                      className="overflow-hidden bg-slate-50 px-6 py-8 relative duration-700"
                     >
-                      <div className="title absolute top-5 left-5 z-[999]">
-                        <span className="text-white text-[.9rem]">
-                          {slide.title}
-                        </span>
+                      <div className="flex flex-col h-full">
+                        <p className="text-neutral-700 text-sm md:text-base flex-1 leading-relaxed mb-4">
+                          “{item.content}”
+                        </p>
+                        <div>
+                          <h3 className="text-base font-semibold text-neutral-900">
+                            {item.name}
+                          </h3>
+                          {item.role && (
+                            <span className="text-sm text-neutral-500">
+                              {item.role}
+                            </span>
+                          )}
+                        </div>
                       </div>
-                      <div className="title absolute bottom-5 flex right-5 z-[999]">
-                        <button className="relative h-12 bg-transparent px-4 group-hover:text-white text-neutral-950">
-                          <span className="relative inline-flex overflow-hidden">
-                            <div className="translate-y-0 skew-y-0 transition duration-500 group-hover:-translate-y-[110%] text-transparent group-hover:skew-y-12">
-                              View More
-                            </div>
-                            <div className="absolute translate-y-[110%] skew-y-12 transition duration-500 group-hover:translate-y-0 group-hover:skew-y-0">
-                              View More
-                            </div>
-                          </span>
-                        </button>
-                        <button className="relative opacity-10 group-hover:opacity-100 duration-500 inline-flex h-12 w-12 items-center justify-center overflow-hidden border font-medium text-neutral-200">
-                          <div className="translate-x-0 transition group-hover:translate-x-[300%]">
-                            ➔
-                          </div>
-                          <div className="absolute -translate-x-[300%] transition group-hover:translate-x-0">
-                            ➔
-                          </div>
-                        </button>
-                      </div>
-
-                      <AnimatedLink href={slide.link}>
-                        <div className="absolute z-50 w-full h-full inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0)_0%,rgba(0,0,0,0.7)_100%)] opacity-0 group-hover:opacity-100 transition-opacity duration-1000 ease-in-out" />
-                        <Card
-                          className="border-white !rounded-[0px] pb-4 w-full h-[250px] md:h-[280px] lg:h-[300px] 2xl:h-[320px] max-h-[450px] border relative bg-no-repeat bg-center bg-cover shadow-none overflow-hidden transition-transform duration-1000 ease-in-out hover:scale-110"
-                          style={{ backgroundImage: `url(${slide.image})` }}
-                        >
-                          <CardBody className="flex relative flex-col h-full w-full px-0" />
-                        </Card>
-                      </AnimatedLink>
                     </SwiperSlide>
                   ))}
+                  {/* <div className="custom-pagination flex justify-center gap-3 mt-6"></div> */}
+                </Swiper>
+              </section>
+
+              {/* 最新動態 */}
+              <section className="section-others-project mb-10 overflow-hidden px-4 sm:px-0 w-full">
+                <div className="title flex justify-center">
+                  <h2 className="text-2xl">最新動態</h2>
+                </div>
+
+                <Swiper
+                  modules={[Pagination, A11y, Autoplay]}
+                  autoplay={{ delay: 4000, disableOnInteraction: false }}
+                  loop
+                  speed={1200}
+                  spaceBetween={16}
+                  pagination={{
+                    el: ".custom-pagination",
+                    clickable: true,
+                    renderBullet: (index, className) => {
+                      return `
+                        <span class="${className} custom-bullet">
+                          <svg class="bullet-svg" width="22" height="22" viewBox="0 0 22 22">
+                            <circle class="bg" cx="11" cy="11" r="9" />
+                            <circle class="progress" cx="11" cy="11" r="9" />
+                            <circle class="dot" cx="11" cy="11" r="4" />
+                          </svg>
+                        </span>
+                      `;
+                    },
+                  }}
+                  breakpoints={{
+                    0: { slidesPerView: 1 },
+                    480: { slidesPerView: 1 },
+                    640: { slidesPerView: 2 },
+                    768: { slidesPerView: 2.5 },
+                    1024: { slidesPerView: 2.5 },
+                    1280: { slidesPerView: 3.5 },
+                  }}
+                  className="m-0 p-0 !overflow-visible sm:!overflow-hidden"
+                >
+                  <Link href="#">
+                    {staticSlides.map((slide, idx) => (
+                      <SwiperSlide
+                        key={idx}
+                        className="overflow-hidden bg-slate-50 px-4 pb-10 pt-5 relative duration-700"
+                      >
+                        <div className="overflow-hidden">
+                          <Card
+                            className="border-white !rounded-[0px] pb-4 w-full h-[250px] md:h-[280px] lg:h-[300px] 2xl:h-[320px] max-h-[450px] border bg-no-repeat bg-center bg-cover shadow-none transition-transform duration-700"
+                            style={{ backgroundImage: `url(${slide.image})` }}
+                          />
+                          <div className="p-8">
+                            <h3 className="text-base md:text-lg font-medium text-neutral-900 line-clamp-2">
+                              義大利 A Design Award 銀獎 ｜ AFTER SCHOOL
+                            </h3>
+                            <div className="mt-2 flex flex-wrap gap-2">
+                              <p>
+                                很高興受到 A Design 評審的青睞，下課後 After
+                                School 作品獲得銀獎，我們會持續精進……
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </SwiperSlide>
+                    ))}
+                  </Link>
+
                   <div className="custom-pagination flex justify-center gap-3 mt-6"></div>
                 </Swiper>
               </section>
@@ -920,5 +595,5 @@ function HomeClient({ specialPosts }) {
   );
 }
 
-// ⬇️ 這行讓整個頁面元件只在 Client 端渲染（無 SSR），確保第一次就能讀 storage 判斷
+// 只在 Client 端渲染（無 SSR）
 export default dynamic(() => Promise.resolve(HomeClient), { ssr: false });

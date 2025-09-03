@@ -6,12 +6,13 @@ import localFont from "next/font/local";
 import { ViewTransitions } from "next-view-transitions";
 import type { Metadata } from "next";
 import Script from "next/script";
-import Nav from "../components/PageTransition/Nav";
+
 import Footer from "../components/Footer/Footer1";
 import PageTransition from "../components/PageTransition/PageTransition";
 import ExoApeOverlayMenu from "../components/ExoApeOverlayMenu";
 import Image from "next/image";
 import IntroOverlay from "@/components/IntroOverlay"; // ⬅️ 新增這行
+import ConditionalNav from "@/components/ConditionalNav";
 
 export const metadata: Metadata = {
   title: "捌程室內設計｜商業空間與住宅設計",
@@ -66,7 +67,7 @@ export default function RootLayout({
 
           <ExoApeOverlayMenu>
             <div className="hidden md:block fixed inset-x-0 top-0 z-[9999]">
-              <Nav />
+              <ConditionalNav />
             </div>
             <PageTransition>{children}</PageTransition>
             <Footer />

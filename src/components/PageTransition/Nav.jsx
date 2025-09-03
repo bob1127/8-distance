@@ -50,19 +50,11 @@ export default function Nav() {
     : "border-gray-300 text-gray-700 hover:bg-gray-50";
 
   // 改成（無底線）
-  const linkTone =
-    "no-underline transition-colors duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] " +
-    (atTop ? "text-white" : "text-gray-800");
 
   return (
     <nav
-      className={[
-        "fixed inset-x-0 top-0 z-40 border-b",
-        atTop
-          ? "bg-transparent backdrop-blur-0 border-white/30 text-white"
-          : "bg-white/90 backdrop-blur border-gray-200 text-gray-900",
-        "transition-[background-color,backdrop-filter,border-color,color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
-      ].join(" ")}
+      className="
+        border-b bg-white"
     >
       {/* NAV BAR */}
       <div className="relative w-full flex items-center justify-between px-4 py-3">
@@ -82,33 +74,32 @@ export default function Nav() {
         </div>
 
         {/* 中：連結（桌機） */}
-        <div className="nav-links hidden md:flex w-[65%] items-center justify-center gap-8">
-          <Link href="/awards" className={linkTone}>
-            最新動態
-          </Link>
-          <Link href="/note" className={linkTone}>
-            作品欣賞
-          </Link>
-          <Link href="/service" className={linkTone}>
-            服務流程
-          </Link>
-          <Link href="/blog" className={linkTone}>
-            設計靈感
-          </Link>
-          <Link href="/about" className={linkTone}>
+        <div className="nav-links hidden md:flex w-[85%] items-center  !justify-end gap-8">
+          {" "}
+          <Link href="/about" className="text-black text-[18px]">
             關於我們
           </Link>
-          <Link href="/qa" className={linkTone}>
+          <Link href="/awards" className="text-black text-[18px]">
+            最新動態
+          </Link>
+          <Link href="/note" className="text-black text-[18px]">
+            作品欣賞
+          </Link>
+          <Link href="/service" className="text-black text-[18px]">
+            服務流程
+          </Link>
+          <Link href="/blog" className="text-black text-[18px]">
+            設計靈感
+          </Link>
+          <Link href="/qa" className="text-black text-[18px]">
             QA
           </Link>
-          <Link href="/contact" className={linkTone}>
-            聯絡我們
-          </Link>
-        </div>
-
-        {/* 右：搜尋 + 漢堡 */}
-        <div className="w-[20%] min-w-[120px] flex items-center justify-end gap-2">
-          {/* Search Button */}
+          <div className="bg-[#cd9f79] px-2 py-1 text-white">
+            {" "}
+            <Link href="/contact" className="text-white">
+              預約諮詢
+            </Link>
+          </div>
           <button
             type="button"
             onClick={() => setOpenSearch((s) => !s)}
@@ -116,15 +107,13 @@ export default function Nav() {
             aria-controls="global-search-bar"
             aria-label={openSearch ? "Close search" : "Open search"}
             className={[
-              "inline-flex items-center gap-2 rounded-xl px-3 py-2 active:scale-[0.98] transition border",
-              searchBtnTone,
+              "inline-flex items-center gap-2 rounded-xl px-3 py-2 active:scale-[0.98] transition border border-black text-black",
               "duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
             ].join(" ")}
           >
             <Search size={18} />
             <span className="hidden sm:inline">Search</span>
           </button>
-
           {/* Hamburger (mobile only) */}
           <HamburgerButton
             open={openMobile}
