@@ -6,7 +6,7 @@ import { projects } from "../../components/ParallaxCard/data";
 import { TextGenerateEffect } from "../../components/ui/text-generate-effec-home";
 import ScrollCard from "../../components/ParallaxCard/page";
 import { Card, CardBody } from "@nextui-org/react";
-
+import AwardsLightbox from "../../components/AwardsLightbox";
 import { useScroll, AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState, useCallback } from "react";
 import Lenis from "@studio-freight/lenis";
@@ -14,6 +14,7 @@ import Image from "next/image";
 import Marquee from "react-fast-marquee";
 import { Pagination, A11y, Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import Link from "next/link";
 import "swiper/css";
 import "swiper/css/pagination";
 
@@ -151,342 +152,88 @@ export default function Home() {
 
   return (
     <>
-      <section>
-        <div className="aspect-[9/12] sm:aspect-[1/1] md:aspect-[1024/576]  xl:aspect-[16/9] relative overflow-hidden">
-          <div className="bottom-bar left-[10%] top-[30%] sm:top-[20%] z-40  absolute  w-2/3 sm:w-1/2">
-            <h1 className=" text-[30px] tracking-widest m-0 leading-snug xl:text-[45px] font-normal text-white">
-              {" "}
-              捌程室內設計獲獎和最新動態
-            </h1>
-            <h1 className=" text-[20px] tracking-wider m-0 xl:text-[45px] font-normal text-white">
-              AWARDS & NEWS
-            </h1>
-          </div>
-          <div className="bottom-bar left-[10%] bottom-0 z-40 absolute max-w-[600px]">
-            <div className="grid w-full py-6 grid-cols-2 gap-8">
-              <div className="flex flex-col">
-                <b className="text-white text-[16px] sm:text-[22px]">NEWS</b>
-                <p className="text-[14px] text-gray-100">
-                  捌程室內設計最新消息
-                </p>
-              </div>
-              <div className="flex flex-col">
-                <b className="text-white text-[16px] sm:text-[22px]">NEWS</b>
-                <p className="text-[14px] text-gray-100">
-                  捌程室內設計最新消息
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="bar hidden sm:block bg-blur w-[30%] md:w-[17%] max-w-[330px] absolute z-40 right-0 sm:right-[10%] top-0 h-full ">
-            <div className="flex flex-col h-full justify-between">
-              <div className="top h-full pt-[70%] sm:pt-[40%] backdrop-blur-sm bg-white/20 border-b border-white/30 shadow-md ">
-                <div className="  mx-auto max-w-[130px] text-center p-2 border-1 border-[#ffbe6f] text-[#ffbe6f]">
-                  關於捌程
-                </div>
-              </div>
-              <div className="bottom bg-[#ffd59a] p-10">
-                <Image
-                  src="/images/awards-logo.png"
-                  alt="award-icon"
-                  placeholder="empty"
-                  loading="lazy"
-                  width={700}
-                  height={700}
-                  className="max-w-[350px] w-[80%] mx-auto"
-                />
-                <b className="text-stone-800 text-[20px]">GOLD.WINNER</b>
-                <p className="text-stone-800 text-[14px]">榮獲國際大獎的肯定</p>
-              </div>
-            </div>
-          </div>
-
+      <section
+        className="flex flex-row justify-center items-center py-10 pt-[150px] bg-gradient-to-r from-[#E4C887] via-[#D9C7A3] to-[#BFAF9B]
+ to-[#F5E6C5]"
+      >
+        <div className="title text-center px-4">
+          <h1 className="text-xl md:text-2xl font-semibold text-neutral-900 tracking-wide">
+            得獎捷報｜德國 iF 設計大獎 2025 Winner
+          </h1>
+          <span>最新消息</span>
+        </div>
+      </section>
+      <section className="max-w-[1300px]  px-4 mx-auto py-10">
+        <div className="info sm:w-[90%] w-full xl:w-[80%] mx-auto border-l-3 border-black pl-3 sm:pl-5">
+          <p className="leading-loose tracking-wider">
+            GOOD DESIGN AWARD
+            日本設計大賞，背後其實有著不為人知的「盗版」設計歷史淵源！第二次世界大戰之後，日本製造業為快速奮起振翅，大量參考使用歐美的設計理念、模仿各式各樣的規則產品，涵蓋交通工具乃至品牌識別，而此行為在戰後剛開始的出口蓬果中也是受到國際與社會抨擊。
+          </p>
+          <p className="leading-loose tracking-wider">
+            此大賞創始於 1957
+            年，為了啟發原創設計和讓人們了解「設計」這個概念能夠帶給社會的力量和效應。由日本通商產業省（簡稱通產省）以「優良設計商品選定製度（Good
+            Design Selection System，俗稱G
+            Mark制度）」評選出各領域的設計佳作，持續協助通設計讓人們的生活、社會變得更加美好。
+          </p>
+        </div>
+        <div className="design-img flex justify-center mt-8">
           <Image
-            src="/11a89f77-e272-4c13-8b86-92bb4e3be7cc.png"
-            alt="award-icon"
-            placeholder="empty"
-            loading="lazy"
-            fill
-            className="w-full  object-cover"
-          />
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLnfdRcSlLiJlYda6-xhiy5e3t2nQPXrKM5w&s"
+            priority
+            className="max-w-[600px]"
+            width={1000}
+            height={400}
+          ></Image>
         </div>
       </section>
-      <div className="mobile sm:hidden flex">
-        <div className="w-full">
-          <div className="bottom flex flex-col justify-center items-center bg-[#ffd59a] p-10">
+      <section>
+        <div className="grid grid-cols-1 max-w-[1920px] mx-auto awrads-image">
+          <div className="awards-item w-full overflow-hidden aspect-[16/9] relative">
+            <AwardsLightbox
+              base="/images/員林胡宅獎盃/"
+              thumb="A7400023.jpg"
+              startIndex={0}
+            />
+          </div>
+        </div>
+      </section>
+      <section className="section-awards-info ">
+        <div className="max-w-[1920px] w-full grid grid-cols-2 md:w-[90%] xl:w-[85%] mx-auto px-4">
+          <div className="p-8">
             <Image
-              src="/images/awards-logo.png"
-              alt="award-icon"
-              placeholder="empty"
-              loading="lazy"
-              width={700}
-              height={700}
-              className="max-w-[350px] w-[70%] mx-auto"
-            />
-            <b className="text-stone-800 text-[20px]">GOLD.WINNER</b>
-            <p className="text-stone-800 text-[14px]">榮獲國際大獎的肯定</p>
-            <div className="  mx-auto max-w-[130px] text-center mt-8 p-2 border-1 border-[#232323] text-[#292929]">
-              關於捌程
-            </div>
+              src="/images/捌程-2024法國設計獎電子證書-員林胡宅.png"
+              priority
+              className="max-w-[600px]"
+              width={1000}
+              height={400}
+            ></Image>
           </div>
-        </div>
-      </div>
-      {/* <section className="section-hero py-20">
-        <Image
-          src="/images/awards-logo.png"
-          alt="award-icon"
-          placeholder="empty"
-          loading="lazy"
-          width={700}
-          height={700}
-          className="max-w-[350px] mx-auto"
-        />
-        <div className="description flex flex-col max-w-[600px] mx-auto">
-          <p className="tracking-wider leading-relaxed text-center">
-            法國設計獎
-          </p>
-          <h1 className="text-rose-500 text-[20px] text-center">Gold.Winner</h1>
-          <p className="tracking-wider leading-relaxed text-center">
-            榮獲國際大獎的肯定
-          </p>
-        </div>
-        <Marquee>
-          <div>
-            <div className="text-[70px] flex justify-center items-center font-bold ">
-              榮獲國際大獎的肯定{" "}
-              <Image
-                src="/images/awards-logo.png"
-                alt="award-icon"
-                placeholder="empty"
-                loading="lazy"
-                width={700}
-                height={700}
-                className="max-w-[80px] mx-8"
-              />
-              法國設計獎{" "}
-              <Image
-                src="/images/awards-logo.png"
-                alt="award-icon"
-                placeholder="empty"
-                loading="lazy"
-                width={700}
-                height={700}
-                className="max-w-[80px] mx-8"
-              />
-              Gold.Winner
+          <div className="flex flex-col justify-center items-center">
+            <div className="flex items-center mt-4">
+              <h2 className="text-2xl m-0">得獎作品：</h2>
+              <p className="text-lg">員林胡宅</p>
             </div>
-          </div>
-        </Marquee>
-      </section> */}
-
-      {/* Parallax 區 */}
-      <main ref={container} className="relative mt-12">
-        {projects.map((project, i) => {
-          const targetScale = 1 - (projects.length - i) * 0.05;
-          return (
-            <ScrollCard
-              total={projects.length}
-              key={`p_${i}`}
-              i={i}
-              {...project}
-              progress={scrollYProgress}
-              range={[i * 0.25, 1]}
-              targetScale={targetScale}
-            />
-          );
-        })}
-      </main>
-
-      {/* 文字 + 圖 */}
-      <section className="section-award-item max-w-[1920px] mx-auto w-[80%]">
-        <div className="flex py-[10vh] flex-col lg:flex-row">
-          <div className=" w-full lg:w-1/2 items-center flex justify-center">
-            <div className="w-full">
-              <Image
-                src="/images/捌程-2024法國設計獎電子證書-員林胡宅.png"
-                placeholder="empty"
-                loading="lazy"
-                className=" w-full lg:w-[90%]"
-                alt=""
-                width={500}
-                height={800}
-              />
+            <div className="flex items-center mt-4">
+              <h2 className="text-2xl m-0">設計師：</h2>
+              <p className="text-lg">Jen</p>
             </div>
-          </div>
-          <div className="w-full lg:w-1/2">
-            <div className="description  w-full lg:max-w-[600px] p-2 mt-10 lg:p-10">
-              <TextGenerateEffect words={"榮獲國際大獎的肯定\n"} />
-              <br />
-              <p className="text-[.9rem] tracking-widest">
-                能夠榮獲國際大獎的肯定，對我們而言意義非凡。這份榮耀凝聚了團隊成員們的心血與智慧，是大家攜手努力的成果。這份肯定更是驅動我們不斷向前的動力，期許未來能持續精進設計，為大家帶來更多卓越的作品！特別感謝我們的業主，您們的信任與支持是我們最大的力量。每一次的交流與啟發，都成為我們克服挑戰、實現創意的寶貴泉源。謝謝您們與我們一同成就這份殊榮。
-              </p>
+            <div className="flex items-center mt-2">
+              <Link
+                href="/portfolio-inner"
+                className="bg-[#dea155] text-xl  text-white mx-3 px-2 py-1"
+              >
+                獲獎連結
+              </Link>
+              <Link
+                href="/note"
+                className="bg-[#dea155] text-xl  text-white mx-3 px-2 py-1"
+              >
+                更多作品
+              </Link>
             </div>
           </div>
         </div>
       </section>
-
-      {/* 其他專案：點擊打開 Popup（fixed + 上一/下一張） */}
-      <section className="section-others-project mb-20 overflow-hidden w-full">
-        <Swiper
-          modules={[Pagination, A11y, Autoplay]}
-          autoplay={{ delay: 4000, disableOnInteraction: false }}
-          loop={true}
-          speed={1200}
-          spaceBetween={16}
-          pagination={{ clickable: true }}
-          breakpoints={{
-            0: { slidesPerView: 1.2 },
-            480: { slidesPerView: 2 },
-            640: { slidesPerView: 2 },
-            768: { slidesPerView: 2.5 },
-            1024: { slidesPerView: 2.5 },
-            1280: { slidesPerView: 3.5 },
-          }}
-          className="m-0 p-0 !overflow-visible sm:!overflow-hidden"
-        >
-          {staticSlides.map((slide, idx) => (
-            <SwiperSlide
-              key={idx}
-              className="mx-2 overflow-hidden group relative duration-1000 cursor-pointer"
-              onClick={() => openPopupAt(idx)}
-            >
-              <div className="title absolute top-5 left-5 z-[2]">
-                <span className="text-white text-[.9rem]">{slide.title}</span>
-              </div>
-
-              <div className="title absolute bottom-5 flex right-5 z-[2] pointer-events-none">
-                <button className="relative h-12 bg-transparent px-4 group-hover:text-white text-neutral-950">
-                  <span className="relative inline-flex overflow-hidden">
-                    <div className="translate-y-0 skew-y-0 transition duration-500 group-hover:-translate-y-[110%] text-transparent group-hover:skew-y-12">
-                      View More
-                    </div>
-                    <div className="absolute translate-y-[110%] skew-y-12 transition duration-500 group-hover:translate-y-0 group-hover:skew-y-0">
-                      View More
-                    </div>
-                  </span>
-                </button>
-                <button className="relative opacity-10 group-hover:opacity-100 duration-500 inline-flex h-12 w-12 items-center justify-center overflow-hidden border font-medium text-neutral-200">
-                  <div className="translate-x-0 transition group-hover:translate-x-[300%]">
-                    ➔
-                  </div>
-                  <div className="absolute -translate-x-[300%] transition group-hover:translate-x-0">
-                    ➔
-                  </div>
-                </button>
-              </div>
-
-              <div className="absolute z-[1] w-full h-full inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0)_0%,rgba(0,0,0,0.7)_100%)] opacity-0 group-hover:opacity-100 transition-opacity duration-1000 ease-in-out" />
-
-              <Card
-                className="border-white !rounded-[0px] pb-4 w-full h-[250px] md:h-[280px] lg:h-[300px] 2xl:h-[320px] max-h-[450px] border relative bg-no-repeat bg-center bg-cover shadow-none overflow-hidden transition-transform duration-1000 ease-in-out group-hover:scale-110"
-                style={{ backgroundImage: `url(${slide.image})` }}
-              >
-                <CardBody className="flex relative flex-col h-full w-full px-0" />
-              </Card>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </section>
-
-      {/* ======= 固定定位 Popup（支援上一/下一張、滑動、鍵盤） ======= */}
-      <AnimatePresence>
-        {popupOpen && (
-          <>
-            {/* 背景遮罩 */}
-            <motion.button
-              aria-label="Close "
-              onClick={closePopup}
-              className="!fixed inset-0 z-[1000] bg-black/65 backdrop-blur-sm"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.25, ease: "easeOut" }}
-            />
-
-            {/* Popup 容器：固定置中 */}
-            <motion.div
-              className="!fixed inset-0 z-[1001] flex items-center justify-center p-3 sm:p-6"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.25, ease: "easeOut" }}
-              aria-modal="true"
-              role="dialog"
-              onTouchStart={onTouchStart}
-              onTouchEnd={onTouchEnd}
-            >
-              <motion.div
-                className="relative w-full max-w-5xl"
-                initial={{ scale: 0.92, y: 12, filter: "blur(6px)" }}
-                animate={{ scale: 1, y: 0, filter: "blur(0px)" }}
-                exit={{ scale: 0.96, y: 8, filter: "blur(4px)" }}
-                transition={{ type: "spring", stiffness: 280, damping: 28 }}
-              >
-                {/* 關閉按鈕 */}
-                <button
-                  onClick={closePopup}
-                  className="absolute -top-3 -right-3 sm:-top-4 sm:-right-4 z-[1003] 
-                       inline-flex h-10 w-10 items-center justify-center rounded-full 
-                       bg-white/95 text-black shadow-lg border border-black/10 
-                       hover:scale-105 active:scale-95 transition"
-                  aria-label="Close image"
-                >
-                  ✕
-                </button>
-
-                {/* 左右切換按鈕 */}
-                <button
-                  onClick={prev}
-                  className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 z-[1003] 
-                       h-10 w-10 sm:h-11 sm:w-11 rounded-full bg-white/90 text-black 
-                       shadow-md border border-black/10 hover:bg-white active:scale-95 transition"
-                  aria-label="Previous"
-                >
-                  ←
-                </button>
-                <button
-                  onClick={next}
-                  className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 z-[1003] 
-                       h-10 w-10 sm:h-11 sm:w-11 rounded-full bg-white/90 text-black 
-                       shadow-md border border-black/10 hover:bg-white active:scale-95 transition"
-                  aria-label="Next"
-                >
-                  →
-                </button>
-
-                {/* 標題 + 計數 */}
-                <div className="mb-2 text-center text-white/90 text-sm sm:text-base z-[1002] relative">
-                  {staticSlides[activeIndex]?.title} ・ {activeIndex + 1}/
-                  {staticSlides.length}
-                </div>
-
-                {/* 圖片容器：限制高度避免超出螢幕 */}
-                <div className="relative w-full rounded-xl bg-black/30 flex items-center justify-center">
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={staticSlides[activeIndex]?.image}
-                      initial={{ opacity: 0, x: 40 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -40 }}
-                      transition={{ duration: 0.28, ease: "easeOut" }}
-                      className="relative w-full max-h-[90vh]"
-                    >
-                      <Image
-                        src={staticSlides[activeIndex]?.image || ""}
-                        alt={staticSlides[activeIndex]?.title || "preview"}
-                        width={1600}
-                        height={900}
-                        className="w-auto max-w-full max-h-[90vh] object-contain mx-auto"
-                        priority
-                      />
-                    </motion.div>
-                  </AnimatePresence>
-                </div>
-              </motion.div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
     </>
   );
 }

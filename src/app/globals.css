@@ -74,7 +74,7 @@ div {
 
 /* 頁面文字樣式 */
 h1 {
-  @apply text-[3rem] font-semibold text-gray-800 mt-4 mb-6;
+  @apply text-[30px] font-semibold text-gray-800 mt-4 mb-6;
 }
 
 h2 {
@@ -208,12 +208,7 @@ body {
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
 }
 
-.hero-title h1 {
-  position: relative;
-  transform: translateY(70px);
-  will-change: transform;
-  color: white;
-}
+
 
 @media (max-width: 900px) {
   .hero-title {
@@ -617,9 +612,6 @@ body {
   padding-right: 0.25rem;
 }
 
-.word h1 {
-  font-size: 2.5rem;
-}
 
 .divider {
   position: absolute;
@@ -675,13 +667,6 @@ body {
   padding-top: 1rem;
 }
 
-.count .digit h1 {
-  font-family: "PP Editorial Old", "PP Neue Montreal";
-  font-size: 15rem;
-  font-weight: 400;
-}
-
-
 
 .cta {
   transform: translateX(-50%) scale(0);
@@ -707,13 +692,6 @@ body {
   will-change: transform;
 }
 
-#word-1 h1 {
-  transform: translateY(-130%);
-}
-
-#word-2 h1 {
-  transform: translateY(120%);
-}
 
 .preloader-block {
   clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
@@ -730,9 +708,7 @@ body {
 }
 
 @media (max-width: 900px) {
-  h1 {
-    font-size: 2.5rem;
-  }
+
 
   .nav-links {
     display: none;
@@ -934,14 +910,6 @@ body {
 }
 
 @media (max-width: 1000px) {
-  h1 {
-    font-size: 2rem;
-    letter-spacing: 0;
-  }
-
-  p {
-    font-size: 0.8rem;
-  }
 
   .slide-header {
     top: 50%;
@@ -1029,15 +997,7 @@ footer {
   align-items: center;
 }
 
-.header h1 {
-  width: 100%;
-  text-align: center;
-  text-transform: uppercase;
-  font-size: 7vw;
-  line-height: 0.85;
-  letter-spacing: -0.25rem;
-  color: #fff;
-}
+
 
 .header p {
   margin-top: 1em;
@@ -1070,10 +1030,6 @@ footer {
   z-index: 2;
 }
 
-.char.anim-out h1 {
-  position: relative;
-  will-change: transform;
-}
 
 .header h1,
 .header p,
@@ -1103,10 +1059,7 @@ footer {
     display: none;
   }
 
-  .header h1 {
-    font-size: 4vw;
-    letter-spacing: -0.125rem;
-  }
+
 
   .coordinates {
     top: 65%;
@@ -1115,14 +1068,6 @@ footer {
     color: #fff;
     opacity: 0.5;
   }
-}
-
-h1 {
-  text-transform: uppercase;
-  color: #141414;
-  font-size: 12rem;
-  font-weight: 800;
-  line-height: 1;
 }
 
 a {
