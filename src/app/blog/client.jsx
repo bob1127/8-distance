@@ -5,8 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import JanusButton02 from "../../components/JanusButton2.jsx";
 
-/* ===== 假資料（換成你的真實資料） ===== */
-const cases = [
+/* ===== 原始樣板資料（保留你給的四篇） ===== */
+const BASE_CASES = [
   {
     id: "A01",
     title: "高評價民宿設計關鍵：空間、細節一次到位",
@@ -73,6 +73,7 @@ const cases = [
   },
 ];
 
+/* ===== 城市/區域與選項 ===== */
 const CITY_DISTRICTS = {
   台北市: [
     "中正區",
@@ -113,7 +114,6 @@ const CITY_DISTRICTS = {
     "小港區",
   ],
 };
-
 const STYLES = ["北歐", "現代", "輕奢", "日式", "工業", "美式"];
 const TYPES = ["住宅", "商業空間"];
 const SORTS = [
@@ -124,7 +124,6 @@ const SORTS = [
   { value: "areaAsc", label: "坪數：小 → 大" },
 ];
 
-/* ===== 共用 Select ===== */
 /* ===== 共用 Select（修正版） ===== */
 function SelectField({
   id,
@@ -138,7 +137,6 @@ function SelectField({
 }) {
   const ph = placeholder ?? (options?.[0]?.label || "請選擇");
   const displayOptions = Array.isArray(options) ? options : [];
-
   return (
     <div className={`flex flex-col min-w-0 ${className}`}>
       {label && (
@@ -164,12 +162,9 @@ function SelectField({
                       }
                       border-gray-200 focus:ring-2 focus:ring-purple-200`}
         >
-          {/* placeholder 選項 */}
           <option value="">{ph}</option>
-
-          {/* 真正的選項（只渲染一次，沒有多餘的陣列裸輸出） */}
           {displayOptions
-            .filter((o, i) => !(i === 0 && o.value === "")) // 避免與 placeholder 重複
+            .filter((o, i) => !(i === 0 && o.value === ""))
             .map((opt) => (
               <option
                 key={`${id}-${String(opt.value ?? "")}`}
@@ -179,7 +174,6 @@ function SelectField({
               </option>
             ))}
         </select>
-
         <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
             <path
@@ -196,15 +190,13 @@ function SelectField({
   );
 }
 
-/* ===== 可收折容器（純 CSS transition） ===== */
+/* ===== 可收折容器 ===== */
 function Collapsible({ title, open, onToggle, children, depKey }) {
   const contentRef = useRef(null);
   const [height, setHeight] = useState(open ? "auto" : 0);
-
   useEffect(() => {
     const el = contentRef.current;
     if (!el) return;
-
     if (open) {
       const h = el.scrollHeight;
       setHeight(h);
@@ -216,7 +208,6 @@ function Collapsible({ title, open, onToggle, children, depKey }) {
       requestAnimationFrame(() => setHeight(0));
     }
   }, [open]);
-
   useEffect(() => {
     if (!open || !contentRef.current) return;
     const h = contentRef.current.scrollHeight;
@@ -252,7 +243,6 @@ function Collapsible({ title, open, onToggle, children, depKey }) {
           </svg>
         </span>
       </button>
-
       <div
         id="filter-panel"
         className="overflow-hidden transition-[height] duration-300 ease-out"
@@ -479,8 +469,86 @@ function CaseFilterBar({ value, onChange, onSearch, onClear }) {
   );
 }
 
+/* ===== 分頁組件 ===== */
+function Pagination({ page, totalPages, onChange }) {
+  if (totalPages <= 1) return null;
+
+  const go = (p) => {
+    const n = Math.max(1, Math.min(totalPages, p));
+    if (n !== page) onChange(n);
+  };
+
+  // 產生頁碼（顯示：1、…、p-1、p、p+1、…、last）
+  const pages = [];
+  const windowSize = 1; // 顯示當前左右各 1
+  const add = (p) => pages.push(p);
+  const addEllipsis = (key) => pages.push(key);
+
+  add(1);
+  const start = Math.max(2, page - windowSize);
+  const end = Math.min(totalPages - 1, page + windowSize);
+  if (start > 2) addEllipsis("...");
+  for (let p = start; p <= end; p++) add(p);
+  if (end < totalPages - 1) addEllipsis("..");
+  if (totalPages > 1) add(totalPages);
+
+  return (
+    <nav
+      className="mt-6 flex flex-wrap items-center justify-center gap-2"
+      aria-label="分頁導覽"
+    >
+      <button
+        onClick={() => go(page - 1)}
+        disabled={page === 1}
+        className={`h-10 rounded-full px-4 border ${
+          page === 1 ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-50"
+        } bg-white border-gray-200`}
+        aria-label="上一頁"
+      >
+        上一頁
+      </button>
+
+      {pages.map((p, idx) =>
+        typeof p === "number" ? (
+          <button
+            key={`p-${p}-${idx}`}
+            onClick={() => go(p)}
+            aria-current={p === page ? "page" : undefined}
+            className={[
+              "h-10 min-w-10 px-4 border",
+              p === page
+                ? "bg-black text-white border-black"
+                : "bg-white border-gray-200 hover:bg-gray-50",
+            ].join(" ")}
+          >
+            {p}
+          </button>
+        ) : (
+          <span key={`e-${idx}`} className="px-2 text-gray-400 select-none">
+            …
+          </span>
+        )
+      )}
+
+      <button
+        onClick={() => go(page + 1)}
+        disabled={page === totalPages}
+        className={`h-10 rounded-full px-4 border ${
+          page === totalPages
+            ? "opacity-50 cursor-not-allowed"
+            : "hover:bg-gray-50"
+        } bg-white border-gray-200`}
+        aria-label="下一頁"
+      >
+        下一頁
+      </button>
+    </nav>
+  );
+}
+
 export default function Home() {
   const container = useRef(null);
+
   const [filters, setFilters] = useState({
     keyword: "",
     city: null,
@@ -495,6 +563,10 @@ export default function Home() {
     _searchTick: 0,
   });
 
+  // 分頁狀態
+  const [page, setPage] = useState(1);
+  const PAGE_SIZE = 9; // 一頁 9 筆（對應你的 1/2/3 欄網格）
+
   // 右側欄搜尋狀態
   const [sideQ, setSideQ] = useState("");
   const [sideFocused, setSideFocused] = useState(false);
@@ -506,6 +578,7 @@ export default function Home() {
   const [pageUrl, setPageUrl] = useState("");
   const [toast, setToast] = useState(null); // { type: 'ok'|'warn', text: string }
 
+  // 平滑滾動
   useEffect(() => {
     const lenis = new Lenis();
     let rafId;
@@ -518,11 +591,34 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      setPageUrl(window.location.href);
-    }
+    if (typeof window !== "undefined") setPageUrl(window.location.href);
   }, []);
 
+  // 產生更多假資料：用 BASE_CASES 複製擴充（24 筆）
+  const cases = useMemo(() => {
+    const total = 24;
+    const list = [];
+    for (let i = 0; i < total; i++) {
+      const base = BASE_CASES[i % BASE_CASES.length];
+      // 產生不同日期（往回推 i 週），確保「最新發佈」排序能看出效果
+      const d = new Date(base.date);
+      d.setDate(d.getDate() - i * 7);
+      const dateStr = d.toISOString().slice(0, 10);
+
+      list.push({
+        ...base,
+        id: `${base.id}-${i + 1}`,
+        title: i === 0 ? base.title : `${base.title}（案例 ${i + 1}）`,
+        date: dateStr,
+      });
+    }
+    return list;
+  }, []);
+
+  const formatWan = (n) =>
+    new Intl.NumberFormat("zh-TW").format(Number(n || 0)) + " 萬";
+
+  // 主清單：先篩選/排序，再分頁
   const filtered = useMemo(() => {
     let list = [...cases];
 
@@ -569,9 +665,32 @@ export default function Home() {
         list.sort((a, b) => new Date(b.date) - new Date(a.date));
     }
     return list;
-  }, [filters]);
+  }, [cases, filters]);
 
-  // 右側欄搜尋結果（即時）
+  // 篩選條件變更時，回到第 1 頁
+  useEffect(() => {
+    setPage(1);
+  }, [
+    filters.keyword,
+    filters.city,
+    filters.district,
+    filters.budgetMin,
+    filters.budgetMax,
+    filters.areaMin,
+    filters.areaMax,
+    filters.type,
+    filters.style,
+    filters.sort,
+    filters._searchTick,
+  ]);
+
+  // 計算分頁切片
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const pageSafe = Math.max(1, Math.min(totalPages, page));
+  const start = (pageSafe - 1) * PAGE_SIZE;
+  const pageItems = filtered.slice(start, start + PAGE_SIZE);
+
+  // 右側欄即時搜尋
   const sideResults = useMemo(() => {
     const q = sideQ.trim().toLowerCase();
     if (!q) return [];
@@ -582,7 +701,7 @@ export default function Home() {
         )
       )
       .slice(0, 6);
-  }, [sideQ]);
+  }, [sideQ, cases]);
 
   const handleChange = (patch) => setFilters((f) => ({ ...f, ...patch }));
   const handleClear = () =>
@@ -600,28 +719,21 @@ export default function Home() {
       _searchTick: (f._searchTick || 0) + 1,
     }));
 
-  const formatWan = (n) =>
-    new Intl.NumberFormat("zh-TW").format(Number(n || 0)) + " 萬";
-
-  // ===== 分享功能 =====
+  // 分享功能
   const openFBShare = () => {
     const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
       pageUrl || (typeof window !== "undefined" ? window.location.href : "")
     )}`;
     window.open(url, "_blank", "noopener,noreferrer");
   };
-
   const shareToIG = async () => {
-    // IG 沒有官方網頁版「帶連結」分享介面；改用 Web Share API（行動裝置支援）
     if (navigator.share) {
       try {
         await navigator.share({
           title: document?.title || "分享連結",
           url: pageUrl,
         });
-      } catch (e) {
-        // 使用者取消就不提示
-      }
+      } catch (e) {}
     } else {
       setToast({
         type: "warn",
@@ -630,7 +742,6 @@ export default function Home() {
       setTimeout(() => setToast(null), 2800);
     }
   };
-
   const copyLink = async () => {
     try {
       await navigator.clipboard.writeText(pageUrl);
@@ -643,12 +754,11 @@ export default function Home() {
   };
 
   return (
-    // 重要：sticky 會被任何祖先的 overflow 隱藏打破；把 overflow-hidden 拿掉/改 visible
     <div className="bg-[#f6f6f7] py-20 w-full overflow-visible">
       <section className="flex pt-[100px] max-w-[1920px] py-20 w-[90%] mx-auto flex-col lg:flex-row">
-        {/* 左半部 */}
+        {/* 左側清單 */}
         <div className="left w-full pr-0 sm:pr-8 lg:w-[70%]">
-          {/* 收折 Filter */}
+          {/* 若要開啟篩選面板，取消註解 */}
           <Collapsible
             title="篩選條件"
             open={filterOpen}
@@ -669,23 +779,27 @@ export default function Home() {
           </Collapsible>
 
           <div className="mb-3 text-sm text-gray-600">
-            共 {filtered.length} 個符合條件的案件
+            共 {filtered.length} 個符合條件的案件（第 {pageSafe} / {totalPages}{" "}
+            頁）
           </div>
 
           <div className="blog-grid grid pl-0 lg:pr-10 grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-4">
-            {filtered.map((item) => (
+            {pageItems.map((item) => (
               <Link key={item.id} href={item.link}>
-                <div className="item overflow-hidden relative group bg-white transition-all duration-300  border border-gray-100">
-                  <div className="img mx-5 overflow-hidden mt-2 relative  aspect-[4/3]">
+                <div className="item overflow-hidden relative group bg-white transition-all duration-300 border border-gray-100">
+                  <div className="img mx-5 overflow-hidden mt-2 relative aspect-[4/3]">
                     <Image
                       src={item.image}
                       alt={item.title}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1536px) 50vw, 33vw"
                     />
                   </div>
                   <div className="px-6 pt-6 pb-7 flex flex-col gap-2">
-                    <h2 className="text-[18px] font-medium">{item.title}</h2>
+                    <h2 className="text-[18px] font-medium line-clamp-2">
+                      {item.title}
+                    </h2>
                     <p className="text-[14px] text-gray-700 line-clamp-2">
                       {item.description}
                     </p>
@@ -715,12 +829,18 @@ export default function Home() {
               </Link>
             ))}
           </div>
+
+          {/* 分頁列 */}
+          <Pagination
+            page={pageSafe}
+            totalPages={totalPages}
+            onChange={setPage}
+          />
         </div>
 
         {/* 右半部（保持不動） */}
         <div className="right w-full pt-10 lg:pt-0 lg:w-[30%] h-full">
-          {/* sticky 寫在卡片容器上；注意不要放 !sticky */}
-          <div className="right-bar bg-white sticky top-20 py-8  border border-gray-100 h-fit">
+          <div className="right-bar bg-white sticky top-20 py-8 border border-gray-100 h-fit">
             <div className="mx-auto rounded-[22px] relative bg-black p-4 flex justify-center max-w-[120px] items-center">
               <div className="absolute color bg-[#323936] w-full h-full rounded-[22px] rotate-12"></div>
               <Image
@@ -744,13 +864,13 @@ export default function Home() {
 
             {/* 社群＋分享 */}
             <div className="social flex justify-center mt-4 mx-auto gap-2">
-              {/* IG（用 Web Share API） */}
               <button
                 onClick={shareToIG}
                 aria-label="分享至 Instagram"
                 className="transition hover:opacity-90"
                 type="button"
               >
+                {/* IG 圖示（略） */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="40"
@@ -788,13 +908,13 @@ export default function Home() {
                 </svg>
               </button>
 
-              {/* FB 分享 */}
               <button
                 onClick={openFBShare}
                 aria-label="分享至 Facebook"
                 className="transition hover:opacity-90"
                 type="button"
               >
+                {/* FB 圖示（略） */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="40"
@@ -823,7 +943,6 @@ export default function Home() {
                 </svg>
               </button>
 
-              {/* 複製連結 */}
               <button
                 onClick={copyLink}
                 aria-label="複製此頁連結"
@@ -831,7 +950,6 @@ export default function Home() {
                 type="button"
                 title="複製連結"
               >
-                {/* link icon */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="40"
@@ -882,7 +1000,7 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* ===== 右側欄搜尋 ===== */}
+              {/* 右側欄搜尋 */}
               <div className="search px-8 mt-6">
                 <label className="mb-1 block text-xs tracking-wider text-gray-500">
                   快速搜尋案例
@@ -897,7 +1015,6 @@ export default function Home() {
                     placeholder="輸入關鍵字（標題 / 內文 / 地點 / 風格…）"
                     className="w-full h-11 rounded-full pl-11 pr-10 border border-gray-200 bg:white bg-white/90 backdrop-blur outline-none focus:ring-2 focus:ring-purple-200"
                   />
-                  {/* search icon */}
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                       <circle
@@ -915,7 +1032,6 @@ export default function Home() {
                       />
                     </svg>
                   </span>
-                  {/* clear */}
                   {sideQ && (
                     <button
                       onClick={() => setSideQ("")}
@@ -940,7 +1056,6 @@ export default function Home() {
                   )}
                 </div>
 
-                {/* 結果區塊 */}
                 {(sideFocused || sideQ) && (
                   <div className="mt-3 space-y-2">
                     {sideQ && sideResults.length === 0 && (
@@ -977,7 +1092,6 @@ export default function Home() {
                       </Link>
                     ))}
 
-                    {/* 更多提示 */}
                     {sideResults.length >= 6 && (
                       <div className="text-[12px] text-gray-500 px-1">
                         只顯示前 6 筆，請輸入更精準的關鍵字以縮小範圍
@@ -986,10 +1100,8 @@ export default function Home() {
                   </div>
                 )}
               </div>
-              {/* ===== /右側欄搜尋 ===== */}
             </div>
 
-            {/* Toast */}
             {toast && (
               <div
                 className={`mx-6 mt-4 rounded-lg px-3 py-2 text-sm ${
