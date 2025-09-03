@@ -353,10 +353,7 @@ function HomeClient({ specialPosts }) {
         prefersReducedMotion ||
         window.localStorage.getItem("home_intro_done") === "1";
 
-      // ⚠️ 這兩個元素我們已經從 DOM 拿掉了（不再顯示 Loading 圓圈/進度條）
-      const counter = document.getElementById("counter"); // 可能是 null
-      const progressBar = document.querySelector(".progress-bar"); // 一定是 null
-
+      // ✅ 僅保留實際會用到的元素
       const heroElement = document.querySelector(".hero");
       const videoContainer = document.querySelector(".video-container");
       const logo = document.querySelector(".logo");
@@ -383,8 +380,6 @@ function HomeClient({ specialPosts }) {
             position: "absolute",
           });
         }
-        if (progressBar) gsap.set(progressBar, { opacity: 0 }); // 現在不會被觸發
-        if (counter) gsap.set(counter, { innerHTML: 100 });
         if (logo) gsap.set(logo, { left: "0%", xPercent: 0 });
         if (animOutChars.length) gsap.set(animOutChars, { y: "100%" });
         if (animInChars.length) gsap.set(animInChars, { x: "-1200%" });
@@ -402,7 +397,7 @@ function HomeClient({ specialPosts }) {
         return;
       }
 
-      // ⏳ 第一次：跑入場動畫
+      // ⏳ 第一次：跑入場動畫（已去除 loading 圓圈／進度條）
       if (document.readyState === "complete") {
         if (videoContainer) {
           gsap.set(videoContainer, {
@@ -414,75 +409,63 @@ function HomeClient({ specialPosts }) {
         }
 
         if (heroElement) {
+          // 1) 先把視窗夾成中間一道細縫
           gsap.to(heroElement, {
             clipPath: "polygon(0% 45%, 25% 45%, 25% 55%, 0% 55%)",
-            duration: 1.5,
+            duration: 1.2,
             ease: customEase,
-            delay: 1,
+            delay: 0.6,
           });
 
+          // 2) 擴展為整條水平帶
           gsap.to(heroElement, {
             clipPath: "polygon(0% 45%, 100% 45%, 100% 55%, 0% 55%)",
-            duration: 2,
+            duration: 1.6,
             ease: customEase,
-            delay: 3,
-            onStart: () => {
-              // 這裡原本有 progressBar/counter 動畫，已移除
-              if (counter) {
-                gsap.to(counter, {
-                  innerHTML: 100,
-                  duration: 2,
-                  ease: customEase,
-                  snap: { innerHTML: 1 },
-                });
-              }
-            },
+            delay: 2.0,
           });
 
+          // 3) 全開 + 視覺物件進場
           gsap.to(heroElement, {
             clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-            duration: 1,
+            duration: 0.9,
             ease: customEase,
-            delay: 5,
+            delay: 3.8,
             onStart: () => {
               if (videoContainer) {
                 gsap.to(videoContainer, {
                   scale: 1,
                   rotation: 0,
                   clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-                  duration: 1.25,
+                  duration: 1.0,
                   ease: customEase,
                   onComplete: () => {
-                    // ✅ 最終位移改為 520px
+                    // ✅ 最終位移
                     gsap.to(videoContainer, {
                       top: `${FINAL_TOP}px`,
-                      duration: 1.5,
+                      duration: 1.2,
                       ease: customEase,
                     });
 
                     gsap.to(heroElement, {
                       backgroundColor: "#ffffff",
-                      duration: 1,
+                      duration: 0.8,
                       ease: customEase,
                     });
                   },
                 });
               }
-              // 移除 progressBar 淡出
-              if (progressBar) {
-                gsap.to(progressBar, { opacity: 0, duration: 0.3 });
-              }
               if (logo) {
                 gsap.to(logo, {
                   left: "0%",
                   transform: "translateX(0%)",
-                  duration: 1.25,
+                  duration: 1.0,
                   ease: customEase,
                   onStart: () => {
                     if (animOutChars.length > 0) {
                       gsap.to(animOutChars, {
                         y: "100%",
-                        duration: 1,
+                        duration: 0.9,
                         stagger: -0.075,
                         ease: customEase,
                       });
@@ -490,9 +473,9 @@ function HomeClient({ specialPosts }) {
                     if (animInChars.length > 0) {
                       gsap.to(animInChars, {
                         x: "-1200%",
-                        duration: 1,
+                        duration: 0.9,
                         ease: customEase,
-                        delay: 0.25,
+                        delay: 0.2,
                       });
                     }
                   },
@@ -509,10 +492,10 @@ function HomeClient({ specialPosts }) {
             {
               y: 0,
               opacity: 1,
-              duration: 1,
+              duration: 0.9,
               stagger: 0.125,
               ease: "power3.out",
-              delay: 5.75,
+              delay: 4.4, // 時序往前調，因為移除 loading 等待
               onComplete: () => {
                 if (preloader) preloader.classList.remove("fixed");
               },
@@ -520,16 +503,16 @@ function HomeClient({ specialPosts }) {
           );
         }
 
-        if (taglineRef.current.length > 0) {
+        if (taglineRef.current?.length > 0) {
           gsap.fromTo(
             taglineRef.current,
             { y: 30, opacity: 0 },
             {
               y: 0,
               opacity: 1,
-              duration: 1.2,
+              duration: 1.0,
               ease: "power4.out",
-              delay: 7.8,
+              delay: 6.0, // 同步提前
               stagger: 0.2,
               onComplete: () => {
                 window.localStorage.setItem("home_intro_done", "1");
@@ -559,40 +542,26 @@ function HomeClient({ specialPosts }) {
           <Preloader01 />
         </div> */}
         <div>
-          <div className="preloader-screen fixed inset-0 z-[9999999999] bg-white">
-            <div className="hero relative w-full bg-white" ref={container}>
-              {/* ⛔ 已移除：Loading/進度條
-          <div className="progress-bar z-20 absolute top-6 left-6 px-6 py-2 text-black">
-            <p>loading</p>
-            <p>
-              /<span id="counter">0</span>
-            </p>
-          </div>
-          */}
-
-              <div
-                className="video-container absolute left-0 w-screen will-change-transform z-0"
-                style={{ top: "0px" }} // 進場從 0 開始 → 動畫推到 520px
-              >
-                <BackgroundSlider images={backgroundImages} duration={5} />
-              </div>
-
-              {/* ✅ 左下角 → 右上角 黑色漸層陰影（在背景之上、標題之下） */}
-              <div
-                className="pointer-events-none absolute inset-0 z-30"
-                style={{
-                  // 底部左側較濃，往右上漸淡；疊兩個漸層讓邊緣更柔和
-                  backgroundImage:
-                    "radial-gradient(120% 120% at 0% 100%, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.45) 25%, rgba(0,0,0,0.15) 55%, rgba(0,0,0,0) 75%), linear-gradient(45deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 40%, rgba(0,0,0,0.0) 75%)",
-                }}
-              />
-
-              <div className="header absolute !bg-transparent bottom-20 left-10 z-30 text-white leading-tight space-y-1" />
+          <div className="">
+            <div className="">
+              <BackgroundSlider images={backgroundImages} duration={5} />
             </div>
+
+            {/* ✅ 左下角 → 右上角 黑色漸層陰影（在背景之上、標題之下） */}
+            <div
+              className="pointer-events-none absolute inset-0 z-30"
+              style={{
+                // 底部左側較濃，往右上漸淡；疊兩個漸層讓邊緣更柔和
+                backgroundImage:
+                  "radial-gradient(120% 120% at 0% 100%, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.45) 25%, rgba(0,0,0,0.15) 55%, rgba(0,0,0,0) 75%), linear-gradient(45deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 40%, rgba(0,0,0,0.0) 75%)",
+              }}
+            />
+
+            <div className="header absolute !bg-transparent bottom-20 left-10 z-30 text-white leading-tight space-y-1" />
           </div>
 
           {/* 指標數字區（保持在漸層之上） */}
-          <div className="absolute bottom-[10%] sm:bottom-[20%] ml-[40px] sm:ml-[100px] text-4xl font-bold z-40 flex">
+          <div className="absolute bottom-[6%] sm:bottom-[10%] ml-[40px] sm:ml-[100px] text-4xl font-bold z-40 flex">
             <div className="grid grid-cols-3 w-[400px] md:w-[800px] ">
               <div>
                 <div className="number flex flex-col">

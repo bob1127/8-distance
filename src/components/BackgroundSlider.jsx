@@ -15,7 +15,7 @@ export default function BackgroundSlider({ images = [], duration = 5 }) {
   }, [currentIndex, images.length, duration]);
 
   return (
-    <section className="section-hero relative w-full aspect-[500/700] sm:aspect-[500/700] md:aspect-[1024/576] xl:aspect-[1920/768] 2xl:aspect-[1920/1080] overflow-hidden">
+    <section className="section-hero relative w-full h-screen overflow-hidden">
       {images.map((bg, i) => (
         <motion.div
           key={i}
@@ -35,11 +35,6 @@ export default function BackgroundSlider({ images = [], duration = 5 }) {
 
       {/* 黑色遮罩 */}
       <div className="bg-black opacity-40 w-full h-full absolute top-0 left-0 z-10" />
-
-      {/* 進度圓圈 */}
-      <div className="relative h-full">
-        <ProgressCircle key={currentIndex} duration={duration} />
-      </div>
     </section>
   );
 }
