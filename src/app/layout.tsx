@@ -1,7 +1,7 @@
 // src/app/layout.tsx
 import "./globals.css";
 import "yakuhanjp";
-
+import React from "react";
 import localFont from "next/font/local";
 import { ViewTransitions } from "next-view-transitions";
 import type { Metadata } from "next";
@@ -11,6 +11,7 @@ import Footer from "../components/Footer/Footer1";
 import PageTransition from "../components/PageTransition/PageTransition";
 import ExoApeOverlayMenu from "../components/ExoApeOverlayMenu";
 import Image from "next/image";
+import IntroOverlay from "@/components/IntroOverlay"; // ⬅️ 新增這行
 
 export const metadata: Metadata = {
   title: "捌程室內設計｜商業空間與住宅設計",
@@ -23,7 +24,6 @@ export const metadata: Metadata = {
   },
 };
 
-// ⚠️ 確保字體檔案存在於：src/app/fonts/WOFF2/LINESeedTW_OTF_Rg.woff2
 const lineSeed = localFont({
   src: [
     {
@@ -61,6 +61,9 @@ export default function RootLayout({
         <body
           className={`antialiased bg-white text-gray-900 ${lineSeed.className}`}
         >
+          {/* ✅ Client-only Intro 放這裡，不讓 layout 變成 Client */}
+          <IntroOverlay />
+
           <ExoApeOverlayMenu>
             <div className="hidden md:block fixed inset-x-0 top-0 z-[9999]">
               <Nav />
@@ -94,18 +97,14 @@ export default function RootLayout({
                 (function () {
                   window.Tawk_API = window.Tawk_API || {};
                   window.Tawk_LoadStart = new Date();
-
-                  // 當 Tawk 載入完成後，降低 z-index
                   window.Tawk_API.onLoad = function () {
                     try {
                       var root = document.getElementById('tawkchat-container');
-                      if (root) root.style.zIndex = '1'; // 低於你站上的 z-[9999]
-
+                      if (root) root.style.zIndex = '1';
                       var ifr = document.querySelector('iframe[title="chat widget"]');
                       if (ifr) ifr.style.zIndex = '1';
                     } catch (e) {}
                   };
-
                   var s1 = document.createElement("script"),
                       s0 = document.getElementsByTagName("script")[0];
                   s1.async = true;
