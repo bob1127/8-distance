@@ -126,8 +126,8 @@ export default async function AboutPage() {
           </section>
         </div>
       </section>
-      <section className="section-story flex lg:flex-row flex-col max-w-[1920px] w-[90%] md:w-[85%] 2xl:w-[80%] mx-auto">
-        <div className=" w-full p-3 lg:w-1/2 lg:p-8">
+      <section className="section-story my-5 flex lg:flex-row flex-col max-w-[1920px] w-[90%] md:w-[85%] 2xl:w-[80%] mx-auto">
+        <div className=" w-full  lg:w-1/2">
           <div className="max-w-[750px]">
             <h1 className="text-3xl">公司故事: </h1>
             <p className="tetx-[14px] leading-loose tracking-wider">
@@ -143,8 +143,23 @@ export default async function AboutPage() {
             </p>
           </div>
         </div>
-        <div className=" w-full p-3 lg:w-1/2 lg:p-8">
-          <div className="max-w-[750px]">
+        <div className=" w-full  lg:w-1/2 ">
+          {" "}
+          <div className="aspect-[4/3] relative overflow-hidden">
+            <Image
+              src="/images/about/公司歷程-hero.jpg"
+              priority
+              placeholder="empty"
+              fill
+              className="object-cover w-full"
+            ></Image>
+          </div>
+        </div>
+      </section>
+      <section className="section-en-story flex lg:flex-row flex-col max-w-[1920px] w-[90%] md:w-[85%] 2xl:w-[80%] mx-auto">
+        {" "}
+        <div>
+          <div className="">
             <h1 className="text-3xl">Story: </h1>
             <p className="tetx-[14px]">
               The origin of 8distance began with three like-minded siblings. One
