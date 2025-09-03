@@ -534,7 +534,7 @@ function HomeClient({ specialPosts }) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homeStructuredData) }}
       />
 
-      <div className="w-full overflow-hidden">
+      <div className="">
         {/* <div
           id="dark-section"
           className="relative w-full aspect-[500/700] sm:aspect-[500/700] md:aspect-[1024/576] xl:aspect-[1920/768] 2xl:aspect-[1920/1080] !overflow-hidden  "
@@ -543,7 +543,7 @@ function HomeClient({ specialPosts }) {
         </div> */}
         <div className="relative ">
           <div className="">
-            <div className="">
+            <div className="w-full overflow-hidden">
               <BackgroundSlider images={backgroundImages} duration={5} />
             </div>
 
