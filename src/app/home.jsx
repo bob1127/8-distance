@@ -541,7 +541,7 @@ function HomeClient({ specialPosts }) {
         >
           <Preloader01 />
         </div> */}
-        <div>
+        <div className="relative">
           <div className="">
             <div className="">
               <BackgroundSlider images={backgroundImages} duration={5} />
