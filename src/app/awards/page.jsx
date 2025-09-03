@@ -267,6 +267,57 @@ export default function Home() {
           </div>
         </div>
       </section>
+      {/* 最新動態 */}
+      <section className="section-others-project mb-10 overflow-hidden px-4 sm:px-0 w-full">
+        <div className="title flex justify-start max-w-[1920px] sm:w-[90%] w-full px-6 mx-auto lg:w-[80%]">
+          <h2 className="text-2xl">相關文章</h2>
+        </div>
+
+        <Swiper
+          modules={[Pagination, A11y, Autoplay]}
+          autoplay={{ delay: 4000, disableOnInteraction: false }}
+          loop
+          speed={1200}
+          spaceBetween={16}
+          breakpoints={{
+            0: { slidesPerView: 1 },
+            480: { slidesPerView: 1 },
+            640: { slidesPerView: 2 },
+            768: { slidesPerView: 2.5 },
+            1024: { slidesPerView: 2.5 },
+            1280: { slidesPerView: 3.5 },
+          }}
+          className="m-0 p-0 !overflow-visible sm:!overflow-hidden"
+        >
+          <Link href="#">
+            {staticSlides.map((slide, idx) => (
+              <SwiperSlide
+                key={idx}
+                className="overflow-hidden relative duration-700 p-8"
+              >
+                <div className="overflow-hidden">
+                  <Card
+                    className="border-white !rounded-[0px] pb-4 w-full h-[250px] md:h-[280px] lg:h-[300px] 2xl:h-[320px] max-h-[450px] border bg-no-repeat bg-center bg-cover shadow-none transition-transform duration-700"
+                    style={{
+                      backgroundImage: `url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPgbDskuTRRNHXb9zwmbzpjucaZzGWawpHdg&s')`,
+                    }}
+                  />
+                  <div className="py-8">
+                    <h3 className="text-base md:text-lg font-medium text-neutral-900 line-clamp-2">
+                      得獎捷報 ｜ 德國iF設計大獎2025 Winner
+                    </h3>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      <p>2025-02-26</p>
+                    </div>
+                  </div>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Link>
+
+          <div className="custom-pagination flex justify-center gap-3 mt-6"></div>
+        </Swiper>
+      </section>
     </>
   );
 }
