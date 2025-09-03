@@ -163,7 +163,7 @@ export default function Home() {
           <span>最新消息</span>
         </div>
       </section>
-      <section className="max-w-[1300px]  px-4 mx-auto py-10">
+      <section className="max-w-[1300px]  px-6 mx-auto py-10">
         <div className="info sm:w-[90%] w-full xl:w-[80%] mx-auto border-l-3 border-black pl-3 sm:pl-5">
           <p className="leading-loose tracking-wider">
             GOOD DESIGN AWARD
@@ -186,7 +186,7 @@ export default function Home() {
           ></Image>
         </div>
       </section>
-      <section>
+      <section className="overflow-hidden px-6">
         <div className="grid grid-cols-1 max-w-[1920px] mx-auto awrads-image">
           <div className="awards-item w-full overflow-hidden aspect-[16/9] relative">
             <AwardsLightbox
@@ -197,39 +197,72 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="section-awards-info ">
-        <div className="max-w-[1920px] w-full grid grid-cols-2 md:w-[90%] xl:w-[85%] mx-auto px-4">
-          <div className="p-8">
-            <Image
-              src="/images/捌程-2024法國設計獎電子證書-員林胡宅.png"
-              priority
-              className="max-w-[600px]"
-              width={1000}
-              height={400}
-            ></Image>
-          </div>
-          <div className="flex flex-col justify-center items-center">
-            <div className="flex items-center mt-4">
-              <h2 className="text-2xl m-0">得獎作品：</h2>
-              <p className="text-lg">員林胡宅</p>
-            </div>
-            <div className="flex items-center mt-4">
-              <h2 className="text-2xl m-0">設計師：</h2>
-              <p className="text-lg">Jen</p>
-            </div>
-            <div className="flex items-center mt-2">
-              <Link
-                href="/portfolio-inner"
-                className="bg-[#dea155] text-xl  text-white mx-3 px-2 py-1"
-              >
-                獲獎連結
-              </Link>
-              <Link
-                href="/note"
-                className="bg-[#dea155] text-xl  text-white mx-3 px-2 py-1"
-              >
-                更多作品
-              </Link>
+      <section
+        className="section-awards-info py-10 md:py-16"
+        aria-labelledby="award-title"
+      >
+        <div className="w-full mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+          {/* 1欄 → 2欄 */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center">
+            {/* 圖片 */}
+            <figure className="w-full">
+              <div className="relative mx-auto w-full max-w-[720px]">
+                <Image
+                  src="/images/捌程-2024法國設計獎電子證書-員林胡宅.png"
+                  alt="2024 法國設計獎電子證書｜員林胡宅"
+                  width={1600}
+                  height={1000}
+                  priority
+                  className="w-full h-auto rounded-xl shadow-md ring-1 ring-black/5"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1280px) 60vw, 720px"
+                />
+              </div>
+              {/* 可選：圖片說明 */}
+              {/* <figcaption className="mt-3 text-sm text-gray-500 text-center">2024 法國設計獎 電子證書</figcaption> */}
+            </figure>
+
+            {/* 文字資訊 */}
+            <div className="flex flex-col items-start md:items-center justify-center">
+              <h1 id="award-title" className="sr-only">
+                得獎資訊
+              </h1>
+
+              {/* 使用語意化 dl 列出欄位 */}
+              <dl className="w-full space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-center sm:gap-3">
+                  <dt className="text-xl md:text-2xl font-semibold text-gray-900">
+                    得獎作品：
+                  </dt>
+                  <dd className="text-lg md:text-xl text-gray-700 mt-1 sm:mt-0">
+                    員林胡宅
+                  </dd>
+                </div>
+
+                <div className="flex flex-col sm:flex-row sm:items-center justify-center  sm:gap-3">
+                  <dt className="text-xl md:text-2xl font-semibold text-gray-900">
+                    設計師：
+                  </dt>
+                  <dd className="text-lg md:text-xl text-gray-700 mt-1 sm:mt-0">
+                    Jen
+                  </dd>
+                </div>
+              </dl>
+
+              {/* 按鈕群組：小螢幕自動換行，桌機橫排 */}
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Link
+                  href="/portfolio-inner"
+                  className="inline-flex items-center justify-center rounded-md bg-[#dea155] px-4 py-2 text-white text-base md:text-lg font-medium shadow-sm hover:brightness-105 active:brightness-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#dea155]/40"
+                >
+                  獲獎連結
+                </Link>
+                <Link
+                  href="/note"
+                  className="inline-flex items-center justify-center rounded-md bg-[#dea155] px-4 py-2 text-white text-base md:text-lg font-medium shadow-sm hover:brightness-105 active:brightness-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#dea155]/40"
+                >
+                  更多作品
+                </Link>
+              </div>
             </div>
           </div>
         </div>
