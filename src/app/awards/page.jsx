@@ -186,7 +186,7 @@ export default function Home() {
           ></Image>
         </div>
       </section>
-      <section className="overflow-hidden px-6">
+      <section className="overflow-hidden w-[95%] md:w-[85%] mx-auto px-6">
         <div className="grid grid-cols-1 max-w-[1920px] mx-auto awrads-image">
           <div className="awards-item w-full overflow-hidden aspect-[16/9] relative">
             <AwardsLightbox
