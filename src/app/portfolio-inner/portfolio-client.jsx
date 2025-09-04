@@ -84,7 +84,7 @@ const Photos = () => {
 
   return (
     <ReactLenis root>
-      <div className="bg-[#f1f1f1]">
+      <div className="bg-[#f1f1f1] overflow-hidden">
         <section className="relative pt-[150px] pb-[100px]">
           {/* 背景圖 */}
           <div className="absolute inset-0">

@@ -11,12 +11,12 @@ import ParallaxCard from "../components/ParallaxCardIndex/page";
 import { useScroll } from "framer-motion";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { ReactLenis } from "@studio-freight/react-lenis";
-
+import LatestNewsCarousel from "../components/LatestNewsCarousel";
 import AnimatedLink from "../components/AnimatedLink";
 import HoverItem from "../components/Slider/Slider.jsx";
 import Video from "../components/Video";
 import Script from "next/script";
-
+import TestimonialsEmbla from "../components/TestimonialsEmbla";
 import { Card } from "@nextui-org/react";
 import { Pagination, A11y, Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -305,7 +305,8 @@ function HomeClient({ specialPosts }) {
       avatar: "/images/testimonials/user3.jpg",
     },
   ];
-
+  const CIRC = 2 * Math.PI * 9; // r=9 -> 圓周長，給進度環用
+  const paginationRef = useRef(null);
   return (
     <ReactLenis root>
       <Script
@@ -388,7 +389,7 @@ function HomeClient({ specialPosts }) {
               {/* 四格入口 */}
               <section className="section-portfolio w-full pb-5 xl:pb-20">
                 <div className="grid relative grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4 w-full">
-                  <div className="border">
+                  <div className="">
                     <Link href="/note">
                       <HoverItem
                         slides={slidesC}
@@ -404,7 +405,7 @@ function HomeClient({ specialPosts }) {
                       />
                     </Link>
                   </div>
-                  <div className="border">
+                  <div className="">
                     <Link href="/note">
                       <HoverItem
                         slides={slidesD}
@@ -420,7 +421,7 @@ function HomeClient({ specialPosts }) {
                       />
                     </Link>
                   </div>
-                  <div className="border">
+                  <div className="">
                     <Link href="/note">
                       <HoverItem
                         slides={slidesA}
@@ -436,7 +437,7 @@ function HomeClient({ specialPosts }) {
                       />
                     </Link>
                   </div>
-                  <div className="border">
+                  <div className="">
                     <Link href="/note">
                       <HoverItem
                         slides={slidesB}
@@ -454,137 +455,8 @@ function HomeClient({ specialPosts }) {
                   </div>
                 </div>
               </section>
-
-              {/* 客戶好評 */}
-              <section className="section-others-project mb-10 px-4 sm:px-0 overflow-hidden w-full">
-                <div className="title flex justify-center">
-                  <h2 className="text-2xl">客戶好評</h2>
-                </div>
-
-                <Swiper
-                  modules={[Pagination, A11y, Autoplay]}
-                  autoplay={{ delay: 4000, disableOnInteraction: false }}
-                  loop
-                  speed={1200}
-                  spaceBetween={16}
-                  pagination={{
-                    el: ".custom-pagination",
-                    clickable: true,
-                    renderBullet: (index, className) => {
-                      return `
-                        <span class="${className} custom-bullet">
-                          <svg class="bullet-svg" width="22" height="22" viewBox="0 0 22 22">
-                            <circle class="bg" cx="11" cy="11" r="9" />
-                            <circle class="progress" cx="11" cy="11" r="9" />
-                            <circle class="dot" cx="11" cy="11" r="4" />
-                          </svg>
-                        </span>
-                      `;
-                    },
-                  }}
-                  breakpoints={{
-                    0: { slidesPerView: 1 },
-                    480: { slidesPerView: 1 },
-                    640: { slidesPerView: 2 },
-                    768: { slidesPerView: 2.5 },
-                    1024: { slidesPerView: 2.5 },
-                    1280: { slidesPerView: 3.5 },
-                  }}
-                  className="m-0 p-0 !overflow-visible sm:!overflow-hidden"
-                >
-                  {testimonials.map((item, idx) => (
-                    <SwiperSlide
-                      key={idx}
-                      className="overflow-hidden bg-slate-50 px-6 py-8 relative duration-700"
-                    >
-                      <div className="flex flex-col h-full">
-                        <p className="text-neutral-700 text-sm md:text-base flex-1 leading-relaxed mb-4">
-                          “{item.content}”
-                        </p>
-                        <div>
-                          <h3 className="text-base font-semibold text-neutral-900">
-                            {item.name}
-                          </h3>
-                          {item.role && (
-                            <span className="text-sm text-neutral-500">
-                              {item.role}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                  ))}
-                  {/* <div className="custom-pagination flex justify-center gap-3 mt-6"></div> */}
-                </Swiper>
-              </section>
-
-              {/* 最新動態 */}
-              <section className="section-others-project mb-10 overflow-hidden px-4 sm:px-0 w-full">
-                <div className="title flex justify-center">
-                  <h2 className="text-2xl">最新動態</h2>
-                </div>
-
-                <Swiper
-                  modules={[Pagination, A11y, Autoplay]}
-                  autoplay={{ delay: 4000, disableOnInteraction: false }}
-                  loop
-                  speed={1200}
-                  spaceBetween={16}
-                  pagination={{
-                    el: ".custom-pagination",
-                    clickable: true,
-                    renderBullet: (index, className) => {
-                      return `
-                        <span class="${className} custom-bullet">
-                          <svg class="bullet-svg" width="22" height="22" viewBox="0 0 22 22">
-                            <circle class="bg" cx="11" cy="11" r="9" />
-                            <circle class="progress" cx="11" cy="11" r="9" />
-                            <circle class="dot" cx="11" cy="11" r="4" />
-                          </svg>
-                        </span>
-                      `;
-                    },
-                  }}
-                  breakpoints={{
-                    0: { slidesPerView: 1 },
-                    480: { slidesPerView: 1 },
-                    640: { slidesPerView: 2 },
-                    768: { slidesPerView: 2.5 },
-                    1024: { slidesPerView: 2.5 },
-                    1280: { slidesPerView: 3.5 },
-                  }}
-                  className="m-0 p-0 !overflow-visible sm:!overflow-hidden"
-                >
-                  <Link href="#">
-                    {staticSlides.map((slide, idx) => (
-                      <SwiperSlide
-                        key={idx}
-                        className="overflow-hidden bg-slate-50 px-4 pb-10 pt-5 relative duration-700"
-                      >
-                        <div className="overflow-hidden">
-                          <Card
-                            className="border-white !rounded-[0px] pb-4 w-full h-[250px] md:h-[280px] lg:h-[300px] 2xl:h-[320px] max-h-[450px] border bg-no-repeat bg-center bg-cover shadow-none transition-transform duration-700"
-                            style={{ backgroundImage: `url(${slide.image})` }}
-                          />
-                          <div className="p-8">
-                            <h3 className="text-base md:text-lg font-medium text-neutral-900 line-clamp-2">
-                              義大利 A Design Award 銀獎 ｜ AFTER SCHOOL
-                            </h3>
-                            <div className="mt-2 flex flex-wrap gap-2">
-                              <p>
-                                很高興受到 A Design 評審的青睞，下課後 After
-                                School 作品獲得銀獎，我們會持續精進……
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </SwiperSlide>
-                    ))}
-                  </Link>
-
-                  <div className="custom-pagination flex justify-center gap-3 mt-6"></div>
-                </Swiper>
-              </section>
+              <TestimonialsEmbla testimonials={testimonials} />
+              <LatestNewsCarousel slides={staticSlides} />/
             </div>
           </div>
         </div>

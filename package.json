@@ -39,6 +39,7 @@
     "clsx": "^2.1.1",
     "crypto-js": "^4.2.0",
     "daisyui": "^5.0.50",
+    "embla-carousel-autoplay": "^8.6.0",
     "embla-carousel-react": "^8.5.2",
     "flyonui": "^2.4.0",
     "framer-motion": "^11.18.2",
