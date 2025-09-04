@@ -388,7 +388,7 @@ const Nav = () => {
                 <b className="text-gray-400 text-[16px]">設計類型</b>
                 <Link href="/note" className="mt-2">
                   {" "}
-                  <span className="text-[.8rem] text-white mt-1">建築設計</span>
+                  <span className="text-[.8rem] text-white mt-1">室內設計</span>
                 </Link>
                 <Link href="/note" className="mt-2">
                   {" "}

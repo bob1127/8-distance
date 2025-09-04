@@ -393,7 +393,7 @@ function HomeClient({ specialPosts }) {
                     <Link href="/note">
                       <HoverItem
                         slides={slidesC}
-                        overlayTitle="建築設計 "
+                        overlayTitle="室內設計 "
                         overlaySubtitle="ARCHITECTURE"
                         overlayDesc="專屬你的生活動線與材質表情。"
                         showOverlay
