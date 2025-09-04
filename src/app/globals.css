@@ -78,7 +78,7 @@ h1 {
 }
 
 h2 {
-  @apply text-[2.2rem] font-semibold mt-4 mb-6;
+  @apply text-[18px] font-semibold;
   color: var(--font-deep-black);
 }
 
@@ -177,14 +177,14 @@ body {
   transform-origin: left;
 }
 
-.home-page {
+/* .home-page {
   position: absolute;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-}
+} */
 
 .hero-img {
   position: absolute;
@@ -1133,7 +1133,7 @@ a {
   z-index: 2;
 }
 
-.block {
+.page-block {
   flex: 1;
   height: 100%;
   background: #222;

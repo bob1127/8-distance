@@ -123,7 +123,7 @@ const PageTransition = ({ children }) => {
       blocksRef.current = [];
       for (let i = 0; i < 16; i++) {
         const block = document.createElement("div");
-        block.className = "block";
+        block.className = "page-block";
         overlayRef.current.appendChild(block);
         blocksRef.current.push(block);
       }

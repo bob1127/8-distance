@@ -12,7 +12,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import Lenis from "@studio-freight/lenis";
 import Image from "next/image";
 import Marquee from "react-fast-marquee";
-import { Pagination, A11y, Autoplay } from "swiper/modules";
+import { Navigation, Pagination, A11y, Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Link from "next/link";
 import "swiper/css";
@@ -202,9 +202,7 @@ export default function Home() {
         aria-labelledby="award-title"
       >
         <div className="w-full mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
-          {/* 1欄 → 2欄 */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center">
-            {/* 圖片 */}
             <figure className="w-full">
               <div className="relative mx-auto w-full max-w-[720px]">
                 <Image
@@ -217,17 +215,13 @@ export default function Home() {
                   sizes="(max-width: 768px) 100vw, (max-width: 1280px) 60vw, 720px"
                 />
               </div>
-              {/* 可選：圖片說明 */}
-              {/* <figcaption className="mt-3 text-sm text-gray-500 text-center">2024 法國設計獎 電子證書</figcaption> */}
             </figure>
 
-            {/* 文字資訊 */}
             <div className="flex flex-col items-start md:items-center justify-center">
               <h1 id="award-title" className="sr-only">
                 得獎資訊
               </h1>
 
-              {/* 使用語意化 dl 列出欄位 */}
               <dl className="w-full space-y-4">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-center sm:gap-3">
                   <dt className="text-xl md:text-2xl font-semibold text-gray-900">
@@ -248,7 +242,6 @@ export default function Home() {
                 </div>
               </dl>
 
-              {/* 按鈕群組：小螢幕自動換行，桌機橫排 */}
               <div className="mt-6 flex flex-wrap gap-3">
                 <Link
                   href="/portfolio-inner"
@@ -267,56 +260,72 @@ export default function Home() {
           </div>
         </div>
       </section>
-      {/* 最新動態 */}
+
       <section className="section-others-project mb-10 overflow-hidden px-4 sm:px-0 w-full">
         <div className="title flex justify-start max-w-[1920px] sm:w-[90%] w-full px-6 mx-auto lg:w-[80%]">
           <h2 className="text-2xl">相關文章</h2>
         </div>
 
-        <Swiper
-          modules={[Pagination, A11y, Autoplay]}
-          autoplay={{ delay: 4000, disableOnInteraction: false }}
-          loop
-          speed={1200}
-          spaceBetween={16}
-          breakpoints={{
-            0: { slidesPerView: 1 },
-            480: { slidesPerView: 1 },
-            640: { slidesPerView: 2 },
-            768: { slidesPerView: 2.5 },
-            1024: { slidesPerView: 2.5 },
-            1280: { slidesPerView: 3.5 },
-          }}
-          className="m-0 p-0 !overflow-visible sm:!overflow-hidden"
-        >
-          <Link href="#">
+        <div className="relative sm:w-[90%] w-full px-6 mx-auto lg:w-[80%]">
+          <button
+            className="swiper-prev absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-white/90 backdrop-blur border rounded-full w-10 h-10 grid place-items-center shadow
+                 hover:bg-white transition pointer-events-auto"
+            aria-label="上一張"
+          >
+            ‹
+          </button>
+          <button
+            className="swiper-next absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-white/90 backdrop-blur border rounded-full w-10 h-10 grid place-items-center shadow
+                 hover:bg-white transition pointer-events-auto"
+            aria-label="下一張"
+          >
+            ›
+          </button>
+
+          <Swiper
+            modules={[Navigation, Pagination, A11y, Autoplay]}
+            navigation={{ prevEl: ".swiper-prev", nextEl: ".swiper-next" }}
+            autoplay={{ delay: 4000, disableOnInteraction: false }}
+            loop
+            speed={1200}
+            spaceBetween={16}
+            breakpoints={{
+              0: { slidesPerView: 1 },
+              480: { slidesPerView: 1 },
+              640: { slidesPerView: 2 },
+              768: { slidesPerView: 2.5 },
+              1024: { slidesPerView: 2.5 },
+              1280: { slidesPerView: 3.5 },
+            }}
+            className="m-0 p-0 !overflow-visible sm:!overflow-hidden"
+          >
             {staticSlides.map((slide, idx) => (
               <SwiperSlide
                 key={idx}
                 className="overflow-hidden relative duration-700 p-8"
               >
-                <div className="overflow-hidden">
-                  <Card
-                    className="border-white !rounded-[0px] pb-4 w-full h-[250px] md:h-[280px] lg:h-[300px] 2xl:h-[320px] max-h-[450px] border bg-no-repeat bg-center bg-cover shadow-none transition-transform duration-700"
-                    style={{
-                      backgroundImage: `url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPgbDskuTRRNHXb9zwmbzpjucaZzGWawpHdg&s')`,
-                    }}
-                  />
-                  <div className="py-8">
-                    <h3 className="text-base md:text-lg font-medium text-neutral-900 line-clamp-2">
-                      得獎捷報 ｜ 德國iF設計大獎2025 Winner
-                    </h3>
-                    <div className="mt-2 flex flex-wrap gap-2">
-                      <p>2025-02-26</p>
+                <Link href={slide.link} className="block">
+                  <div className="overflow-hidden">
+                    <Card
+                      className="border-white !rounded-[0px] pb-4 w-full h-[250px] md:h-[280px] lg:h-[300px] 2xl:h-[320px] max-h-[450px] border bg-no-repeat bg-center bg-cover shadow-none transition-transform duration-700"
+                      style={{
+                        backgroundImage: `url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPgbDskuTRRNHXb9zwmbzpjucaZzGWawpHdg&s')`,
+                      }}
+                    />
+                    <div className="py-8">
+                      <h3 className="text-base md:text-lg font-medium text-neutral-900 line-clamp-2">
+                        得獎捷報 ｜ 德國iF設計大獎2025 Winner
+                      </h3>
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        <p>2025-02-26</p>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </Link>
               </SwiperSlide>
             ))}
-          </Link>
-
-          <div className="custom-pagination flex justify-center gap-3 mt-6"></div>
-        </Swiper>
+          </Swiper>
+        </div>
       </section>
     </>
   );

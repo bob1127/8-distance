@@ -79,7 +79,7 @@ export default function Nav() {
           <Link href="/about" className="text-black text-[18px]">
             關於我們
           </Link>
-          <Link href="/awards" className="text-black text-[18px]">
+          <Link href="/news" className="text-black text-[18px]">
             最新動態
           </Link>
           <Link href="/note" className="text-black text-[18px]">
@@ -207,20 +207,20 @@ function HamburgerButton({
         initial={false}
         animate={open ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }}
         transition={{ type: "spring", stiffness: 400, damping: 28 }}
-        className={`absolute block h-[2px] w-6 ${barClass}`}
+        className={`absolute page-block h-[2px] w-6 ${barClass}`}
       />
       <motion.span
         initial={false}
         animate={open ? { opacity: 0 } : { opacity: 1 }}
         transition={{ duration: 0.15 }}
-        className={`absolute block h-[2px] w-6 ${barClass}`}
+        className={`absolute page-block h-[2px] w-6 ${barClass}`}
         style={{ y: 0 }}
       />
       <motion.span
         initial={false}
         animate={open ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }}
         transition={{ type: "spring", stiffness: 400, damping: 28 }}
-        className={`absolute block h-[2px] w-6 ${barClass}`}
+        className={`absolute page-block h-[2px] w-6 ${barClass}`}
       />
     </button>
   );
