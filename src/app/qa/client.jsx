@@ -42,41 +42,14 @@ export default function Home() {
 
   return (
     <div>
-      <section className="flex flex-row">
+      <section className="flex flex-row py-[150px]">
         {/* 左側：QA Accordion */}
-        <div className="w-[70%] p-20 flex flex-col items-center justify-center">
-          <div className="title w-full flex justify-start">
-            <h1 className="text-7xl">Q&A</h1>
+        <div className=" max-w-[1300px] mx-auto xl:w-[80%] md:w-[90%] px-6 w-full">
+          <div className="title w-full flex justify-start ">
+            <h1 className=" text-3xl md:tetx-4xl xl:text-7xl">問答FAQ</h1>
           </div>
           <div className=" w-full flex flex-row ">
-            <div className="left w-1/2 pr-8">
-              <h2 className="text-xl 2xl:text-2xl">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint
-                totam omnis amet harum reprehenderit doloremque. Distinctio
-                assumenda possimus quibusdam eligendi!
-              </h2>
-            </div>
-            <div className="right w-1/2">
-              <QAAccordion items={qaItems} />
-            </div>
-          </div>
-        </div>
-
-        {/* 右側圖片 */}
-        <div className="Picture w-[30%] relative">
-          <div className="circle absolute top-[20%] -translate-y-1/2 left-[-70px] border-3 border-white w-[140px] h-[140px] bg-rose-500 rounded-full z-50 flex justify-center items-center">
-            {" "}
-            <span className="text-slate-50">8-DISTANCE</span>
-          </div>
-          <div className="w-full aspect-[5/8.6] relative overflow-hidden">
-            <Image
-              src="https://www.rebita.co.jp/wp-content/uploads/2025/06/wbjujo_mv-1920x1280.jpg"
-              alt="QA-img"
-              placeholder="empty"
-              priority
-              fill
-              className="object-cover"
-            />
+            <QAAccordion items={qaItems} />
           </div>
         </div>
       </section>
@@ -88,7 +61,7 @@ export default function Home() {
 
 function QAAccordion({ items }) {
   return (
-    <div className="mx-auto w-full max-w-2xl">
+    <div className="mx-auto w-full ">
       {/* 下底線風格：使用 divide-y */}
       <div className="divide-y divide-neutral-300/80">
         {items.map((it, i) => (

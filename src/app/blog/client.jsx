@@ -190,10 +190,11 @@ function SelectField({
   );
 }
 
-/* ===== 可收折容器 ===== */
+/* ===== 可收折容器（版面原樣） ===== */
 function Collapsible({ title, open, onToggle, children, depKey }) {
   const contentRef = useRef(null);
   const [height, setHeight] = useState(open ? "auto" : 0);
+
   useEffect(() => {
     const el = contentRef.current;
     if (!el) return;
@@ -208,6 +209,7 @@ function Collapsible({ title, open, onToggle, children, depKey }) {
       requestAnimationFrame(() => setHeight(0));
     }
   }, [open]);
+
   useEffect(() => {
     if (!open || !contentRef.current) return;
     const h = contentRef.current.scrollHeight;
@@ -478,9 +480,8 @@ function Pagination({ page, totalPages, onChange }) {
     if (n !== page) onChange(n);
   };
 
-  // 產生頁碼（顯示：1、…、p-1、p、p+1、…、last）
   const pages = [];
-  const windowSize = 1; // 顯示當前左右各 1
+  const windowSize = 1;
   const add = (p) => pages.push(p);
   const addEllipsis = (key) => pages.push(key);
 
@@ -549,6 +550,44 @@ function Pagination({ page, totalPages, onChange }) {
 export default function Home() {
   const container = useRef(null);
 
+  /* ---------- 防滾動鎖：進入/離開本頁都解鎖 ---------- */
+  useEffect(() => {
+    const unlock = () => {
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+    };
+    unlock(); // mount 時解一次
+    return unlock; // unmount 時再解一次
+  }, []);
+
+  /* ---------- Lenis：記得完整銷毀，避免殘留監聽造成無法滾動 ---------- */
+  const lenisRef = useRef(null);
+  useEffect(() => {
+    const lenis = new Lenis({
+      smoothWheel: true,
+      syncTouch: true,
+    });
+    lenisRef.current = lenis;
+
+    let rafId;
+    const raf = (time) => {
+      lenis.raf(time);
+      rafId = requestAnimationFrame(raf);
+    };
+    rafId = requestAnimationFrame(raf);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      try {
+        lenis.destroy(); // ← 關鍵：把 wheel/touch 監聽與樣式恢復
+      } catch {}
+      lenisRef.current = null;
+      // 離開時再保險解一次
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+    };
+  }, []);
+
   const [filters, setFilters] = useState({
     keyword: "",
     city: null,
@@ -565,7 +604,7 @@ export default function Home() {
 
   // 分頁狀態
   const [page, setPage] = useState(1);
-  const PAGE_SIZE = 9; // 一頁 9 筆（對應你的 1/2/3 欄網格）
+  const PAGE_SIZE = 9;
 
   // 右側欄搜尋狀態
   const [sideQ, setSideQ] = useState("");
@@ -578,18 +617,6 @@ export default function Home() {
   const [pageUrl, setPageUrl] = useState("");
   const [toast, setToast] = useState(null); // { type: 'ok'|'warn', text: string }
 
-  // 平滑滾動
-  useEffect(() => {
-    const lenis = new Lenis();
-    let rafId;
-    const raf = (time) => {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
-    };
-    rafId = requestAnimationFrame(raf);
-    return () => cancelAnimationFrame(rafId);
-  }, []);
-
   useEffect(() => {
     if (typeof window !== "undefined") setPageUrl(window.location.href);
   }, []);
@@ -600,7 +627,6 @@ export default function Home() {
     const list = [];
     for (let i = 0; i < total; i++) {
       const base = BASE_CASES[i % BASE_CASES.length];
-      // 產生不同日期（往回推 i 週），確保「最新發佈」排序能看出效果
       const d = new Date(base.date);
       d.setDate(d.getDate() - i * 7);
       const dateStr = d.toISOString().slice(0, 10);
@@ -758,7 +784,7 @@ export default function Home() {
       <section className="flex pt-[100px] max-w-[1920px] py-20 w-[90%] mx-auto flex-col lg:flex-row">
         {/* 左側清單 */}
         <div className="left w-full pr-0 sm:pr-8 lg:w-[70%]">
-          {/* 若要開啟篩選面板，取消註解 */}
+          {/* 篩選面板（保留 UI 與功能） */}
           <Collapsible
             title="篩選條件"
             open={filterOpen}
@@ -870,7 +896,7 @@ export default function Home() {
                 className="transition hover:opacity-90"
                 type="button"
               >
-                {/* IG 圖示（略） */}
+                {/* IG 圖示 */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="40"
@@ -914,7 +940,7 @@ export default function Home() {
                 className="transition hover:opacity-90"
                 type="button"
               >
-                {/* FB 圖示（略） */}
+                {/* FB 圖示 */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="40"
