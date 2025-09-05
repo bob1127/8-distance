@@ -75,14 +75,14 @@ export default function LatestNewsEmbla({ slides = [], title = "最新動態" })
       </div>
 
       {/* 置中容器 */}
-      <div className="relative mx-auto w-full px-4">
+      <div className="relative mx-auto w-full px-0 sm:px-4">
         {/* Viewport */}
         <div
           className="embla__viewport overflow-hidden cursor-grab active:cursor-grabbing"
           ref={emblaRef}
         >
           {/* Container（保持你的版面設定） */}
-          <div className="embla__container flex w-[97%] gap-0 md:gap-4">
+          <div className="embla__container flex w-full sm:w-[97%] gap-0 md:gap-4">
             {slides.map((slide, idx) => (
               <div
                 key={idx}

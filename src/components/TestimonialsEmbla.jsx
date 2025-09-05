@@ -151,6 +151,16 @@ export default function TestimonialsEmbla({
       </div>
 
       <style jsx>{`
+        :global(.embla__container) {
+          gap: 0 !important; /* 覆蓋掉 flex gap */
+          margin-left: -16px; /* 等同原本 gap-4 的 16px */
+          min-width: 0; /* 防止子項目溢出 */
+        }
+        :global(.embla__slide) {
+          padding-left: 16px; /* 用內距補回間距 */
+          box-sizing: border-box;
+          min-width: 0;
+        }
         /* 隱藏 WebKit 捲軸 */
         .embla__viewport::-webkit-scrollbar {
           display: none;

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useEffect } from "react";
+import { useEffect, useState, useMemo } from "react";
 import Marquee from "react-fast-marquee";
 import Image from "next/image";
 import Link from "next/link";
@@ -30,7 +30,7 @@ export default function Content() {
   return (
     <div
       id="dark-section"
-      className="pb-2  pt-20 sm:pt-[300px] md:pt-[360px] xl:pt-[380px] 2xl:pt-[350px] bg-[#222422] bg-left bg-no-repeat bg-cover py-8 2xl:px-[200px] lg:px-[150px] px-[40px] h-full  w-full flex flex-col justify-center"
+      className="pb-2  pt-20 sm:pt-[300px] mxa-w-[1920px] mx-auto md:pt-[360px] xl:pt-[380px] 2xl:pt-[350px] bg-[#222422] bg-left bg-no-repeat bg-cover py-8 2xl:px-[100px] xl:px-[100px] px-[40px] h-full  w-full flex flex-col justify-center"
     >
       <Section2 />
       <div className=" md:w-1/2 max-w-[900px] flex justify-start"></div>
@@ -377,37 +377,71 @@ const Section2 = () => {
   );
 };
 
-const Nav = () => {
+function Nav() {
+  // 檔案最上面（Content/Nav 外面）
+  const LOCATIONS = [
+    {
+      id: "taichung",
+      label: "台中設計辦公室",
+      map: "https://miro.medium.com/v2/resize:fit:720/format:webp/1*KaEGyehJJqsOupp7wpmBXA.png",
+      title: "捌程室內設計",
+      address: "台中市 ○○區 ○○路 123 號",
+      phone: "04-23720128（室內設計部門）",
+      gmap: "https://maps.google.com/?q=台中市",
+    },
+    {
+      id: "tianwei",
+      label: "田尾總部",
+      map: "https://miro.medium.com/v2/resize:fit:720/format:webp/1*KaEGyehJJqsOupp7wpmBXA.png",
+      title: "捌程室內設計",
+      address: "彰化縣田尾鄉 ○○路 88 號",
+      phone: "0986-272188（張特助）",
+      gmap: "https://maps.google.com/?q=彰化縣田尾鄉",
+    },
+    {
+      id: "yuanlin",
+      label: "員林設計辦公室",
+      map: "https://miro.medium.com/v2/resize:fit:720/format:webp/1*KaEGyehJJqsOupp7wpmBXA.png",
+      title: "捌程室內設計",
+      address: "彰化縣員林市 ○○路 66 號",
+      phone: "（預留）",
+      gmap: "https://maps.google.com/?q=彰化縣員林市",
+    },
+  ];
+
+  const [active, setActive] = useState("taichung");
+  const current = useMemo(
+    () => LOCATIONS.find((l) => l.id === active) ?? LOCATIONS[0],
+    [active]
+  );
+
   return (
-    <div className=" shrink-0 gap-2 pt-10 ">
-      <div className="middle flex  flex-col lg:flex-row">
-        <div className=" w-full lg:w-[40%]">
+    <div className="shrink-0 gap-2 pt-20 w-full">
+      {/* 兩欄：左側清單 + 右側地圖卡 */}
+      <div className="middle flex flex-col lg:flex-row">
+        {/* 左側：原連結清單 */}
+        <div className="w-full lg:w-[40%]">
           <div className="grid grid-cols-2">
-            <div className="flex py-8 flex-col">
+            <div className="flex py-0 sm:py-8 flex-col">
               <div className="flex flex-col">
                 <b className="text-gray-400 text-[16px]">設計類型</b>
                 <Link href="/note" className="mt-2">
-                  {" "}
                   <span className="text-[.8rem] text-white mt-1">室內設計</span>
                 </Link>
                 <Link href="/note" className="mt-2">
-                  {" "}
                   <span className="text-[.8rem] text-white mt-1">老屋改造</span>
                 </Link>
                 <Link href="/note" className="mt-2">
-                  {" "}
                   <span className="text-[.8rem] text-white mt-1">住宅空間</span>
                 </Link>
                 <Link href="/note" className="mt-2">
-                  {" "}
                   <span className="text-[.8rem] text-white mt-1">商業空間</span>
                 </Link>
               </div>
             </div>
-            <div className="flex pl-8 py-8 flex-col">
+            <div className="flex pl-0 py-0 sm:pl-8 sm:py-8 flex-col">
               <div className="flex flex-col">
                 <b className="text-gray-400 text-[16px]">關於我們</b>
-
                 <span className="text-[.8rem] text-white mt-1">信箱：</span>
                 <span className="text-[.8rem] text-white mt-1">
                   室內設計｜8distancee@gmail.com
@@ -426,66 +460,81 @@ const Nav = () => {
             </div>
           </div>
         </div>
-        <div className=" w-full lg:w-[60%] pb-5 flex justify-start lg:justify-end">
-          <div className="map pr-8">
+
+        {/* 右側：地圖卡 + Tabs（黏在地圖上方） */}
+        <div className="w-full lg:w-[60%] pb-5  mt-10 sm:mt-0 flex flex-col lg:flex-row items-start lg:items-end justify-start lg:justify-end gap-4">
+          <div className="relative w-full mt-5 max-w-[500px]">
+            {/* Tabs：放在地圖容器內，貼在左上角 */}
+            <div
+              role="tablist"
+              aria-label="營業據點切換"
+              className="absolute w-auto top-[-40px] left-0 sm:left-3 z-10 inline-flex  bg-black/50 backdrop-blur px-1 py-1 border border-white/10"
+            >
+              {LOCATIONS.map((loc) => {
+                const isActive = loc.id === active;
+                return (
+                  <button
+                    key={loc.id}
+                    role="tab"
+                    aria-selected={isActive}
+                    onClick={() => setActive(loc.id)}
+                    className={[
+                      "px-2 py-1 text-[13px] sm:text-[14px]  transition",
+                      "focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40",
+                      isActive
+                        ? "bg-white text-black"
+                        : "text-gray-200 hover:text-white hover:bg-white/10",
+                    ].join(" ")}
+                  >
+                    {loc.label}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* 地圖圖像 */}
             <img
-              src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*KaEGyehJJqsOupp7wpmBXA.png"
-              className="w-[500px] h-[250px] "
+              src={current.map}
+              alt={`${current.label} 地圖`}
+              className="w-full h-[220px] object-cover  border border-white/10"
             />
           </div>
-          <div className=" flex flex-col items-end justify-end">
-            <div className="w-full flex justify-end">
-              {" "}
-              <b className="text-[#dedede] text-[20px] font-normal">營業據點</b>
-            </div>
-            <div className="flex group flex-row items-center">
-              <span className="text-[14px] mr-2 mt-1 text-gray-400 location">
-                台中設計辦公室
-              </span>
-              <button class=" relative text-[14px] h-5 rounded-full   text-neutral-50">
-                <span class="relative inline-flex overflow-hidden">
-                  <div class="translate-y-0  skew-y-0 transition duration-500 group-hover:-translate-y-[110%] group-hover:skew-y-10">
-                    捌程室內設計
-                  </div>
-                  <div class="absolute translate-y-[110%] skew-y-10 transition duration-500 group-hover:translate-y-0 group-hover:skew-y-0">
-                    捌程室內設計
-                  </div>
-                </span>
-              </button>
-            </div>
-            <div className="flex group flex-row items-center">
-              <span className="text-[14px] mr-2 mt-1 text-gray-400 location">
-                田尾總部
-              </span>
-              <button class=" relative text-[14px] h-5 rounded-full   text-neutral-50">
-                <span class="relative inline-flex overflow-hidden">
-                  <div class="translate-y-0  skew-y-0 transition duration-500 group-hover:-translate-y-[110%] group-hover:skew-y-10">
-                    捌程室內設計
-                  </div>
-                  <div class="absolute translate-y-[110%] skew-y-10 transition duration-500 group-hover:translate-y-0 group-hover:skew-y-0">
-                    捌程室內設計
-                  </div>
-                </span>
-              </button>
-            </div>
-            <div className="flex group flex-row items-center">
-              <span className="text-[14px] mr-2 mt-1 text-gray-400 location">
-                員林設計辦公室
-              </span>
-              <button class=" relative text-[14px] h-5 rounded-full   text-neutral-50">
-                <span class="relative inline-flex overflow-hidden">
-                  <div class="translate-y-0  skew-y-0 transition duration-500 group-hover:-translate-y-[110%] group-hover:skew-y-10">
-                    捌程室內設計
-                  </div>
-                  <div class="absolute translate-y-[110%] skew-y-10 transition duration-500 group-hover:translate-y-0 group-hover:skew-y-0">
-                    捌程室內設計
-                  </div>
-                </span>
-              </button>
+
+          {/* 右側資訊 */}
+          <div className="sm:flex hidden  flex-col items-start lg:items-end justify-end w-full lg:w-auto">
+            {/* 可點擊的地點列表（同步切換 Tab） */}
+            <div className="mt-5 space-y-1">
+              {LOCATIONS.map((loc) => {
+                const isActive = loc.id === active;
+                return (
+                  <button
+                    key={loc.id}
+                    onClick={() => setActive(loc.id)}
+                    className={[
+                      "group flex flex-row items-center text-left",
+                      isActive ? "opacity-100" : "opacity-70 hover:opacity-100",
+                    ].join(" ")}
+                  >
+                    <span className="text-[14px] mr-2 mt-1 text-gray-400 location">
+                      {loc.label}
+                    </span>
+                    <span className="relative text-[14px] h-5 rounded-full text-neutral-50">
+                      <span className="relative inline-flex overflow-hidden">
+                        <span className="translate-y-0 skew-y-0 transition duration-500 group-hover:-translate-y-[110%] group-hover:skew-y-10">
+                          捌程室內設計
+                        </span>
+                        <span className="absolute translate-y-[110%] skew-y-10 transition duration-500 group-hover:translate-y-0 group-hover:skew-y-0">
+                          捌程室內設計
+                        </span>
+                      </span>
+                    </span>
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>
       </div>
     </div>
   );
-};
+}

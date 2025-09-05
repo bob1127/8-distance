@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 
-/* ✅ 引入 Swiper React（只用來跑公告輪播） */
+/* ✅ 公告輪播（僅手機） */
 import { Swiper as SwiperReact, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
@@ -12,7 +12,7 @@ export default function ExoApeOverlayMenu({ children }) {
   const rootRef = useRef(null);
   const noticeSwiperRef = useRef(null);
 
-  // ✅ 公告內容（自行調整）
+  // ✅ 公告內容
   const notices = ["歡迎來到捌程室內設計", "官網全新上線！！"];
 
   useEffect(() => {
@@ -40,25 +40,22 @@ export default function ExoApeOverlayMenu({ children }) {
       "!bg-transparent",
       "origin-top-right",
     ];
-    const addActiveClasses = () => {
-      if (container) container.classList.add(...ACTIVE_CLASSES);
-    };
-    const removeActiveClasses = () => {
-      if (container) container.classList.remove(...ACTIVE_CLASSES);
-    };
+    const addActiveClasses = () => container?.classList.add(...ACTIVE_CLASSES);
+    const removeActiveClasses = () =>
+      container?.classList.remove(...ACTIVE_CLASSES);
 
-    // 手機才需要撐滿高度；桌機直接跳過
+    // 僅手機撐滿視窗高，避免旋轉/縮放時破版
     const setContainerMinHeight = () => {
       if (!container) return;
       if (window.matchMedia("(min-width: 768px)").matches) {
-        container.style.minHeight = ""; // 桌機不用
+        container.style.minHeight = "";
       } else {
-        container.style.minHeight = `${window.innerHeight}px`; // 手機固定視窗高
+        container.style.minHeight = `${window.innerHeight}px`;
       }
     };
 
     // 初次設定 + 監聽
-    container && (container.style.minHeight = "");
+    setContainerMinHeight();
     const onResize = () => setContainerMinHeight();
     window.addEventListener("resize", onResize);
     window.addEventListener("load", onResize);
@@ -182,7 +179,7 @@ export default function ExoApeOverlayMenu({ children }) {
             isOpen = true;
             isAnimating = false;
             menuToggle?.setAttribute("aria-expanded", "true");
-            document.documentElement.style.overflow = "hidden";
+            document.documentElement.style.overflow = "hidden"; // 鎖定頁面
             setContainerMinHeight();
           },
         });
@@ -238,9 +235,8 @@ export default function ExoApeOverlayMenu({ children }) {
               { y: "120%", opacity: 0.25 }
             );
             resetPreviewImage();
-            document.documentElement.style.overflow = "";
-
-            menuOverlay.style.pointerEvents = "none";
+            document.documentElement.style.overflow = ""; // 解鎖頁面
+            if (menuOverlay) menuOverlay.style.pointerEvents = "none";
             removeActiveClasses();
             setContainerMinHeight();
           },
@@ -257,7 +253,11 @@ export default function ExoApeOverlayMenu({ children }) {
       if (!imgSrc || !menuPreviewImg) return;
 
       const imgs = menuPreviewImg.querySelectorAll("img");
-      if (imgs.length > 0 && imgs[imgs.length - 1].src.endsWith(imgSrc)) return;
+      if (
+        imgs.length > 0 &&
+        imgs[imgs.length - 1].getAttribute("src")?.endsWith(imgSrc)
+      )
+        return;
 
       const newImg = document.createElement("img");
       newImg.src = imgSrc;
@@ -279,7 +279,8 @@ export default function ExoApeOverlayMenu({ children }) {
     };
 
     const handleLinkClick = (e) => {
-      const href = e.currentTarget.getAttribute("href") || "#";
+      const a = e.currentTarget;
+      const href = a.getAttribute("href") || "#";
       if (href.startsWith("#") || href === "#") e.preventDefault();
       closeMenu();
     };
@@ -317,8 +318,8 @@ export default function ExoApeOverlayMenu({ children }) {
 
   return (
     <div ref={rootRef} className="exoape-menu-root z-[60]">
-      {/* ✅ 手機公告條（橘色；使用 Swiper 垂直輪播；顯示在 nav 上方） */}
-      <div className="md:hidden fixed top-0 inset-x-0 z-[70] bg-[#E1A95F]  text-white">
+      {/* ✅ 手機公告條（最上層，確保不被覆蓋） */}
+      <div className="md:hidden fixed top-0 inset-x-0 z-[100] bg-[#E1A95F] text-white">
         <div className="h-9">
           <SwiperReact
             modules={[Autoplay]}
@@ -330,14 +331,14 @@ export default function ExoApeOverlayMenu({ children }) {
             autoplay={{
               delay: 3000,
               disableOnInteraction: false,
-              pauseOnMouseEnter: true, // 滑鼠移上去暫停（行動裝置不影響）
+              pauseOnMouseEnter: true,
             }}
             onSwiper={(sw) => (noticeSwiperRef.current = sw)}
             className="h-9"
           >
             {notices.map((t, i) => (
               <SwiperSlide key={i}>
-                <div className="h-9 flex items-center px-4 mx-auto text-center  justify-center  text-[13px] whitespace-nowrap">
+                <div className="h-9 flex items-center px-4 mx-auto text-center justify-center text-[13px] whitespace-nowrap">
                   {t}
                 </div>
               </SwiperSlide>
@@ -346,15 +347,23 @@ export default function ExoApeOverlayMenu({ children }) {
         </div>
       </div>
 
-      {/* 手機頂欄（桌機隱藏） → 位移到公告條下方 */}
-      <nav className="md:hidden fixed top-9 inset-x-0 z-[60] flex items-center justify-between px-5 py-2 bg-black/60 backdrop-blur border-b border-white/10">
+      {/* ✅ 手機頂欄（公告條下方；層級高於 overlay/container） */}
+      <nav
+        className="
+          md:hidden fixed top-9 inset-x-0 z-[95]
+          flex items-center justify-between
+          pl-[max(env(safe-area-inset-left),1.25rem)]
+          pr-[max(env(safe-area-inset-right),1.25rem)]
+          py-2 bg-black/60 backdrop-blur border-b border-white/10
+        "
+      >
         <div className="font-semibold text-white">
           <a href="/" aria-label="Brand">
             8-DISTANCE
           </a>
         </div>
 
-        {/* 三條線漢堡按鈕 */}
+        {/* 漢堡按鈕 */}
         <button
           className="menu-toggle !z-50 relative w-11 h-11 inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/5"
           type="button"
@@ -368,16 +377,16 @@ export default function ExoApeOverlayMenu({ children }) {
         </button>
       </nav>
 
-      {/* 手機 Overlay（桌機隱藏） */}
+      {/* ✅ 手機 Overlay（覆蓋內容，但不蓋 nav/公告條） */}
       <div
         id="exoape-menu-overlay"
-        className="menu-overlay md:hidden fixed inset-0 bg-[#0f0f0f] z-[50]"
+        className="menu-overlay md:hidden fixed inset-0 bg-[#0f0f0f] z-[90] h-[100dvh]"
         style={{ clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)" }}
         role="dialog"
         aria-modal="true"
       >
         <div
-          className="menu-content relative w-full h-full flex items-center justify中心 origin-bottom-left opacity-25"
+          className="menu-content relative w-full h-full flex items-center justify-center origin-bottom-left opacity-25"
           style={{
             transform:
               "translateX(-100px) translateY(-100px) scale(1.5) rotate(-15deg)",
@@ -385,35 +394,50 @@ export default function ExoApeOverlayMenu({ children }) {
         >
           <div className="menu-items w-full flex flex-wrap gap-5 px-5 py-8 text-white">
             {/* 連結區 */}
-            <div className="col-sm order-1 basis-full flex flex-col gap-8">
+            <div className="col-sm order-1 basis-full flex flex-col gap-6">
               <div className="menu-links flex flex-col gap-2">
                 {[
                   {
                     label: "關於我們",
-                    img: "/images/project-01/img02.jpg",
                     href: "/about",
+                    img: "/images/project-01/img02.jpg",
+                  },
+                  {
+                    label: "最新動態",
+                    href: "/news",
+                    img: "/images/project-01/img03.jpg",
                   },
                   {
                     label: "作品欣賞",
-                    img: "/images/project-01/img03.jpg",
-                    href: "/#core",
+                    href: "/note",
+                    img: "/images/project-01/img04.jpg",
                   },
                   {
                     label: "服務流程",
-                    img: "/images/project-01/img04.jpg",
-                    href: "/#signals",
+                    href: "/service",
+                    img: "/images/project-01/img05.jpg",
                   },
                   {
                     label: "設計靈感",
-                    img: "/images/project-01/img05.jpg",
-                    href: "/#connect",
+                    href: "/blog",
+                    img: "/images/project-01/img06.jpg",
+                  },
+                  {
+                    label: "QA",
+                    href: "/qa",
+                    img: "/images/project-01/img07.jpg",
+                  },
+                  {
+                    label: "聯絡我們",
+                    href: "/contact",
+                    img: "/images/project-01/img07.jpg",
                   },
                 ].map((item) => (
                   <div key={item.label} className="link pb-1">
                     <a
                       href={item.href}
                       data-img={item.img}
-                      className="inline-block text-[2.25rem] leading-none tracking-tight text白色 opacity-25 translate-y-[120%] transition-colors hover:opacity-100"
+                      className="inline-block text-[2rem] leading-none tracking-tight text-white opacity-25 translate-y-[120%] transition-colors hover:opacity-100"
                     >
                       {item.label}
                     </a>
@@ -464,8 +488,8 @@ export default function ExoApeOverlayMenu({ children }) {
         </div>
       </div>
 
-      {/* 只有手機才有效果的 exo-container；桌機上不影響排版（display:contents） */}
-      <div className="exo-container md:contents">{children}</div>
+      {/* ✅ 內容容器：手機上維持較低層級，桌機不影響排版 */}
+      <div className="exo-container md:contents z-[10]">{children}</div>
 
       <style jsx>{`
         a,
@@ -512,9 +536,9 @@ export default function ExoApeOverlayMenu({ children }) {
         .menu-overlay {
           position: fixed;
           width: 100%;
-          height: auto;
+          height: 100dvh; /* ✅ 滿版高度，避免手機 auto 導致破版 */
           background-color: #0f0f0f;
-          z-index: 50;
+          z-index: 90;
           clip-path: polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%);
         }
         .menu-content {
@@ -567,8 +591,9 @@ export default function ExoApeOverlayMenu({ children }) {
           will-change: transform;
           transition: color 0.5s;
         }
+        /* ✅ 字級已微縮為 2rem */
         .link a {
-          font-size: 2.25rem;
+          font-size: 2rem;
           letter-spacing: -0.02rem;
         }
         .social a {
@@ -611,15 +636,16 @@ export default function ExoApeOverlayMenu({ children }) {
           transform-origin: left;
         }
 
-        /* 手機：保留原本絕對定位與 transform-origin，以符合你的動效 */
+        /* ✅ 手機：保持絕對定位以符合旋轉動效 */
         .exo-container {
           position: absolute;
           width: 100%;
           will-change: transform;
           transform-origin: right top;
+          z-index: 10; /* 低於 nav/overlay，避免把按鈕蓋住 */
         }
 
-        /* 桌機（≥768px）：把 exo-container 變成不影響排版（display:contents） */
+        /* ✅ 桌機（≥768px）：不影響排版 */
         @media (min-width: 768px) {
           .exo-container {
             position: static !important;
@@ -627,6 +653,7 @@ export default function ExoApeOverlayMenu({ children }) {
             min-height: 0 !important;
             transform: none !important;
             will-change: auto !important;
+            z-index: auto !important;
           }
         }
       `}</style>
