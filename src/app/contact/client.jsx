@@ -4,8 +4,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
+
 /* --------------------------- 設定與小工具 --------------------------- */
 const STEPS = ["個人資料", "房屋資訊", "設計需求"]; // 正確步驟順序
+const isNonEmpty = (v) => String(v ?? "").trim().length > 0;
 
 function Section({ title, subtitle, children }) {
   return (
@@ -20,69 +22,56 @@ function Section({ title, subtitle, children }) {
 }
 
 /* 整卡可點的單選 */
+// 原本 <div ...> ... </div> 全部換成：
 function ChoiceCard({ name, value, current, onChange, children }) {
   const active = current === value;
-  const toggle = () => onChange(value);
   const onKey = (e) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
-      toggle();
+      onChange(value);
     }
   };
   return (
-    <div
-      role="radio"
-      aria-checked={active}
-      tabIndex={0}
+    <button
+      type="button"
+      aria-pressed={active}
+      data-name={name}
       onKeyDown={onKey}
-      onClick={toggle}
-      className={`rounded-xl border p-3 cursor-pointer transition select-none
-      ${
+      onClick={() => onChange(value)}
+      className={`rounded-xl border p-3 cursor-pointer transition select-none text-left ${
         active
           ? "border-neutral-900 bg-neutral-50"
           : "border-neutral-200 hover:border-neutral-400"
       }`}
     >
-      <input
-        type="radio"
-        name={name}
-        value={value}
-        checked={active}
-        readOnly
-        className="hidden"
-      />
       <div className="text-sm">{children}</div>
-    </div>
+    </button>
   );
 }
 
 /* 整卡可點的複選 */
 function MultiChoiceCard({ value, values, onToggle, children }) {
   const active = values.includes(value);
-  const toggle = () => onToggle(value);
   const onKey = (e) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
-      toggle();
+      onToggle(value);
     }
   };
   return (
-    <div
-      role="checkbox"
-      aria-checked={active}
-      tabIndex={0}
+    <button
+      type="button"
+      aria-pressed={active}
       onKeyDown={onKey}
-      onClick={toggle}
-      className={`rounded-xl border p-3 cursor-pointer transition select-none
-      ${
+      onClick={() => onToggle(value)}
+      className={`rounded-xl border p-3 cursor-pointer transition select-none text-left ${
         active
           ? "border-neutral-900 bg-neutral-50"
           : "border-neutral-200 hover:border-neutral-400"
       }`}
     >
-      <input type="checkbox" checked={active} readOnly className="hidden" />
       <div className="text-sm">{children}</div>
-    </div>
+    </button>
   );
 }
 
@@ -118,7 +107,7 @@ function LoanHelpModal({ open, onClose }) {
     if (open) window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
-  // ====== 來自 Excel 的內容（已整理）======
+
   const loanNews = {
     title: "最新消息 | 2025 全新裝修分期：輕鬆打造您的夢想家園！",
     intro:
@@ -197,7 +186,7 @@ function LoanHelpModal({ open, onClose }) {
             transition={{ type: "spring", stiffness: 300, damping: 28 }}
           >
             {/* Header */}
-            <div className="flex items-center justify-between  border-b border-neutral-200 px-6 py-4">
+            <div className="flex items-center justify-between border-b border-neutral-200 px-6 py-4">
               <h3 className="text-base font-semibold">協助貸款資訊</h3>
               <button
                 onClick={onClose}
@@ -207,7 +196,6 @@ function LoanHelpModal({ open, onClose }) {
               </button>
             </div>
 
-            {/* Body */}
             {/* Body */}
             <div className="overflow-y-auto px-6 py-5 space-y-6">
               {/* 標題＋導言 */}
@@ -219,7 +207,7 @@ function LoanHelpModal({ open, onClose }) {
               </section>
 
               {/* 合作說明 */}
-              <section className="rounded-2xl border border-neutral-200  !bg-[#daa335] p-4 sm:p-5 bg-neutral-50/60">
+              <section className="rounded-2xl border border-neutral-200 !bg-[#daa335] p-4 sm:p-5 bg-neutral-50/60">
                 <div className="mb-3 font-medium">
                   {loanNews.partnerBlock[0]}
                 </div>
@@ -305,7 +293,7 @@ function LoanHelpModal({ open, onClose }) {
 
               {/* 注意事項 */}
               <section className="rounded-2xl border border-neutral-200 p-4">
-                <h4 className="font-medium mb-2">注意事項</h4>
+                <h4 className="text-sm font-medium mb-2">注意事項</h4>
                 <ul className="list-disc pl-5 space-y-1 text-sm text-neutral-700">
                   {loanNews.notes.map((n, i) => (
                     <li key={i}>{n}</li>
@@ -313,15 +301,13 @@ function LoanHelpModal({ open, onClose }) {
                 </ul>
               </section>
 
-              {/* 你原本的流程/準備資料 -> 保留，但預設折疊，避免資訊過長 */}
-              {/* 更多：流程與準備資料（移到注意事項前面，強化可見性） */}
+              {/* 更多：流程與準備資料（保留示意） */}
               <details
                 className="group border-t border-neutral-200 pt-4 rounded-lg"
                 open
               >
                 <summary className="flex items-center justify-between cursor-pointer text-sm font-medium select-none px-2 py-2 rounded-lg hover:bg-neutral-50">
                   <span>更多：流程與準備資料</span>
-                  {/* 自訂箭頭，避免瀏覽器把預設 marker 藏起來 */}
                   <svg
                     className="w-4 h-4 text-neutral-500 transition-transform group-open:rotate-180"
                     viewBox="0 0 20 20"
@@ -372,11 +358,137 @@ function LoanHelpModal({ open, onClose }) {
   );
 }
 
+/* ------------------------------- 流程說明 Popup ------------------------------- */
+function FlowHelpModal({ open, onClose }) {
+  useEffect(() => {
+    if (open) document.body.style.overflow = "hidden";
+    else document.body.style.overflow = "";
+    return () => (document.body.style.overflow = "");
+  }, [open]);
+
+  useEffect(() => {
+    const onKey = (e) => e.key === "Escape" && onClose();
+    if (open) window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, onClose]);
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          className="fixed inset-0 z-[999999999] flex items-center justify-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={onClose}
+            aria-hidden="true"
+          />
+          <motion.div
+            role="dialog"
+            aria-modal="true"
+            className="relative z-[81] w-[min(900px,94vw)] max-h-[88svh] overflow-y-auto rounded-2xl bg-white shadow-xl border border-neutral-200"
+            initial={{ y: 16, scale: 0.98, opacity: 0 }}
+            animate={{ y: 0, scale: 1, opacity: 1 }}
+            exit={{ y: 16, scale: 0.98, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 300, damping: 28 }}
+          >
+            <div className="flex items-center justify-between border-b border-neutral-200 px-6 py-4">
+              <h3 className="text-base font-semibold">流程說明</h3>
+              <button
+                onClick={onClose}
+                className="rounded-lg border border-neutral-200 px-3 py-1.5 text-sm hover:border-neutral-900"
+              >
+                關閉
+              </button>
+            </div>
+
+            <div className="px-6 py-5 space-y-6 text-sm leading-relaxed text-neutral-800">
+              <section className="space-y-2">
+                <h4 className="text-lg font-semibold">服務流程一覽</h4>
+                <p>
+                  以下為捌程室內設計標準服務流程，讓你清楚掌握每一階段的重點與交付內容。
+                </p>
+              </section>
+
+              <ol className="list-decimal pl-5 space-y-10">
+                <li>
+                  <h5 className="font-semibold">初步諮詢（免費）</h5>
+                  <p className="mt-1">
+                    了解現況與需求：坪數、格局、風格、預算、時程。提供過往作品與初步建議。
+                  </p>
+                </li>
+                <li>
+                  <h5 className="font-semibold">現場丈量與需求釐清</h5>
+                  <p className="mt-1">
+                    專員到場丈量、拍照與紀錄，釐清細節（動線、收納與設備需求）。
+                  </p>
+                </li>
+                <li>
+                  <h5 className="font-semibold">平面配置提案</h5>
+                  <p className="mt-1">
+                    提供 2–3
+                    版平面配置，說明優劣與動線。確認方向後進入設計合約。
+                  </p>
+                </li>
+                <li>
+                  <h5 className="font-semibold">設計合約＆3D 模擬</h5>
+                  <p className="mt-1">
+                    簽訂設計合約並進入 3D
+                    模擬（材質、色彩、燈光氛圍），同步進行基本機電整合。
+                  </p>
+                </li>
+                <li>
+                  <h5 className="font-semibold">施工圖與工程報價</h5>
+                  <p className="mt-1">
+                    繪製完整施工圖、統整材料與設備明細，提供分項工程報價與時程規劃。
+                  </p>
+                </li>
+                <li>
+                  <h5 className="font-semibold">簽訂工程合約＆開工</h5>
+                  <p className="mt-1">
+                    確認報價與期程後簽約，安排進場。提供 LINE
+                    群組與定期進度回報。
+                  </p>
+                </li>
+                <li>
+                  <h5 className="font-semibold">完工驗收與交屋</h5>
+                  <p className="mt-1">
+                    依驗收清單逐項確認品質，完成後交屋並提供保固維護說明。
+                  </p>
+                </li>
+                <li>
+                  <h5 className="font-semibold">售後保固與維護</h5>
+                  <p className="mt-1">
+                    依合約提供保固；若有使用或維護疑問，隨時與我們聯繫。
+                  </p>
+                </li>
+              </ol>
+
+              <section className="rounded-2xl border border-neutral-200 p-4 bg-neutral-50">
+                <h5 className="font-semibold">費用說明（摘要）</h5>
+                <ul className="list-disc pl-5 mt-2 space-y-1">
+                  <li>設計費：每坪 $6500 起（未稅）。</li>
+                  <li>工程：最低承接總額 100 萬。</li>
+                  <li>實際以現場狀況、材料與工項核算。</li>
+                </ul>
+              </section>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
 /* --------------------------------- 主頁面 --------------------------------- */
 export default function AppointmentFormPage() {
   const [step, setStep] = useState(0);
   const [direction, setDirection] = useState(0); // -1 往左, 1 往右
   const [loanOpen, setLoanOpen] = useState(false);
+  const [flowOpen, setFlowOpen] = useState(false);
 
   // 表單資料
   const [form, setForm] = useState({
@@ -387,7 +499,7 @@ export default function AppointmentFormPage() {
     phone: "",
     lineId: "",
     email: "",
-    ref: "",
+    ref: "", // ← 改為自由輸入（必填）
     referrer: "",
 
     // Step 2 房屋資訊
@@ -420,25 +532,33 @@ export default function AppointmentFormPage() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [step]);
+  }, [step, form]); // 保持最新狀態
 
-  // 驗證（依順序）
+  // 小工具：安全字串檢查
+  const isNonEmpty = (v) => typeof v === "string" && v.trim().length > 0;
+
+  // 驗證（依當前步驟檢查）
   const validate = (s = step) => {
     if (s === 0) {
       return (
-        form.name &&
-        form.gender &&
-        form.age &&
-        form.phone &&
-        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email) &&
-        form.ref
+        isNonEmpty(form.name) &&
+        isNonEmpty(form.gender) &&
+        isNonEmpty(form.age) &&
+        isNonEmpty(form.phone) &&
+        isNonEmpty(form.lineId) && // ← Line ID 必填
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(form.email).trim()) &&
+        isNonEmpty(form.ref) // ← 從哪裡得知（自由輸入）必填
       );
     }
     if (s === 1) {
-      return form.region && form.houseStatus && form.sizeRange;
+      return (
+        isNonEmpty(form.region) &&
+        isNonEmpty(form.houseStatus) &&
+        isNonEmpty(form.sizeRange)
+      );
     }
     if (s === 2) {
-      return form.need && form.budget && form.agree;
+      return isNonEmpty(form.need) && isNonEmpty(form.budget) && !!form.agree;
     }
     return true;
   };
@@ -471,13 +591,8 @@ export default function AppointmentFormPage() {
 
   const progress = useMemo(() => ((step + 1) / STEPS.length) * 100, [step]);
   const setF = (patch) => setForm((f) => ({ ...f, ...patch }));
-  const toggleStyle = (v) =>
-    setForm((f) => ({
-      ...f,
-      styles: f.styles.includes(v)
-        ? f.styles.filter((x) => x !== v)
-        : [...f.styles, v],
-    }));
+  const canNext = validate(step);
+  const canSubmit = step === 2 && validate(2);
 
   /* ------------------------------ UI 版型 ------------------------------ */
   return (
@@ -490,10 +605,11 @@ export default function AppointmentFormPage() {
           loading="lazy"
           fill
           className="object-cover w-full"
-        ></Image>
+        />
       </div>
+
       <div className="mx-auto w-full max-w-3xl px-4 py-8">
-        {/* 標題（第一版排版） */}
+        {/* 標題 */}
         <header className="mb-6 flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-semibold tracking-wide">
@@ -520,7 +636,7 @@ export default function AppointmentFormPage() {
           </div>
         </header>
 
-        {/* 進度條（第一版風格） */}
+        {/* 進度條 */}
         <div className="h-2 w-full rounded-full bg-neutral-100 mb-6 overflow-hidden">
           <div
             className="h-full bg-[#daa335] transition-all duration-500"
@@ -531,7 +647,7 @@ export default function AppointmentFormPage() {
         {/* 表單卡片 */}
         <form
           onSubmit={handleSubmit}
-          className="relative rounded-2xl  p-5 sm:p-8 shadow-sm"
+          className="relative rounded-2xl p-5 sm:p-8 shadow-sm"
         >
           <AnimatePresence mode="wait" custom={direction}>
             <motion.div
@@ -543,13 +659,26 @@ export default function AppointmentFormPage() {
               exit="exit"
               transition={{ type: "spring", stiffness: 300, damping: 35 }}
             >
-              {/* STEP 1：個人資料（略）—— 內容與前版相同 */}
+              {/* STEP 1：個人資料 */}
               {step === 0 && (
                 <>
                   <Section
                     title="歡迎先參閱我們的流程說明"
-                    subtitle="這裡要套用停留的顏色效果以及插入連結讓使用者可切換"
+                    subtitle={
+                      <span>
+                        若想更了解合作方式，請點擊
+                        <button
+                          type="button"
+                          onClick={() => setFlowOpen(true)}
+                          className="ml-1 underline underline-offset-2 decoration-2 text-blue-600 hover:opacity-80"
+                          title="查看流程說明"
+                        >
+                          流程說明
+                        </button>
+                      </span>
+                    }
                   />
+
                   {/* 姓名 */}
                   <Section title="姓名 *">
                     <input
@@ -560,6 +689,7 @@ export default function AppointmentFormPage() {
                       onChange={(e) => setF({ name: e.target.value })}
                     />
                   </Section>
+
                   {/* 稱謂 */}
                   <Section title="稱謂 *">
                     <div className="grid gap-3 grid-cols-2">
@@ -576,6 +706,7 @@ export default function AppointmentFormPage() {
                       ))}
                     </div>
                   </Section>
+
                   {/* 年齡 */}
                   <Section title="年齡 *">
                     <div className="grid gap-3 grid-cols-1 sm:grid-cols-3">
@@ -598,6 +729,7 @@ export default function AppointmentFormPage() {
                       ))}
                     </div>
                   </Section>
+
                   {/* 聯絡 */}
                   <Section title="手機號碼 *">
                     <input
@@ -608,15 +740,16 @@ export default function AppointmentFormPage() {
                       onChange={(e) => setF({ phone: e.target.value })}
                     />
                   </Section>
-                  <Section title="LINE ID">
+                  <Section title="LINE ID *">
                     <input
                       type="text"
-                      placeholder="請留帳號便於聯絡"
+                      placeholder="請留 LINE ID（必填）"
                       className="w-full rounded-xl border border-neutral-200 px-4 py-3 outline-none focus:ring-2 focus:ring-neutral-800"
                       value={form.lineId}
                       onChange={(e) => setF({ lineId: e.target.value })}
                     />
                   </Section>
+
                   <Section title="Email *">
                     <input
                       type="email"
@@ -626,6 +759,7 @@ export default function AppointmentFormPage() {
                       onChange={(e) => setF({ email: e.target.value })}
                     />
                   </Section>
+
                   <Section title="推薦人姓名">
                     <input
                       type="text"
@@ -635,27 +769,20 @@ export default function AppointmentFormPage() {
                       onChange={(e) => setF({ referrer: e.target.value })}
                     />
                   </Section>
+
                   <Section title="從哪裡得知我們 *">
-                    <div className="grid gap-3 grid-cols-1 sm:grid-cols-3">
-                      {["FB", "IG", "自主搜尋", "廣告", "親友", "其他"].map(
-                        (label) => (
-                          <ChoiceCard
-                            key={label}
-                            name="ref"
-                            value={label}
-                            current={form.ref}
-                            onChange={(val) => setF({ ref: val })}
-                          >
-                            {label}
-                          </ChoiceCard>
-                        )
-                      )}
-                    </div>
+                    <input
+                      type="text"
+                      placeholder="例：IG、FB、搜尋、親友介紹…（必填）"
+                      className="w-full border-0 border-b border-neutral-300 bg-transparent px-1 py-2 outline-none focus:border-neutral-900"
+                      value={form.ref}
+                      onChange={(e) => setF({ ref: e.target.value })}
+                    />
                   </Section>
                 </>
               )}
 
-              {/* STEP 2：房屋資訊（略）—— 與前版相同 */}
+              {/* STEP 2：房屋資訊 */}
               {step === 1 && (
                 <>
                   <Section title="家庭人口">
@@ -676,6 +803,7 @@ export default function AppointmentFormPage() {
                       />
                     </div>
                   </Section>
+
                   <Section title="房屋所在區域 *">
                     <div className="grid gap-3 grid-cols-3">
                       {["北部", "中部", "南部"].map((v) => (
@@ -691,6 +819,7 @@ export default function AppointmentFormPage() {
                       ))}
                     </div>
                   </Section>
+
                   <Section title="房屋現況 *">
                     <div className="grid gap-3 grid-cols-1 sm:grid-cols-3">
                       {[
@@ -713,6 +842,7 @@ export default function AppointmentFormPage() {
                       ))}
                     </div>
                   </Section>
+
                   <Section title="室內坪數 *">
                     <div className="grid gap-3 grid-cols-2">
                       {["25坪以下", "26-40坪", "41-60坪", "61坪以上"].map(
@@ -736,7 +866,7 @@ export default function AppointmentFormPage() {
                 </>
               )}
 
-              {/* STEP 3：設計需求（新增「協助貸款」按鈕＋Popup） */}
+              {/* STEP 3：設計需求 */}
               {step === 2 && (
                 <>
                   <Section title="本次委託需求 *">
@@ -768,13 +898,13 @@ export default function AppointmentFormPage() {
                       <h3 className="text-lg font-semibold tracking-wide">
                         預算範圍 <span className="text-rose-600">*</span>
                       </h3>
-                      <button
+                      {/* <button
                         type="button"
                         onClick={() => setLoanOpen(true)}
                         className="rounded-xl border border-neutral-300 px-3 py-2 text-sm hover:border-neutral-900"
                       >
                         協助貸款
-                      </button>
+                      </button> */}
                     </div>
 
                     <div className="grid gap-3 grid-cols-2">
@@ -796,7 +926,15 @@ export default function AppointmentFormPage() {
                       ))}
                     </div>
                     <p className="text-xs text-rose-600 mt-1">
-                      工程最低承接總額為 100 萬。
+                      工程最低承接總額為 200 萬。即日起推出{" "}
+                      <button
+                        type="button"
+                        onClick={() => setLoanOpen(true)}
+                        className="rounded-xl !border-b border-none underline !border-blue-400 !text-blue-400 px-3 py-2 text-sm hover:border-neutral-900"
+                      >
+                        裝修分期付款專案
+                      </button>
+                      最高200萬額度
                     </p>
                   </section>
 
@@ -897,14 +1035,24 @@ export default function AppointmentFormPage() {
               <button
                 type="button"
                 onClick={next}
-                className="rounded-xl bg-neutral-900 px-5 py-3 text-sm text-white hover:opacity-90"
+                disabled={!canNext}
+                className={`rounded-xl px-5 py-3 text-sm text-white ${
+                  canNext
+                    ? "bg-neutral-900 hover:opacity-90"
+                    : "bg-neutral-400 cursor-not-allowed"
+                }`}
               >
                 下一步 →
               </button>
             ) : (
               <button
                 type="submit"
-                className="rounded-xl bg-neutral-900 px-5 py-3 text-sm text-white hover:opacity-90"
+                disabled={!canSubmit}
+                className={`rounded-xl px-5 py-3 text-sm text-white ${
+                  canSubmit
+                    ? "bg-neutral-900 hover:opacity-90"
+                    : "bg-neutral-400 cursor-not-allowed"
+                }`}
               >
                 送出表單
               </button>
@@ -917,8 +1065,9 @@ export default function AppointmentFormPage() {
         </p>
       </div>
 
-      {/* 協助貸款 Popup */}
+      {/* Popup：協助貸款 & 流程說明 */}
       <LoanHelpModal open={loanOpen} onClose={() => setLoanOpen(false)} />
+      <FlowHelpModal open={flowOpen} onClose={() => setFlowOpen(false)} />
     </div>
   );
 }

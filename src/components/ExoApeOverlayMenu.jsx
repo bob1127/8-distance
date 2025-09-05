@@ -428,7 +428,7 @@ export default function ExoApeOverlayMenu({ children }) {
                     img: "/images/project-01/img07.jpg",
                   },
                   {
-                    label: "聯絡我們",
+                    label: "預約諮詢",
                     href: "/contact",
                     img: "/images/project-01/img07.jpg",
                   },
