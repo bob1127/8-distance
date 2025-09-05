@@ -54,7 +54,7 @@ export default function Nav() {
   return (
     <nav
       className="
-        border-b bg-white"
+         bg-white"
     >
       {/* NAV BAR */}
       <div className="relative w-full flex items-center justify-between px-4 py-3">
