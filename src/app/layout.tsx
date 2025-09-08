@@ -6,14 +6,14 @@ import localFont from "next/font/local";
 import { ViewTransitions } from "next-view-transitions";
 import type { Metadata } from "next";
 import Script from "next/script";
-
+import BackToTopButton from "@/components/BackToTopButton";
 import Footer from "../components/Footer/Footer1";
 import PageTransition from "../components/PageTransition/PageTransition";
 import ExoApeOverlayMenu from "../components/ExoApeOverlayMenu";
 import Image from "next/image";
 import IntroOverlay from "@/components/IntroOverlay"; // ⬅️ 新增這行
 import ConditionalNav from "@/components/ConditionalNav";
-
+import Link from "next/link";
 export const metadata: Metadata = {
   title: "捌程室內設計｜商業空間與住宅設計",
   description:
@@ -73,20 +73,34 @@ export default function RootLayout({
             <Footer />
           </ExoApeOverlayMenu>
 
-          <div className="fixed right-8 bottom-[15%]">
-            <a
+          <div className="fixed right-8 bottom-[15%] flex flex-col items-center gap-3">
+            {/* Line Icon */}
+            <Link
               href="https://page.line.me/655cyzya?oat_content=url&openQrModal=true"
               target="_blank"
               rel="noopener noreferrer"
             >
               <Image
-                src="/images/icon/line.png"
+                src="/images/圓形line@ icon.png"
                 alt="line-icon"
                 width={200}
                 height={200}
                 className="max-w-[50px] w-auto h-auto"
               />
-            </a>
+            </Link>
+
+            <Link href="/contact" target="_blank" rel="noopener noreferrer">
+              <Image
+                src="/images/圓形表單icon.png"
+                alt="line-icon"
+                width={200}
+                height={200}
+                className="max-w-[50px] w-auto h-auto"
+              />
+            </Link>
+
+            {/* Top Button (Client Component) */}
+            <BackToTopButton />
           </div>
 
           {/* Tawk.to（下調 z-index） */}

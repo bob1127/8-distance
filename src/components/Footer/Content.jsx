@@ -60,9 +60,6 @@ const Section2 = () => {
 
       <div className="copy flex  flex-col lg:flex-row  border-t-1 border-white py-4">
         <div className="flex flex-col w-full lg:w-1/2  items-start justify-start">
-          <p className="text-[22px] text-gray-100 font-mode leading-[0.8] my-2">
-            捌程室內設計
-          </p>
           {/* <p className="text-[.9rem] text-gray-200 font-light">
             Copyright © 2023︎ Ait Design Inc.
           </p> */}
@@ -134,6 +131,13 @@ function Nav() {
           <div className="grid grid-cols-2">
             <div className="flex py-0 sm:py-8 flex-col">
               <div className="flex flex-col">
+                <div className="flex items-center flex-row mb-2">
+                  <img
+                    src="/images/捌程室內設計.png.avif"
+                    className="max-w-[90px]"
+                  ></img>
+                  <p className="text-white text-xl font-bold">捌程室內設計</p>
+                </div>
                 <p className="text-gray-50 text-[16px] inline-flex  w-[100px] px-3 py-1 rounded-[30px] justify-center items-center bg-[#e1cdbc]">
                   聯繫專線
                 </p>
