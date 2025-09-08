@@ -123,8 +123,9 @@ export default async function AboutPage() {
               從構想到落成，捌程始終堅守用心聆聽、細膩打磨的初衷。每一個家，每一處庭院，都承載著對美好生活的想像──捌程邀請您，一同見證從設計萌芽到完美落成的每一段旅程。
             </p>
             <div className="en-slogan mt-5 flex flex-col">
-              <b>Slogan: </b>
-              <b>設計不是裝修，是「把您的人生過得更有質感」的開始</b>
+              <b className="text-[18px]">
+                設計不是裝修，是「把您的人生過得更有質感」的開始
+              </b>
             </div>
           </div>
         </div>
@@ -175,11 +176,10 @@ export default async function AboutPage() {
               design to its graceful realization.
             </p>
             <div className="en-slogan mt-5 flex flex-col">
-              <b>Slogan: </b>
-              <p>
+              <b className="text-[18px]">
                 Design is not renovation; it’s where a more graceful life
                 begins.{" "}
-              </p>
+              </b>
             </div>
           </div>
         </div>

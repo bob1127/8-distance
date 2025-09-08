@@ -200,7 +200,7 @@ function FadeCard({ project }) {
         }}
         className="group relative overflow-hidden"
       >
-        <div className="relative w-full h-[590px] sm:h-[650px] xl:h-[1000px]">
+        <div className="relative w-full h-[590px] sm:h-[550px] xl:h-[700px]">
           <div className="absolute inset-0 z-10 bg-gradient-to-t from-[rgba(0,0,0,0.55)] via-[rgba(0,0,0,0.20)] to-transparent pointer-events-none" />
           <div className="absolute inset-0 z-20 flex items-center justify-center p-6 pointer-events-none">
             <div className="text-center max-w-[80%]">

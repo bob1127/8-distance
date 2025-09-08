@@ -3,23 +3,43 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 
-/**
- * 使用方式：
- * <TestimonialsEmbla testimonials={testimonials} title="客戶好評" />
- * 需要先安裝：npm i embla-carousel-react
- *
- * testimonials: Array<{ content: string; name: string; role?: string }>
- */
 export default function TestimonialsEmbla({
-  testimonials = [],
   title = "客戶好評",
   autoPlayDelay = 4000, // ms
 }) {
+  const [testimonials, setTestimonials] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollSnaps, setScrollSnaps] = useState([]);
   const isHoveringRef = useRef(false);
   const isDraggingRef = useRef(false);
   const autoPlayTimerRef = useRef(null);
+
+  // 抓 API 資料
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await fetch("https://api.ld-8distance.com/api/front", {
+          cache: "no-store",
+        });
+        const json = await res.json();
+        if (Array.isArray(json.front_customer_review)) {
+          setTestimonials(
+            json.front_customer_review
+              .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
+              .map((it) => ({
+                name: it.name,
+                role: it.position,
+                content: it.comment,
+                image: it.image_url,
+              }))
+          );
+        }
+      } catch (err) {
+        console.error("Failed to fetch testimonials:", err);
+      }
+    }
+    fetchData();
+  }, []);
 
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: "start",
@@ -135,7 +155,7 @@ export default function TestimonialsEmbla({
           </div>
         </div>
 
-        {/* Pagination：黑點→active 膠囊（根據 scrollSnapList 的「頁」數量） */}
+        {/* Pagination */}
         <div className="embla__dots mt-6 flex items-center justify-center gap-3">
           {scrollSnaps.map((_, i) => (
             <button
@@ -152,50 +172,43 @@ export default function TestimonialsEmbla({
 
       <style jsx>{`
         :global(.embla__container) {
-          gap: 0 !important; /* 覆蓋掉 flex gap */
-          margin-left: -16px; /* 等同原本 gap-4 的 16px */
-          min-width: 0; /* 防止子項目溢出 */
+          gap: 0 !important;
+          margin-left: -16px;
+          min-width: 0;
         }
         :global(.embla__slide) {
-          padding-left: 16px; /* 用內距補回間距 */
+          padding-left: 16px;
           box-sizing: border-box;
           min-width: 0;
         }
-        /* 隱藏 WebKit 捲軸 */
         .embla__viewport::-webkit-scrollbar {
           display: none;
         }
 
-        /* 依斷點調整每張寬度（對應 Swiper 的 slidesPerView 1 / 2 / 2.5 / 2.5 / 3.5） */
         .testi-slide {
           flex: 0 0 100%;
         }
         @media (min-width: 640px) {
-          /* >= 640: 2 張 */
           .testi-slide {
             flex: 0 0 50%;
           }
         }
         @media (min-width: 768px) {
-          /* >= 768: 2.5 張（露出半張） */
           .testi-slide {
             flex: 0 0 calc(100% / 2);
           }
         }
         @media (min-width: 1024px) {
-          /* >= 1024: 仍 2.5 張 */
           .testi-slide {
             flex: 0 0 calc(100% / 3);
           }
         }
         @media (min-width: 1280px) {
-          /* >= 1280: 3.5 張（露出半張） */
           .testi-slide {
             flex: 0 0 calc(100% / 4);
           }
         }
 
-        /* pagination 樣式：黑點／active 膠囊 */
         .pill-bullet {
           display: inline-block;
           width: 8px;
