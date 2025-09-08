@@ -80,10 +80,28 @@ const Photos = () => {
       src: "/images/index/老屋翻新-李宅.webp",
       href: "/project/renovation-li", // ← 你的內頁路徑
     },
+    {
+      title: "總太東方",
+      subtitle: "Modern Oriental",
+      src: "/images/index/老屋翻新-李宅.webp",
+      href: "/project/renovation-li", // ← 你的內頁路徑
+    },
+    {
+      title: "總太東方",
+      subtitle: "Modern Oriental",
+      src: "/images/index/老屋翻新-李宅.webp",
+      href: "/project/renovation-li", // ← 你的內頁路徑
+    },
+    {
+      title: "總太東方",
+      subtitle: "Modern Oriental",
+      src: "/images/index/老屋翻新-李宅.webp",
+      href: "/project/renovation-li", // ← 你的內頁路徑
+    },
   ];
 
   return (
-    <ReactLenis root>
+    <>
       <div className="bg-[#f1f1f1] overflow-hidden">
         <section className="relative pt-[150px] pb-[100px]">
           {/* 背景圖 */}
@@ -343,44 +361,43 @@ const Photos = () => {
 
             {/* ✅ NEW：Sticky 側邊欄（第 4 欄） */}
             {/* ✅ NEW：Sticky 側邊欄（第 4 欄；md 起就會出現） */}
-            <aside className="md:col-span-1 h-full xl:col-span-1 ">
-              <div className="sticky top-24 space-y-4">
-                {" "}
-                {/* 如需可滾動再加 max-h/overflow */}
-                {sidebarCases.map((c) => {
-                  // 若有內部路由，用 Link；若要外部連結，換成 <a href={c.href} target="_blank" rel="noopener noreferrer">
-                  const href = c.href ?? "#";
-                  return (
-                    <Link key={c.src} href={href}>
-                      {/* 長方形比例 16:9 */}
-                      <div className="relative w-full aspect-[9/12]  overflow-hidden my-2">
-                        {/* 置中文字（水平垂直置中） */}
-                        <div className="absolute inset-0 z-20 flex items-center justify-center text-center p-4 pointer-events-none">
-                          <div className="max-w-[90%]">
-                            <h4 className="text-white text-lg md:text-xl font-semibold leading-tight">
-                              {c.title}
-                            </h4>
-                            {c.subtitle && (
-                              <p className="text-white/90 text-xs md:text-sm mt-1">
-                                {c.subtitle}
-                              </p>
-                            )}
+            {/* ✅ NEW：Sticky 側邊欄（第 4 欄；md 起就會出現） */}
+            <aside className="md:col-span-1 h-full xl:col-span-1">
+              <div className="sticky top-24">
+                <div className="h-screen overflow-y-auto pr-2 space-y-4">
+                  {sidebarCases.map((c) => {
+                    const href = c.href ?? "#";
+                    return (
+                      <Link key={c.src} href={href}>
+                        {/* 改小：固定高度 or 比例 */}
+                        <div className="relative w-full mb-5 h-[400px] overflow-hidden ">
+                          {/* 置中文字 */}
+                          <div className="absolute inset-0 z-20 flex items-center justify-center text-center p-3 pointer-events-none">
+                            <div className="max-w-[90%]">
+                              <h4 className="text-white text-base md:text-lg font-semibold leading-tight">
+                                {c.title}
+                              </h4>
+                              {c.subtitle && (
+                                <p className="text-white/90 text-xs md:text-sm mt-1">
+                                  {c.subtitle}
+                                </p>
+                              )}
+                            </div>
                           </div>
+                          {/* 遮罩 */}
+                          <div className="absolute inset-0 z-10 bg-gradient-to-t from-[rgba(0,0,0,0.55)] via-[rgba(0,0,0,0.25)] to-transparent" />
+                          {/* 圖片 */}
+                          <Image
+                            src={c.src}
+                            alt={c.title}
+                            fill
+                            className="object-cover transition-transform duration-500 hover:scale-[1.05]"
+                          />
                         </div>
-                        {/* 漸層遮罩提升對比 */}
-                        <div className="absolute inset-0 z-10 bg-gradient-to-t from-[rgba(0,0,0,0.55)] via-[rgba(0,0,0,0.25)] to-transparent" />
-                        {/* 圖片 */}
-                        <Image
-                          src={c.src}
-                          alt={c.title}
-                          fill
-                          className="object-cover bg-black  transition-transform duration-500 group-hover:scale-[1.04]"
-                          priority={false}
-                        />
-                      </div>
-                    </Link>
-                  );
-                })}
+                      </Link>
+                    );
+                  })}
+                </div>
               </div>
             </aside>
           </div>
@@ -444,7 +461,7 @@ const Photos = () => {
             document.body
           )
         : null}
-    </ReactLenis>
+    </>
   );
 };
 

@@ -414,56 +414,338 @@ function FlowHelpModal({ open, onClose }) {
               </section>
 
               <ol className="list-decimal pl-5 space-y-10">
-                <li>
-                  <h5 className="font-semibold">初步諮詢（免費）</h5>
-                  <p className="mt-1">
-                    了解現況與需求：坪數、格局、風格、預算、時程。提供過往作品與初步建議。
-                  </p>
+                <li className="flex justify-between">
+                  <div>
+                    <h5 className="font-semibold">1.初步諮詢（免費）</h5>
+                    <p className="mt-1">
+                      了解現況與需求：坪數、格局、風格、預算、時程。提供過往作品與初步建議。
+                    </p>
+                  </div>
+                  <svg
+                    preserveAspectRatio="xMidYMid meet"
+                    data-bbox="22.5 20 155 160"
+                    viewBox="22.5 20 155 160"
+                    height="80"
+                    width="80"
+                    xmlns="http://www.w3.org/2000/svg"
+                    role="presentation"
+                    aria-hidden="true"
+                  >
+                    <g>
+                      <path
+                        d="M100 20c-42.802 0-77.5 34.7-77.5 77.505h155C177.5 54.7 142.802 20 100 20z"
+                        fill="#9D6200"
+                      />
+                      <path
+                        d="M100 102.496c-42.802 0-77.5 34.7-77.5 77.504h155c0-42.804-34.698-77.504-77.5-77.504z"
+                        fill="#9D6200"
+                      />
+                    </g>
+                  </svg>
                 </li>
-                <li>
-                  <h5 className="font-semibold">現場丈量與需求釐清</h5>
-                  <p className="mt-1">
-                    專員到場丈量、拍照與紀錄，釐清細節（動線、收納與設備需求）。
-                  </p>
+                <li className="flex justify-between">
+                  <div>
+                    <h5 className="font-semibold">2.現場丈量與需求釐清</h5>
+                    <p className="mt-1">
+                      專員到場丈量、拍照與紀錄，釐清細節（動線、收納與設備需求）。
+                    </p>
+                  </div>
+                  <svg
+                    preserveAspectRatio="xMidYMid meet"
+                    data-bbox="20 20 160 160"
+                    viewBox="20 20 160 160"
+                    height="80"
+                    width="80"
+                    xmlns="http://www.w3.org/2000/svg"
+                    data-type="color"
+                    role="presentation"
+                    aria-hidden="true"
+                    aria-label=""
+                  >
+                    <defs>
+                      <style>#comp-lqc5w8ix2 svg </style>
+                    </defs>
+                    <g>
+                      <path
+                        d="M20 20v160c44.183 0 80-35.817 80-80S64.183 20 20 20z"
+                        fill="#9D6200"
+                        clip-rule="evenodd"
+                        fill-rule="evenodd"
+                        data-color="1"
+                      ></path>
+                      <path
+                        d="M100 100c0 44.183 35.817 80 80 80V20c-44.183 0-80 35.817-80 80z"
+                        fill="#9D6200"
+                        clip-rule="evenodd"
+                        fill-rule="evenodd"
+                        data-color="1"
+                      ></path>
+                    </g>
+                  </svg>
                 </li>
-                <li>
-                  <h5 className="font-semibold">平面配置提案</h5>
-                  <p className="mt-1">
-                    提供 2–3
-                    版平面配置，說明優劣與動線。確認方向後進入設計合約。
-                  </p>
+                <li className="flex justify-between">
+                  <div>
+                    <h5 className="font-semibold">3.平面配置提案</h5>
+                    <p className="mt-1">
+                      提供 2–3
+                      版平面配置，說明優劣與動線。確認方向後進入設計合約。
+                    </p>
+                  </div>
+                  <svg
+                    preserveAspectRatio="xMidYMid meet"
+                    data-bbox="38.5 20 123 160"
+                    viewBox="38.5 20 123 160"
+                    height="80"
+                    width="80"
+                    xmlns="http://www.w3.org/2000/svg"
+                    data-type="color"
+                    role="presentation"
+                    aria-hidden="true"
+                    aria-label=""
+                  >
+                    <defs>
+                      <style>#comp-lqc5w8ja6 svg</style>
+                    </defs>
+                    <g>
+                      <path
+                        d="M102.887 20v117.469c32.371 0 58.613-26.296 58.613-58.734C161.5 46.296 135.258 20 102.887 20z"
+                        fill="#9D6200"
+                        clip-rule="evenodd"
+                        fill-rule="evenodd"
+                        data-color="1"
+                      ></path>
+                      <path
+                        d="M38.5 121.266C38.5 153.704 64.742 180 97.113 180V62.532c-32.371 0-58.613 26.296-58.613 58.734z"
+                        fill="#9D6200"
+                        clip-rule="evenodd"
+                        fill-rule="evenodd"
+                        data-color="1"
+                      ></path>
+                    </g>
+                  </svg>
                 </li>
-                <li>
-                  <h5 className="font-semibold">設計合約＆3D 模擬</h5>
-                  <p className="mt-1">
-                    簽訂設計合約並進入 3D
-                    模擬（材質、色彩、燈光氛圍），同步進行基本機電整合。
-                  </p>
+                <li className="flex justify-between">
+                  <div>
+                    <h5 className="font-semibold">4.設計合約＆3D 模擬</h5>
+                    <p className="mt-1">
+                      簽訂設計合約並進入 3D
+                      模擬（材質、色彩、燈光氛圍），同步進行基本機電整合。
+                    </p>
+                  </div>
+                  <svg
+                    preserveAspectRatio="xMidYMid meet"
+                    data-bbox="10 10 180 180.05"
+                    viewBox="10 10 180 180.05"
+                    height="80"
+                    width="80"
+                    xmlns="http://www.w3.org/2000/svg"
+                    data-type="color"
+                    role="presentation"
+                    aria-hidden="true"
+                    aria-label=""
+                  >
+                    <defs>
+                      <style>#comp-lqc5w8jh3 svg </style>
+                    </defs>
+                    <g>
+                      <path
+                        d="M189.3 145.6c-.5-2.6-1.3-5.2-2.4-7.6-1.8-4.2-4.4-8.2-7.9-11.6-24.6-24.6-6.4-46.3-1.3-51.5.4-.4.8-.8 1.3-1.2 14.6-14.6 14.6-38.2 0-52.7-14.6-14.6-38.2-14.6-52.7 0-14.6 14.6-14.6 38.2 0 52.7 24.1 24.1 9.1 43.8 2.6 50.4-.2.2-.4.3-.5.5-.2.2-.5.4-.7.6-.4.4-.9.8-1.3 1.2-24.6 24.6-46.3 6.4-51.5 1.3-.4-.4-.8-.8-1.2-1.3-14.6-14.6-38.2-14.6-52.7 0-14.6 14.6-14.6 38.2 0 52.7 14.6 14.6 38.2 14.6 52.7 0 24.1-24.1 43.8-9.1 50.4-2.6.2.2.3.4.5.5.2.2.4.5.6.7.4.4.8.9 1.2 1.3 2.7 2.7 5.8 4.9 9 6.7 1.2.6 2.5 1.2 3.7 1.7 1.2.5 2.5.9 3.7 1.2 1.4.4 2.8.7 4.2.9.2 0 .4.1.6.1 1.7.2 3.4.4 5.1.4 3.6 0 7.2-.5 10.6-1.5.6-.2 1.1-.4 1.7-.6 2.3-.8 4.5-1.8 6.6-3.1 2.6-1.6 5.1-3.5 7.4-5.8.9-.9 1.8-1.9 2.6-2.8s1.5-2 2.2-3 1.3-2.1 1.9-3.2c2-3.8 3.3-7.8 3.9-12 .1-.6.2-1.2.2-1.8.1-1.2.2-2.4.2-3.6 0-1.2-.1-2.4-.2-3.6-.1-1-.3-2.2-.5-3.4z"
+                        fill="#9D6200"
+                        data-color="1"
+                      ></path>
+                      <path
+                        fill="#9D6200"
+                        d="M84.4 47.2c0 20.545-16.655 37.2-37.2 37.2S10 67.745 10 47.2 26.655 10 47.2 10s37.2 16.655 37.2 37.2z"
+                        data-color="1"
+                      ></path>
+                    </g>
+                  </svg>
                 </li>
-                <li>
-                  <h5 className="font-semibold">施工圖與工程報價</h5>
-                  <p className="mt-1">
-                    繪製完整施工圖、統整材料與設備明細，提供分項工程報價與時程規劃。
-                  </p>
+                <li className="flex justify-between">
+                  <div>
+                    <h5 className="font-semibold">5.施工圖與工程報價</h5>
+                    <p className="mt-1">
+                      繪製完整施工圖、統整材料與設備明細，提供分項工程報價與時程規劃。
+                    </p>
+                  </div>
+                  <svg
+                    preserveAspectRatio="xMidYMid meet"
+                    data-bbox="19.999 33.5 160 133"
+                    viewBox="19.999 33.5 160 133"
+                    height="80"
+                    width="80"
+                    xmlns="http://www.w3.org/2000/svg"
+                    data-type="color"
+                    role="presentation"
+                    aria-hidden="true"
+                    aria-label=""
+                  >
+                    <defs>
+                      <style>#comp-lqc5w8jl3 svg </style>
+                    </defs>
+                    <g>
+                      <path
+                        d="M90.853 116.612c3.645 6.167 3.663 13.75.046 19.87L73.158 166.5l-19.061-32.252 15.036-25.442H39.06L19.999 76.555h35.476c7.234 0 13.947 3.806 17.593 9.974l5.09 8.613.009.005 12.686 21.465z"
+                        fill="#9D6200"
+                        clip-rule="evenodd"
+                        fill-rule="evenodd"
+                        data-color="1"
+                      ></path>
+                      <path
+                        d="M109.149 116.557c-3.645 6.167-3.663 13.75-.046 19.87l17.741 30.017 19.061-32.252-15.037-25.443h30.07l19.061-32.252h-35.476c-7.233 0-13.947 3.806-17.592 9.974l-5.093 8.617-.004.002-12.685 21.467z"
+                        fill="#9D6200"
+                        clip-rule="evenodd"
+                        fill-rule="evenodd"
+                        data-color="1"
+                      ></path>
+                      <path
+                        d="M118.183 73.411a20.011 20.011 0 0 0 17.23-9.818L153.198 33.5h-38.123l-15.039 25.447L84.997 33.5H46.874l17.785 30.092a20.009 20.009 0 0 0 17.23 9.818h10.556l25.738.001z"
+                        fill="#9D6200"
+                        clip-rule="evenodd"
+                        fill-rule="evenodd"
+                        data-color="1"
+                      ></path>
+                    </g>
+                  </svg>
                 </li>
-                <li>
-                  <h5 className="font-semibold">簽訂工程合約＆開工</h5>
-                  <p className="mt-1">
-                    確認報價與期程後簽約，安排進場。提供 LINE
-                    群組與定期進度回報。
-                  </p>
+                <li className="flex justify-between">
+                  <div>
+                    <h5 className="font-semibold">6.簽訂工程合約＆開工</h5>
+                    <p className="mt-1">
+                      確認報價與期程後簽約，安排進場。提供 LINE
+                      群組與定期進度回報。
+                    </p>
+                  </div>
+                  <svg
+                    preserveAspectRatio="xMidYMid meet"
+                    data-bbox="40 10 120 180"
+                    viewBox="40 10 120 180"
+                    height="80"
+                    width="80"
+                    xmlns="http://www.w3.org/2000/svg"
+                    data-type="color"
+                    role="presentation"
+                    aria-hidden="true"
+                    aria-label=""
+                  >
+                    <defs>
+                      <style>#comp-lqc5w8jv2 svg </style>
+                    </defs>
+                    <g>
+                      <path
+                        d="M130 70c-28.1 0-30-22.7-30-28.6V40c0-16.6-13.4-30-30-30S40 23.4 40 40s13.4 30 30 30c27.5 0 30.1 19.8 30.1 27.2-.1.9-.1 1.8-.1 2.8 0 16.6 13.4 30 30 30s30-13.4 30-30-13.4-30-30-30z"
+                        fill="#9D6200"
+                        data-color="1"
+                      ></path>
+                      <path
+                        fill="#9D6200"
+                        d="M100 160c0 16.569-13.431 30-30 30-16.569 0-30-13.431-30-30 0-16.569 13.431-30 30-30 16.569 0 30 13.431 30 30z"
+                        data-color="1"
+                      ></path>
+                    </g>
+                  </svg>
                 </li>
-                <li>
-                  <h5 className="font-semibold">完工驗收與交屋</h5>
-                  <p className="mt-1">
-                    依驗收清單逐項確認品質，完成後交屋並提供保固維護說明。
-                  </p>
+                <li className="flex justify-between">
+                  <div>
+                    <h5 className="font-semibold">7.完工驗收與交屋</h5>
+                    <p className="mt-1">
+                      依驗收清單逐項確認品質，完成後交屋並提供保固維護說明。
+                    </p>
+                  </div>
+                  <svg
+                    preserveAspectRatio="xMidYMid meet"
+                    data-bbox="10 10 180 180"
+                    viewBox="10 10 180 180"
+                    height="80"
+                    width="80"
+                    xmlns="http://www.w3.org/2000/svg"
+                    data-type="color"
+                    role="presentation"
+                    aria-hidden="true"
+                    aria-label=""
+                  >
+                    <defs>
+                      <style>#comp-lqc5w8jy5 svg </style>
+                    </defs>
+                    <g>
+                      <path
+                        fill="#9D6200"
+                        d="M130 40c0 16.569-13.431 30-30 30-16.569 0-30-13.431-30-30 0-16.569 13.431-30 30-30 16.569 0 30 13.431 30 30z"
+                        data-color="1"
+                      ></path>
+                      <path
+                        fill="#9D6200"
+                        d="M130 160c0 16.569-13.431 30-30 30-16.569 0-30-13.431-30-30 0-16.569 13.431-30 30-30 16.569 0 30 13.431 30 30z"
+                        data-color="1"
+                      ></path>
+                      <path
+                        d="M160 70c-7.7 0-14.8 2.9-20.1 7.7-42.2 30.2-79.9 0-79.9 0-5.2-4.8-12.3-7.7-20-7.7-16.6 0-30 13.4-30 30s13.4 30 30 30c7.4 0 14.1-2.7 19.3-7 41.3-26.5 80.6-.7 80.6-.7 5.3 4.8 12.4 7.7 20.1 7.7 16.6 0 30-13.4 30-30s-13.4-30-30-30z"
+                        fill="#9D6200"
+                        data-color="1"
+                      ></path>
+                    </g>
+                  </svg>
                 </li>
-                <li>
-                  <h5 className="font-semibold">售後保固與維護</h5>
-                  <p className="mt-1">
-                    依合約提供保固；若有使用或維護疑問，隨時與我們聯繫。
-                  </p>
+                <li className="flex justify-between">
+                  <div>
+                    <h5 className="font-semibold">8.售後保固與維護</h5>
+                    <p className="mt-1">
+                      依合約提供保固；若有使用或維護疑問，隨時與我們聯繫。
+                    </p>
+                  </div>
+                  <svg
+                    preserveAspectRatio="xMidYMid meet"
+                    data-bbox="22.538 13.592 154.924 172.817"
+                    viewBox="22.538 13.592 154.924 172.817"
+                    height="80"
+                    width="80"
+                    xmlns="http://www.w3.org/2000/svg"
+                    data-type="color"
+                    role="presentation"
+                    aria-hidden="true"
+                    aria-label=""
+                  >
+                    <defs>
+                      <style>#comp-lqc5w8k11 svg </style>
+                    </defs>
+                    <g>
+                      <path
+                        d="m27.458 76.311 42.188 24.647a3.268 3.268 0 0 1 1.62 2.824v48.96c0 2.536-2.762 4.107-4.942 2.81l-42.188-25.101a3.27 3.27 0 0 1-1.598-2.81V79.135c0-2.525 2.74-4.097 4.92-2.824z"
+                        fill="#9D6200"
+                        data-color="1"
+                      ></path>
+                      <path
+                        d="m80.734 106.703 42.188 24.647a3.268 3.268 0 0 1 1.62 2.824v48.96c0 2.536-2.762 4.107-4.942 2.81l-42.188-25.101a3.27 3.27 0 0 1-1.598-2.81v-48.506c0-2.526 2.74-4.098 4.92-2.824z"
+                        fill="#9D6200"
+                        data-color="1"
+                      ></path>
+                      <path
+                        d="m133.676 185.943 42.188-25.101a3.27 3.27 0 0 0 1.598-2.81v-48.506c0-2.525-2.74-4.097-4.92-2.824l-42.188 24.647a3.268 3.268 0 0 0-1.62 2.824v48.96c0 2.537 2.762 4.107 4.942 2.81z"
+                        fill="#9D6200"
+                        data-color="1"
+                      ></path>
+                      <path
+                        d="m83.215 35.731 41.736-21.769a3.273 3.273 0 0 1 3.025 0l41.736 21.769c2.293 1.196 2.356 4.454.111 5.738l-41.736 23.87a3.272 3.272 0 0 1-3.247 0l-41.736-23.87c-2.245-1.284-2.182-4.542.111-5.738z"
+                        fill="#9D6200"
+                        data-color="1"
+                      ></path>
+                      <path
+                        d="m80.734 44.691 42.188 24.647a3.268 3.268 0 0 1 1.62 2.824v48.96c0 2.536-2.762 4.107-4.942 2.81L77.412 98.831a3.27 3.27 0 0 1-1.598-2.81V47.514c0-2.524 2.74-4.097 4.92-2.823z"
+                        fill="#9D6200"
+                        data-color="1"
+                      ></path>
+                      <path
+                        d="m133.676 123.932 42.188-25.101a3.27 3.27 0 0 0 1.598-2.81V47.514c0-2.525-2.74-4.097-4.92-2.824l-42.188 24.647a3.268 3.268 0 0 0-1.62 2.824v48.96c0 2.537 2.762 4.108 4.942 2.811z"
+                        fill="#9D6200"
+                        data-color="1"
+                      ></path>
+                      <path
+                        d="M67.735 47.638 29.94 67.351c-2.293 1.196-2.356 4.454-.111 5.738l37.823 21.633c1.649.943 3.701-.247 3.701-2.147V49.831c0-1.858-1.971-3.052-3.618-2.193z"
+                        fill="#9D6200"
+                        data-color="1"
+                      ></path>
+                    </g>
+                  </svg>
                 </li>
               </ol>
 
@@ -771,13 +1053,43 @@ export default function AppointmentFormPage() {
                   </Section>
 
                   <Section title="從哪裡得知我們 *">
-                    <input
-                      type="text"
-                      placeholder="例：IG、FB、搜尋、親友介紹…（必填）"
-                      className="w-full border-0 border-b border-neutral-300 bg-transparent px-1 py-2 outline-none focus:border-neutral-900"
-                      value={form.ref}
-                      onChange={(e) => setF({ ref: e.target.value })}
-                    />
+                    <div className="grid gap-3 grid-cols-2 sm:grid-cols-3">
+                      {["IG", "FB", "自主搜尋", "廣告", "親友"].map((v) => (
+                        <ChoiceCard
+                          key={v}
+                          name="ref"
+                          value={v}
+                          current={form.ref}
+                          onChange={(val) => setF({ ref: val })}
+                        >
+                          {v}
+                        </ChoiceCard>
+                      ))}
+                      {/* 其他選項 */}
+                      <ChoiceCard
+                        name="ref"
+                        value="其他"
+                        current={
+                          form.ref?.startsWith("其他:") ? "其他" : form.ref
+                        }
+                        onChange={() => setF({ ref: "其他:" })}
+                      >
+                        其他
+                      </ChoiceCard>
+                    </div>
+
+                    {/* 顯示文字輸入框（僅當 ref 以 "其他:" 開頭時） */}
+                    {form.ref?.startsWith("其他:") && (
+                      <input
+                        type="text"
+                        placeholder="請輸入其他來源"
+                        className="mt-3 w-full border-0 border-b border-neutral-300 bg-transparent px-1 py-2 outline-none focus:border-neutral-900"
+                        value={form.ref.replace(/^其他:/, "")}
+                        onChange={(e) =>
+                          setF({ ref: "其他:" + e.target.value })
+                        }
+                      />
+                    )}
                   </Section>
                 </>
               )}
@@ -909,10 +1221,10 @@ export default function AppointmentFormPage() {
 
                     <div className="grid gap-3 grid-cols-2">
                       {[
-                        ["100-200", "100-200萬"],
-                        ["201-300", "201-300萬"],
+                        ["200-300", "200-300萬"],
                         ["301-400", "301-400萬"],
-                        ["401+", "401萬以上"],
+                        ["401-500", "401-500萬"],
+                        ["501+", "501萬以上"],
                       ].map(([v, label]) => (
                         <ChoiceCard
                           key={v}
@@ -1003,7 +1315,7 @@ export default function AppointmentFormPage() {
                       onChange={(e) => setF({ agree: e.target.checked })}
                     />
                     <label htmlFor="agree" className="text-sm">
-                      我已閱讀並同意：工程最低承接總額為 100 萬以上，設計費每坪
+                      我已閱讀並同意：工程最低承接總額為 200 萬以上，設計費每坪
                       $6500（未稅）起。*
                     </label>
                   </div>

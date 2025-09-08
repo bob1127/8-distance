@@ -46,7 +46,7 @@ export default function Home() {
         {/* 左側：QA Accordion */}
         <div className=" max-w-[1300px] mx-auto xl:w-[80%] md:w-[90%] px-6 w-full">
           <div className="title w-full flex justify-start ">
-            <h1 className=" text-3xl md:tetx-4xl xl:text-7xl">問答FAQ</h1>
+            <h1 className=" text-3xl md:tetx-4xl xl:text-7xl">常見問題</h1>
           </div>
           <div className=" w-full flex flex-row ">
             <QAAccordion items={qaItems} />

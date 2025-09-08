@@ -124,7 +124,7 @@ export default async function AboutPage() {
             </p>
             <div className="en-slogan mt-5 flex flex-col">
               <b>Slogan: </b>
-              <p>設計不是裝修，是「把您的人生過得更有質感」的開始</p>
+              <b>設計不是裝修，是「把您的人生過得更有質感」的開始</b>
             </div>
           </div>
         </div>
