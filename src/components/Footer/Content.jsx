@@ -143,7 +143,7 @@ function Nav() {
                 </p>
                 <Link href="/note" className="mt-5">
                   <span className="text-[.8rem] text-white mt-1">
-                    室內設計| 04-23720128 是內設計部門
+                    室內設計| 04-23720128 室內設計部門
                   </span>
                 </Link>
                 <Link href="/note" className="mt-2">
