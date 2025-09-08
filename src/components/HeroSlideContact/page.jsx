@@ -18,10 +18,10 @@ const Photos = () => {
 
   // ✅ 指定圖片路徑
   const imagePaths = [
-    "/images/小資專案/468661269_122223979160031935_3338016445612834353_n.jpg",
-    "/images/小資專案/003-烏日透天-魏s_241207_5.jpg",
-    "/images/小資專案/006-20250224-109.jpg",
-    "/images/小資專案/469120903_122223965966031935_3027154932930762522_n.jpg",
+    "/images/index/商業空間-桃園招待所.webp",
+    "/images/index/b69ff1_dbf0d0c42626415881135b9768235d8f~mv2.jpg.avif",
+    "/images/index/b69ff1_ed3d1e1ab1e14db4bd8ad2c8f3b9c3de~mv2.jpg.avif",
+    "/images/index/b69ff1_5fbc029839a748f18ca1e1ac09bd662e~mv2.jpg.avif",
   ];
 
   useGSAP(

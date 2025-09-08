@@ -106,7 +106,7 @@ export default function TestimonialsEmbla({
       >
         {/* Viewport */}
         <div
-          className="embla__viewport overflow-hidden cursor-grab active:cursor-grabbing"
+          className="embla__viewport px-5 overflow-hidden cursor-grab active:cursor-grabbing"
           ref={emblaRef}
         >
           {/* Container */}
@@ -179,19 +179,19 @@ export default function TestimonialsEmbla({
         @media (min-width: 768px) {
           /* >= 768: 2.5 張（露出半張） */
           .testi-slide {
-            flex: 0 0 calc(100% / 2.5);
+            flex: 0 0 calc(100% / 2);
           }
         }
         @media (min-width: 1024px) {
           /* >= 1024: 仍 2.5 張 */
           .testi-slide {
-            flex: 0 0 calc(100% / 2.5);
+            flex: 0 0 calc(100% / 3);
           }
         }
         @media (min-width: 1280px) {
           /* >= 1280: 3.5 張（露出半張） */
           .testi-slide {
-            flex: 0 0 calc(100% / 3.5);
+            flex: 0 0 calc(100% / 4);
           }
         }
 

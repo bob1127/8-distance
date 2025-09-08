@@ -322,7 +322,7 @@ function HomeClient({ specialPosts }) {
         className="section-hero-video relative h-screen overflow-hidden"
       >
         <video
-          src="https://videos.files.wordpress.com/FkZ9MbMc/e9a696e9a081e5bdb1e78987.mp4"
+          src="https://video.wixstatic.com/video/b69ff1_143f9b33dccf44eea83413490c5a1713/2160p/mp4/file.mp4"
           loop
           autoPlay
           muted
@@ -456,7 +456,7 @@ function HomeClient({ specialPosts }) {
                 </div>
               </section>
               <TestimonialsEmbla testimonials={testimonials} />
-              <LatestNewsCarousel slides={staticSlides} />/
+              <LatestNewsCarousel slides={staticSlides} />
             </div>
           </div>
         </div>

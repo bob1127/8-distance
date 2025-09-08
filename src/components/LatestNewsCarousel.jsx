@@ -82,7 +82,7 @@ export default function LatestNewsEmbla({ slides = [], title = "最新動態" })
           ref={emblaRef}
         >
           {/* Container（保持你的版面設定） */}
-          <div className="embla__container flex w-full sm:w-[97%] gap-0 md:gap-4">
+          <div className="embla__container flex w-full gap-0 md:gap-4">
             {slides.map((slide, idx) => (
               <div
                 key={idx}

@@ -11,7 +11,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import ProjectSlider from "../../components/Project-Slider/Slider.jsx";
-
+import HeroSlider from "../../components/HeroSlideContact/page.jsx";
 /* -------------------- 類別與資料 -------------------- */
 const categories = [
   { label: "住宅空間", value: "residential" },
@@ -246,7 +246,7 @@ export default function QaClient() {
   return (
     <>
       <section>
-        <ProjectSlider />
+        <HeroSlider />
       </section>
 
       <section className="section-portfolio-category py-20 bg-white text-black">
@@ -254,7 +254,7 @@ export default function QaClient() {
           <h2 className="text-2xl">作品欣賞</h2>
         </div>
 
-        <div className="max-w-[1920px] w-[95%] 2xl:w-[95%] mx-auto px-4">
+        <div className="max-w-[1920px] sm:w-[90%] w-full xl:w-[80%] mx-auto px-4">
           {/* Tabs */}
           <div className="flex flex-wrap justify-center gap-4 mb-6">
             {categories.map((cat) => (
