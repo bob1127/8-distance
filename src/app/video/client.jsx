@@ -7,40 +7,34 @@ import { motion, useReducedMotion } from "framer-motion";
 
 /**
  * 使用方式：
- * 1) 在 items 陣列填入 { type: 'video' | 'short', id: 'YouTubeID', title?: string }
- * 2) 'video' -> 16:9，'short' -> 9:16
- * 3) 點擊縮圖才載入真正的 iframe，初載超輕量
+ * 1) 到 items 陣列填入 { type: 'video' | 'short', id: 'YouTubeID', title?: string }
+ * 2) Tab「一般影片 / Shorts」切換；卡片進視窗時會 fade-up
+ * 3) 仍採輕量載入：點擊縮圖才建立 iframe
  */
 
-// 單支輕量 YouTube 元件（互動後才載入 iframe）
-function LiteYouTube({
-  id,
-  title = "YouTube video",
-  ratio = "16/9",
-  params = "",
-}) {
+/* ---------------- Lite YouTube (只在互動後載入 iframe) ---------------- */
+function LiteYouTube({ id, title = "YouTube", ratio = "16/9", params = "" }) {
   const [isIframe, setIsIframe] = useState(false);
   const [thumb, setThumb] = useState(
     `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`
   );
   const warmedUp = useRef(false);
 
-  // 滑過或點擊時預連線，降低延遲
+  // 預連線（滑過/點擊時）
   const warmConnections = useCallback(() => {
     if (warmedUp.current) return;
     warmedUp.current = true;
-    const hints = [
+    [
       ["preconnect", "https://www.youtube-nocookie.com"],
       ["preconnect", "https://www.google.com"],
       ["preconnect", "https://i.ytimg.com"],
       ["preconnect", "https://www.gstatic.com"],
-    ];
-    for (const [rel, href] of hints) {
+    ].forEach(([rel, href]) => {
       const link = document.createElement("link");
       link.rel = rel;
       link.href = href;
       document.head.appendChild(link);
-    }
+    });
   }, []);
 
   const onPlay = () => {
@@ -48,14 +42,13 @@ function LiteYouTube({
     setIsIframe(true);
   };
 
-  // 縮圖 fallback：maxres 失敗時改 hqdefault
+  // maxres 失敗 fallback 到 hqdefault
   const onThumbError = () => {
     if (!thumb.includes("hqdefault.jpg")) {
       setThumb(`https://i.ytimg.com/vi/${id}/hqdefault.jpg`);
     }
   };
 
-  // 組合 iframe src（使用 nocookie 網域）
   const iframeSrc = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&playsinline=1&rel=0&modestbranding=1${
     params ? `&${params}` : ""
   }`;
@@ -69,16 +62,17 @@ function LiteYouTube({
       {!isIframe ? (
         <button
           type="button"
-          aria-label="Play video"
-          className="group absolute inset-0 w-full h-full"
+          aria-label={`播放：${title}`}
+          className="group absolute inset-0 w-full h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
           onClick={onPlay}
         >
-          {/* 縮圖 */}
+          {/* 縮圖（提供精簡且有意義的 alt，避免冗贅字） */}
           <img
             src={thumb}
             alt={title}
             className="absolute inset-0 w-full h-full object-cover"
             loading="lazy"
+            decoding="async"
             onError={onThumbError}
           />
           {/* 半透明遮罩 */}
@@ -92,8 +86,10 @@ function LiteYouTube({
                 viewBox="0 0 24 24"
                 fill="currentColor"
                 className="text-red-600"
+                aria-hidden="true"
+                focusable="false"
               >
-                <path d="M8 5v14l11-7z"></path>
+                <path d="M8 5v14l11-7z" />
               </svg>
             </div>
           </div>
@@ -106,7 +102,7 @@ function LiteYouTube({
         <iframe
           className="absolute inset-0 w-full h-full"
           src={iframeSrc}
-          title={title}
+          title={`YouTube：${title}`}
           allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowFullScreen
           referrerPolicy="strict-origin-when-cross-origin"
@@ -116,20 +112,35 @@ function LiteYouTube({
   );
 }
 
-// 依類型設定比例
+/* ---------------- 卡片：依類型設定比例 ---------------- */
 function YouTubeCard({ type, id, title }) {
   if (type === "short")
     return <LiteYouTube id={id} title={title} ratio="9/16" params="" />;
   return <LiteYouTube id={id} title={title} ratio="16/9" params="" />;
 }
 
-function TabButton({ active, children, onClick }) {
+/* ---------------- 可及性良好的 Tabs ----------------
+   - role="tablist" / role="tab" / role="tabpanel"
+   - aria-controls / aria-labelledby 成對
+   - 鍵盤：← → Home End
+---------------------------------------------------- */
+function TabButton({ id, panelId, active, onClick, children, tabRef }) {
   return (
     <button
+      id={id}
+      ref={tabRef}
+      role="tab"
       type="button"
-      onClick={onClick}
       aria-selected={active}
-      className="text-stone-800 hover:text-black transition duration-300"
+      aria-controls={panelId}
+      tabIndex={active ? 0 : -1}
+      onClick={onClick}
+      className={[
+        "px-4 py-2 rounded-full text-sm font-medium transition-all",
+        active
+          ? "bg-black text-white shadow"
+          : "bg-white text-gray-700 border border-gray-200 hover:border-gray-300",
+      ].join(" ")}
     >
       {children}
     </button>
@@ -137,7 +148,7 @@ function TabButton({ active, children, onClick }) {
 }
 
 export default function YouTubeLitePage() {
-  // 在這裡填入你的影片（只要寫 id）
+  /* 你的資料：只要填 id 與 type */
   const items = [
     {
       type: "video",
@@ -165,7 +176,6 @@ export default function YouTubeLitePage() {
     { type: "video", id: "-fBFYVZc6TY", title: "東區饒宅A2 Before / After" },
     { type: "short", id: "pIP-0R6dwQA", title: "饒宅A2-主臥更衣室" },
     { type: "short", id: "lgWPWpyFf78", title: "主臥室 梳化區" },
-
     { type: "short", id: "04dUVWjuQQo", title: "饒宅A1 客房 -床頭背板" },
     { type: "short", id: "AMyjIadRzm4", title: "饒宅A1 小孩房-床頭收納" },
     { type: "short", id: "yzLepUCNyRM", title: "饒宅A2-電視櫃" },
@@ -174,9 +184,13 @@ export default function YouTubeLitePage() {
   const [tab, setTab] = useState("video"); // 'video' | 'short'
   const prefersReduced = useReducedMotion();
 
-  const filtered = useMemo(
-    () => items.filter((i) => i.type === tab),
-    [items, tab]
+  const videos = useMemo(
+    () => items.filter((i) => i.type === "video"),
+    [items]
+  );
+  const shorts = useMemo(
+    () => items.filter((i) => i.type === "short"),
+    [items]
   );
 
   const fadeUp = {
@@ -188,6 +202,49 @@ export default function YouTubeLitePage() {
     },
   };
 
+  // Tabs 可鍵盤操作
+  const videoTabRef = useRef(null);
+  const shortTabRef = useRef(null);
+  const tabs = [
+    {
+      key: "video",
+      label: "一般影片",
+      tabId: "tab-video",
+      panelId: "panel-video",
+      ref: videoTabRef,
+    },
+    {
+      key: "short",
+      label: "Shorts",
+      tabId: "tab-short",
+      panelId: "panel-short",
+      ref: shortTabRef,
+    },
+  ];
+
+  const onTabsKeyDown = (e) => {
+    const idx = tabs.findIndex((t) => t.key === tab);
+    if (e.key === "ArrowRight") {
+      const next = (idx + 1) % tabs.length;
+      setTab(tabs[next].key);
+      tabs[next].ref.current?.focus();
+      e.preventDefault();
+    } else if (e.key === "ArrowLeft") {
+      const prev = (idx - 1 + tabs.length) % tabs.length;
+      setTab(tabs[prev].key);
+      tabs[prev].ref.current?.focus();
+      e.preventDefault();
+    } else if (e.key === "Home") {
+      setTab(tabs[0].key);
+      tabs[0].ref.current?.focus();
+      e.preventDefault();
+    } else if (e.key === "End") {
+      setTab(tabs[tabs.length - 1].key);
+      tabs[tabs.length - 1].ref.current?.focus();
+      e.preventDefault();
+    }
+  };
+
   return (
     <>
       <Head>
@@ -196,7 +253,7 @@ export default function YouTubeLitePage() {
           name="description"
           content="使用輕量載入的高效能 YouTube / Shorts 嵌入頁面。"
         />
-        {/* 基本預連線（互動時還會再動態補強） */}
+        {/* 預連線（互動時也會再補強） */}
         <link rel="preconnect" href="https://www.youtube-nocookie.com" />
         <link rel="preconnect" href="https://i.ytimg.com" />
       </Head>
@@ -204,42 +261,83 @@ export default function YouTubeLitePage() {
       <main className="mx-auto w-[92%] pt-[150px] max-w-[1200px] py-10">
         <header className="mb-6 md:mb-8"></header>
 
-        {/* Tabs */}
+        {/* Tabs（ARIA 完整） */}
         <div
           role="tablist"
           aria-label="影片類型"
-          className=" items-center mx-auto w-full flex justify-center gap-3 mb-6"
+          aria-orientation="horizontal"
+          className="flex items-center justify-center gap-3 mb-6"
+          onKeyDown={onTabsKeyDown}
         >
-          <TabButton active={tab === "video"} onClick={() => setTab("video")}>
-            Video
-          </TabButton>
-          <span>|</span>
-          <TabButton active={tab === "short"} onClick={() => setTab("short")}>
-            Shorts Video
-          </TabButton>
+          {tabs.map((t) => (
+            <TabButton
+              key={t.key}
+              id={t.tabId}
+              panelId={t.panelId}
+              active={tab === t.key}
+              onClick={() => setTab(t.key)}
+              tabRef={t.ref}
+            >
+              {t.label}
+            </TabButton>
+          ))}
         </div>
 
-        {/* 影片格狀排版：手機單欄、md 兩欄、lg 三欄 */}
+        {/* Panels：同時存在，未選擇的以 hidden 隱藏，符合 aria-controls / labelledby */}
         <section
-          key={tab}
-          className="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3 gap-6"
+          id="panel-video"
+          role="tabpanel"
+          aria-labelledby="tab-video"
+          hidden={tab !== "video"}
+          aria-hidden={tab !== "video"}
+          tabIndex={0}
+          className={tab === "video" ? "block" : "hidden"}
         >
-          {filtered.map((v, idx) => (
-            <motion.article
-              key={`${v.id}-${idx}`}
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, amount: 0.2 }}
-              className="flex flex-col gap-3 will-change-transform"
-            >
-              <YouTubeCard type={v.type} id={v.id} title={v.title} />
-              <h2 className="text-base font-medium">
-                {v.title ||
-                  (v.type === "short" ? "YouTube Shorts" : "YouTube 影片")}
-              </h2>
-            </motion.article>
-          ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {videos.map((v, idx) => (
+              <motion.article
+                key={`${v.id}-video-${idx}`}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, amount: 0.2 }}
+                className="flex flex-col gap-3 will-change-transform"
+              >
+                <YouTubeCard type={v.type} id={v.id} title={v.title} />
+                <h2 className="text-base font-medium">
+                  {v.title || "YouTube 影片"}
+                </h2>
+              </motion.article>
+            ))}
+          </div>
+        </section>
+
+        <section
+          id="panel-short"
+          role="tabpanel"
+          aria-labelledby="tab-short"
+          hidden={tab !== "short"}
+          aria-hidden={tab !== "short"}
+          tabIndex={0}
+          className={tab === "short" ? "block" : "hidden"}
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {shorts.map((v, idx) => (
+              <motion.article
+                key={`${v.id}-short-${idx}`}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, amount: 0.2 }}
+                className="flex flex-col gap-3 will-change-transform"
+              >
+                <YouTubeCard type={v.type} id={v.id} title={v.title} />
+                <h2 className="text-base font-medium">
+                  {v.title || "YouTube Shorts"}
+                </h2>
+              </motion.article>
+            ))}
+          </div>
         </section>
       </main>
     </>
