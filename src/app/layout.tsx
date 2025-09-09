@@ -69,16 +69,67 @@ export default function RootLayout({
             <div className="hidden md:block fixed inset-x-0 top-0 z-[9999]">
               <ConditionalNav />
             </div>
-            <PageTransition>{children}</PageTransition>
+            {children}
             <Footer />
           </ExoApeOverlayMenu>
 
-          <div className="fixed right-8 bottom-[15%] flex flex-col items-center gap-3">
+          {/* ====== Mobile 底部長條（40% / 40% / 20%） ====== */}
+          <div className="sm:hidden fixed inset-x-0 bottom-0 z-50">
+            <div className="bg-white/95 backdrop-blur border-t border-black/10 shadow-[0_-6px_20px_rgba(0,0,0,0.08)] px-3 pb-[env(safe-area-inset-bottom)]">
+              <div className="flex h-16 items-center">
+                {/* 左 40%：LINE */}
+                <Link
+                  href="https://page.line.me/655cyzya?oat_content=url&openQrModal=true"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="basis-[40%] flex items-center justify-center gap-2"
+                  aria-label="加入 LINE 聯繫"
+                >
+                  <Image
+                    src="/images/圓形line@ icon.png"
+                    alt="LINE"
+                    width={200}
+                    height={200}
+                    className="w-8 h-8"
+                    priority={false}
+                  />
+                  <span className="text-xs font-medium">LINE</span>
+                </Link>
+
+                {/* 中 40%：表單 */}
+                <Link
+                  href="/contact"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="basis-[40%] flex items-center justify-center gap-2"
+                  aria-label="前往聯絡表單"
+                >
+                  <Image
+                    src="/images/圓形表單icon.png"
+                    alt="表單"
+                    width={200}
+                    height={200}
+                    className="w-8 h-8"
+                  />
+                  <span className="text-xs font-medium">表單</span>
+                </Link>
+
+                {/* 右 20%：回頂部（用現有 Client Component） */}
+                <div className="basis-[20%] flex items-center justify-center">
+                  <BackToTopButton />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ====== Tablet/Desktop 右側直欄（沿用你的原本行為） ====== */}
+          <div className="hidden sm:flex fixed right-8 bottom-[15%] z-50 flex-col items-center gap-3">
             {/* Line Icon */}
             <Link
               href="https://page.line.me/655cyzya?oat_content=url&openQrModal=true"
               target="_blank"
               rel="noopener noreferrer"
+              className="inline-block bg-white/0"
             >
               <Image
                 src="/images/圓形line@ icon.png"
@@ -89,17 +140,18 @@ export default function RootLayout({
               />
             </Link>
 
+            {/* 表單 */}
             <Link href="/contact" target="_blank" rel="noopener noreferrer">
               <Image
                 src="/images/圓形表單icon.png"
-                alt="line-icon"
+                alt="form-icon"
                 width={200}
                 height={200}
                 className="max-w-[50px] w-auto h-auto"
               />
             </Link>
 
-            {/* Top Button (Client Component) */}
+            {/* 回頂部（沿用你的 Client Component） */}
             <BackToTopButton />
           </div>
 

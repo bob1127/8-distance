@@ -107,7 +107,7 @@ export default async function AboutPage() {
         <h1 className="tetx-2xl lg:text-5xl">關於捌程</h1>
         <hr />
       </section>
-      <section className="section-story my-5 flex lg:flex-row flex-col max-w-[1920px] w-[90%] md:w-[85%] 2xl:w-[80%] mx-auto">
+      <section className="section-story my-5  flex lg:flex-row flex-col max-w-[1920px] w-[90%] md:w-[85%] 2xl:w-[80%] mx-auto">
         <div className=" w-full  lg:w-1/2 pr-0 lg:pr-8">
           <div className="max-w-[750px]">
             <h2 className="text-xl lg:text-3xl">公司故事: </h2>

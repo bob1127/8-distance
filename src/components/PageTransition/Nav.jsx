@@ -94,6 +94,9 @@ export default function Nav() {
           <Link href="/qa" className="text-black text-[18px]">
             QA
           </Link>
+          <Link href="/video" className="text-black text-[18px]">
+            影音內容
+          </Link>
           <div className="bg-[#cd9f79] px-2 py-1 text-white">
             {" "}
             <Link href="/contact" className="text-white">
