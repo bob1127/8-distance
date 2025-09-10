@@ -18,7 +18,7 @@ const Photos = () => {
 
   // ✅ 指定圖片路徑
   const imagePaths = [
-    "/images/index/商業空間-桃園招待所.webp",
+    "/images/index/b69ff1_dbf0d0c42626415881135b9768235d8f~mv2.jpg.avif",
     "/images/index/b69ff1_dbf0d0c42626415881135b9768235d8f~mv2.jpg.avif",
     "/images/index/b69ff1_ed3d1e1ab1e14db4bd8ad2c8f3b9c3de~mv2.jpg.avif",
     "/images/index/b69ff1_5fbc029839a748f18ca1e1ac09bd662e~mv2.jpg.avif",
@@ -192,7 +192,7 @@ const Photos = () => {
 
         <div className="slider-title">
           <div className="slider-title-wrapper" ref={titlesRef}>
-            <p>寬越室內設計</p>
+            <p>Above The Canvas</p>
             <p>Above The Canvas</p>
             <p>Harmony in Every Note</p>
             <p>Redefining Imagination</p>
