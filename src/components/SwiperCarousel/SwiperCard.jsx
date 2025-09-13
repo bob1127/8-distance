@@ -24,20 +24,17 @@ export default function SwiperCardAbout() {
     []
   );
 
-  const stopAutoplay = () => {
-    try {
-      swiperRef.current?.autoplay?.stop();
-    } catch {}
-  };
-  const startAutoplay = () => {
-    try {
-      swiperRef.current?.autoplay?.start();
-    } catch {}
-  };
+  // ≥2 張才有意義的 loop/autoplay
+  const canLoop = reels.length > 1;
 
   return (
-    <div className="relative w-full m-0 p-0">
-      {/* 左右箭頭（用 CSS 選擇器給 Navigation 綁定） */}
+    // 🔑 阻擋 Lenis 接管觸控，讓 Swiper 在手機可滑動
+    <div
+      className="relative w-full m-0 p-0"
+      data-lenis-prevent
+      data-lenis-prevent-touch
+    >
+      {/* 箭頭（桌機顯示） */}
       <button
         type="button"
         aria-label="上一張"
@@ -72,35 +69,50 @@ export default function SwiperCardAbout() {
       <Swiper
         modules={[Pagination, A11y, Autoplay, Navigation]}
         onSwiper={(sw) => (swiperRef.current = sw)}
-        slidesPerView="auto" // ✅ 一次顯示多個
+        onInit={(sw) => sw.autoplay?.start()} // iOS 有時不自啟
+        onTouchStart={() => swiperRef.current?.autoplay?.stop()} // 用 Swiper 的事件，不用逐卡片掛
+        onTouchEnd={() => swiperRef.current?.autoplay?.start()}
+        slidesPerView="auto"
         spaceBetween={12}
         centeredSlides={false}
-        loop
-        loopAdditionalSlides={reels.length}
-        autoplay={{
-          delay: 4000,
-          disableOnInteraction: false,
-          pauseOnMouseEnter: false, // 我們在卡片 hover 時手動 stop
-        }}
+        // 讓觸控真的能傳到 Swiper（避免預設阻止）
+        allowTouchMove
+        simulateTouch
+        touchEventsTarget="container"
+        touchStartPreventDefault={false}
+        passiveListeners={false}
+        // 巢狀在其他可滾動容器內更穩定
+        nested
+        grabCursor
+        // 只有張數夠才 loop/自動播，並避免「not enough for loop」警告
+        loop={canLoop}
+        watchOverflow
+        loopedSlides={Math.min(reels.length, 6)}
+        loopAdditionalSlides={Math.min(reels.length, 6)}
+        autoplay={
+          canLoop
+            ? {
+                delay: 4000,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+              }
+            : false
+        }
         speed={600}
         navigation={{ prevEl: ".js-prev", nextEl: ".js-next" }}
         observer
         observeParents
-        className="m-0 p-4 h-auto sm:h-[540px] !overflow-hidden"
+        className="m-0 p-4 h-auto sm:h-[540px] !overflow-visible"
       >
         {reels.map((item, idx) => (
           <SwiperSlide key={idx} style={{ width: "auto" }}>
-            {/* 每張卡片固定尺寸；hover 暫停、離開恢復 */}
+            {/* 不再在卡片上掛 onTouchStart/End（避免 autoplay 永遠停住） */}
             <div
               className="
                 relative 
                 w-[220px] sm:w-[240px] md:w-[260px] lg:w-[280px]
                 h-[380px] sm:h-[420px] md:h-[460px] lg:h-[520px]
               "
-              onMouseEnter={stopAutoplay}
-              onMouseLeave={startAutoplay}
-              onTouchStart={stopAutoplay}
-              onTouchEnd={startAutoplay}
             >
               <FacebookReelsSection
                 items={[item]} // 每個 slide 一支影片

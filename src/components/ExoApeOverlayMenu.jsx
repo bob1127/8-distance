@@ -33,13 +33,7 @@ export default function ExoApeOverlayMenu({ children }) {
     const lineMid = $(".menu-toggle .line.middle");
     const lineBot = $(".menu-toggle .line.bottom");
 
-    const ACTIVE_CLASSES = [
-      "relative",
-      "w-screen",
-      "z-10",
-      "!bg-transparent",
-      "origin-top-right",
-    ];
+    const ACTIVE_CLASSES = ["z-10", "!bg-transparent", "origin-top-right"];
     const addActiveClasses = () => container?.classList.add(...ACTIVE_CLASSES);
     const removeActiveClasses = () =>
       container?.classList.remove(...ACTIVE_CLASSES);
@@ -317,7 +311,7 @@ export default function ExoApeOverlayMenu({ children }) {
   }, []);
 
   return (
-    <div ref={rootRef} className="exoape-menu-root z-[60]">
+    <div ref={rootRef} className="exoape-menu-root w-full z-[60]">
       {/* ✅ 手機公告條（最上層，確保不被覆蓋） */}
       <div className="md:hidden fixed top-0 inset-x-0 z-[100] bg-[#E1A95F] text-white">
         <div className="h-9">
@@ -350,7 +344,7 @@ export default function ExoApeOverlayMenu({ children }) {
       {/* ✅ 手機頂欄（公告條下方；層級高於 overlay/container） */}
       <nav
         className="
-          md:hidden fixed top-9 inset-x-0 z-[95]
+          md:hidden fixed  top-9 inset-x-0 z-[95]
           flex items-center justify-between
           pl-[max(env(safe-area-inset-left),1.25rem)]
           pr-[max(env(safe-area-inset-right),1.25rem)]
@@ -640,9 +634,12 @@ export default function ExoApeOverlayMenu({ children }) {
         .exo-container {
           position: absolute;
           width: 100%;
-          will-change: transform;
           transform-origin: right top;
-          z-index: 10; /* 低於 nav/overlay，避免把按鈕蓋住 */
+          will-change: transform;
+          z-index: 10;
+          /* 防水平滾動保險絲 */
+          overflow-x: clip; /* 或 hidden，現代瀏覽器推薦 clip */
+          max-width: 100dvw;
         }
 
         /* ✅ 桌機（≥768px）：不影響排版 */

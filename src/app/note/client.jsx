@@ -12,6 +12,7 @@ import Image from "next/image";
 import Link from "next/link";
 import ProjectSlider from "../../components/Project-Slider/Slider.jsx";
 import HeroSlider from "../../components/HeroSlideContact/page.jsx";
+
 /* -------------------- 類別與資料 -------------------- */
 const categories = [
   { label: "住宅空間", value: "residential" },
@@ -200,7 +201,7 @@ function FadeCard({ project }) {
         }}
         className="group relative overflow-hidden"
       >
-        <div className="relative w-full h-[590px] sm:h-[550px] xl:h-[700px]">
+        <div className="relative w-full h-[400px] sm:h-[550px] 2xl:h-[700px]">
           <div className="absolute inset-0 z-10 bg-gradient-to-t from-[rgba(0,0,0,0.55)] via-[rgba(0,0,0,0.20)] to-transparent pointer-events-none" />
           <div className="absolute inset-0 z-20 flex items-center justify-center p-6 pointer-events-none">
             <div className="text-center max-w-[80%]">
@@ -221,6 +222,7 @@ function FadeCard({ project }) {
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
             className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+            style={{ willChange: "transform" }} // ✅ 避免 reflow
             priority={false}
           />
         </div>
@@ -246,10 +248,11 @@ export default function QaClient() {
   return (
     <>
       <section>
+        {/* ✅ HeroSlider 內已改：不足 slides 不 loop */}
         <HeroSlider />
       </section>
 
-      <section className="section-portfolio-category py-20 bg-white text-black">
+      <section className="section-portfolio-category py-20 bg-white text-black relative">
         <div className="title flex justify-center">
           <h2 className="text-2xl">作品欣賞</h2>
         </div>
@@ -261,7 +264,7 @@ export default function QaClient() {
               <button
                 key={cat.value}
                 onClick={() => setActiveCategory(cat.value)}
-                className={`border-r-1 border-black pr-5 ${
+                className={`border-r border-black pr-5 ${
                   cat.value === activeCategory ? "font-semibold" : ""
                 }`}
               >
@@ -279,7 +282,7 @@ export default function QaClient() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.18 }}
-                className="contents pointer-events-none" /* 避免退出層攔截滾動 */
+                className="contents pointer-events-none"
               >
                 <div className={`grid ${colsClass} gap-6`}>
                   {items.map((project) => (

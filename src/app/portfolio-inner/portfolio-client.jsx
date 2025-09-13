@@ -404,7 +404,7 @@ const Photos = () => {
         </section>
 
         {/* 下方輪播（原樣） */}
-        <section className="flex pl-20 flex-col py-[140px] bg-custom-gradient">
+        <section className="flex pl-10 sm:pl-20 flex-col py-[140px] bg-custom-gradient">
           <div className="flex flex-col  justify-center items-center">
             <h3 className="text-4xl text-white">對我們作品有興趣嗎？</h3>
             <button className="bg-[#f7a438] mt-3 text-stone-800 rounded-[30px] font-bold px-4 border border-gray-300 py-1">
@@ -420,14 +420,14 @@ const Photos = () => {
           <div className="FB-reels mt-10 flex">
             <div className="w-[10%]  flex items-center justify-end">
               <div className="card-text flex flex-col justify-center items-center">
-                <h2 className="text-[9.5vmin] text-[#F1F1F1] rotate-[90deg] tracking-wide">
+                <h2 className=" text-[6vmin] sm:text-[9.5vmin] text-[#F1F1F1] rotate-[90deg] tracking-wide">
                   IDEA
                 </h2>
-                <div className="project-amount text-white my-5 bg-black flex justify-center items-center rounded-full w-8 h-8">
-                  23
+                <div className="project-amount text-white mt-10 bg-black flex justify-center items-center rounded-full w-12 h-12">
+                  20+
                 </div>
                 <span
-                  className="text-[1.4rem] text-[#F1F1F1] mt-10"
+                  className="text-[1.4rem] text-[#F1F1F1] mt-5 sm:mt-10"
                   style={{
                     writingMode: "vertical-rl",
                     textOrientation: "upright",
@@ -438,13 +438,12 @@ const Photos = () => {
               </div>
             </div>
             <div className="w-[90%] overflow-hidden">
-              <SwiperCarousel />
-              <div className="pt-8">
-                <span className="text-[.85rem] text-gray-400">
-                  界裡還有許多充滿趣味的店舗設計想法。使用海外材料和個性化的色彩設計的空間中，充滿了商店設計的靈感。
-                  <br />
-                  我們可以以輕鬆旅行的心情，去發現新的設計。
-                </span>
+              <div
+                className="w-[90%] overflow-hidden"
+                data-lenis-prevent
+                data-lenis-prevent-touch
+              >
+                <SwiperCarousel />
               </div>
             </div>
           </div>

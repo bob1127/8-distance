@@ -11,6 +11,7 @@ import {
   useReducedMotion,
 } from "framer-motion";
 import Link from "next/link";
+
 /* ===== 假資料：自行替換 ===== */
 const NEWS = [
   {
@@ -71,20 +72,31 @@ const NEWS = [
 
 const PAGE_SIZE = 6;
 
-/* ===== 全域 spring（柔順） ===== */
-const spring = { type: "spring", stiffness: 110, damping: 20, mass: 0.7 };
+/* ===== 更絲滑的 spring（柔順） ===== */
+const spring = { type: "spring", stiffness: 70, damping: 22, mass: 0.9 };
 
-/* 切頁容器過度（無縫） */
-const pageVariants = {
-  hidden: { opacity: 0, y: 8, filter: "blur(2px)" },
-  show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { ...spring } },
-  exit: { opacity: 0, y: -8, filter: "blur(2px)", transition: { ...spring } },
-};
+/* 父層 variants：依序逐一進場（stagger） */
+const listVariants = (reduce) => ({
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: reduce ? 0 : 0.085,
+      delayChildren: reduce ? 0 : 0.04,
+    },
+  },
+  exit: { opacity: 1 }, // 不特別做退場，專注進場序列
+});
 
-/* 卡片 fade-up（位移加大） */
+/* 單卡片：大位移 + 模糊 → 清晰 */
 const cardVariants = {
-  hidden: { opacity: 0, y: 64, filter: "blur(10px)" },
-  show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { ...spring } },
+  hidden: { opacity: 0, y: 96, filter: "blur(10px)", scale: 0.985 },
+  show: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    scale: 1,
+    transition: { ...spring },
+  },
 };
 
 export default function News() {
@@ -93,7 +105,7 @@ export default function News() {
   const reduce = useReducedMotion();
 
   useEffect(() => {
-    // 切頁時回頂；若有 ViewTransitions，可改成更流暢的滾動保留
+    // 切頁時回到頂部
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [page]);
 
@@ -101,92 +113,78 @@ export default function News() {
     const start = (page - 1) * PAGE_SIZE;
     return NEWS.slice(start, start + PAGE_SIZE);
   }, [page]);
+
   const MotionLink = motion(Link);
-  // 依視窗寬估算目前「一行有幾欄」，讓同一行內做左→右的微階梯延遲
-  const [cols, setCols] = useState(3);
-  useEffect(() => {
-    const compute = () => {
-      if (window.innerWidth < 640) setCols(1); // grid-cols-1
-      else if (window.innerWidth < 1024) setCols(2); // sm:grid-cols-2
-      else setCols(3); // lg:grid-cols-3
-    };
-    compute();
-    window.addEventListener("resize", compute, { passive: true });
-    return () => window.removeEventListener("resize", compute);
-  }, []);
 
   return (
     <LazyMotion features={domAnimation}>
       <MotionConfig transition={spring} reducedMotion="user">
         <section className="py-[150px]">
           <div
-            className="mx-auto w-full md:w-[90%] px-5 xl:w-[85%] max-w-[1920px] 
-                  grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+            className="mx-auto w-full md:w-[90%] px-5 xl:w-[85%] max-w-[1920px]
+                       grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
           >
+            {/* 父層用 stagger 控制所有卡片依序 fade-up */}
             <AnimatePresence mode="wait">
               <motion.div
                 key={`page-${page}`}
-                variants={pageVariants}
+                className="contents"
+                variants={listVariants(reduce)}
                 initial="hidden"
                 animate="show"
-                exit="exit"
-                className="contents"
-                style={{ willChange: "transform, opacity, filter" }}
+                exit="hidden"
               >
-                {currentItems.map((n, i) => {
-                  const inRowIndex = i % cols;
-                  const delay = reduce ? 0 : inRowIndex * 0.08;
-
-                  return (
-                    <MotionLink
-                      href="/awards"
-                      key={`${n.title}-${i}`}
-                      className="block will-change-transform" // 讓 <a> 變 block，才能當作 grid item
-                      whileTap={{ scale: 0.98 }}
-                      style={{ transform: "translateZ(0)" }}
+                {currentItems.map((n, i) => (
+                  <MotionLink
+                    href="/awards"
+                    key={`${page}-${i}-${n.title}`}
+                    className="block will-change-transform"
+                    whileTap={{ scale: 0.98 }}
+                    style={{ transform: "translateZ(0)" }}
+                    layout
+                  >
+                    <motion.article
+                      layout
+                      variants={cardVariants}
+                      className="flex flex-col"
+                      style={{
+                        backfaceVisibility: "hidden",
+                        WebkitFontSmoothing: "antialiased",
+                        willChange: "transform, opacity, filter",
+                      }}
                     >
-                      <motion.article
-                        variants={cardVariants}
-                        initial="hidden"
-                        whileInView="show"
-                        viewport={{ once: false, amount: 0.25 }}
-                        transition={{ ...spring, delay }}
-                        className="flex flex-col"
-                      >
-                        <div className="relative aspect-[4/3] overflow-hidden ">
-                          <motion.div
-                            whileHover={{ scale: 1.03 }}
-                            transition={spring}
-                            className="w-full h-full"
-                          >
-                            <Image
-                              src={n.img}
-                              alt="news-item-img"
-                              fill
-                              className="object-cover w-full"
-                              sizes="(max-width: 1024px) 50vw, 33vw"
-                            />
-                          </motion.div>
-                        </div>
+                      <div className="relative aspect-[4/3] overflow-hidden">
+                        <motion.div
+                          whileHover={{ scale: 1.03 }}
+                          transition={spring}
+                          className="w-full h-full"
+                        >
+                          <Image
+                            src={n.img}
+                            alt="news-item-img"
+                            fill
+                            className="object-cover w-full"
+                            sizes="(max-width: 1024px) 50vw, 33vw"
+                            priority={i < 3} // 首屏幾張優先載入
+                          />
+                        </motion.div>
+                      </div>
 
-                        <div className="pt-5">
-                          <div className="flex items-center gap-2 text-black">
-                            <b className="text-[14px]">發布日期：</b>
-                            <span className="text-[14px]">{n.date}</span>
-                          </div>
-                          <div className="py-3">
-                            <h2 className="text-[18px] font-medium leading-tight text-black">
-                              {n.title}
-                            </h2>
-                            <p className="text-[14px] text-gray-600">
-                              {n.desc}
-                            </p>
-                          </div>
+                      <div className="pt-5">
+                        <div className="flex items-center gap-2 text-black">
+                          <b className="text-[14px]">發布日期：</b>
+                          <span className="text-[14px]">{n.date}</span>
                         </div>
-                      </motion.article>
-                    </MotionLink>
-                  );
-                })}
+                        <div className="py-3">
+                          <h2 className="text-[18px] font-medium leading-tight text-black">
+                            {n.title}
+                          </h2>
+                          <p className="text-[14px] text-gray-600">{n.desc}</p>
+                        </div>
+                      </div>
+                    </motion.article>
+                  </MotionLink>
+                ))}
               </motion.div>
             </AnimatePresence>
           </div>
@@ -198,7 +196,7 @@ export default function News() {
   );
 }
 
-/* ===== 分頁器：也用 spring，點擊更順 ===== */
+/* ===== 分頁器：維持原設計 ===== */
 function Pagination({ page, totalPages, onChange }) {
   if (totalPages <= 1) return null;
 
