@@ -4,6 +4,15 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 
+function safeISO(dt) {
+  try {
+    const d = new Date(dt);
+    return isNaN(d.getTime()) ? undefined : d.toISOString();
+  } catch {
+    return undefined;
+  }
+}
+
 export default function TimelineM062u03Client({ items = [] }) {
   const wrapRef = useRef(null);
   const listRef = useRef(null);
@@ -57,15 +66,20 @@ export default function TimelineM062u03Client({ items = [] }) {
     (w) => `-${Number(w) / 2}px`
   );
 
+  // ⚠️ SEO：不要在 SSR 輸出 opacity:0；把 initial 關掉
   const fadeUp = {
-    initial: { opacity: 0, y: 28 },
+    initial: false,
     whileInView: { opacity: 1, y: 0 },
     transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
     viewport: { once: true, amount: 0.55 },
   };
 
   return (
-    <section id="timeline-m062u03" className="w-full font-sans md:px-10">
+    <section
+      id="timeline-m062u03"
+      className="w-full font-sans md:px-10"
+      aria-label="公司歷程"
+    >
       <div ref={wrapRef} className="relative max-w-7xl mx-auto py-10">
         <div ref={listRef} className="relative pb-24">
           {/* 底線：手機靠左、桌機置中 */}
@@ -101,14 +115,19 @@ export default function TimelineM062u03Client({ items = [] }) {
             />
           </div>
 
-          {/* 項目：手機右側直排；桌機左右交錯 */}
-          <div className="space-y-16 md:space-y-24">
+          {/* ✅ 語意化列表（SEO）：改用 <ol>/<li> */}
+          <ol className="space-y-16 md:space-y-24">
             {items.map((it, i) => {
               const leftSide = i % 2 === 0;
+              const dateText = it.date || it.event_date || it.time || null;
+              const dateISO = dateText ? safeISO(dateText) : undefined;
+
               return (
-                <div
+                <li
                   key={`${i}-${it.title}`}
                   className="relative grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 pt-16"
+                  itemScope
+                  itemType="https://schema.org/ListItem"
                 >
                   {/* 閃爍原點（灰白） */}
                   <span
@@ -131,12 +150,23 @@ export default function TimelineM062u03Client({ items = [] }) {
                     {leftSide ? (
                       <motion.div
                         initial={fadeUp.initial}
-                        whileInView={fadeUp.whileInView}
+                        whileInView={fadeUp.withinView}
                         transition={fadeUp.transition}
                         viewport={fadeUp.viewport}
                         className="md:ml-auto"
                       >
-                        <h3 className="font-bold text-neutral-700 dark:text-neutral-200 mb-3 text-[clamp(1rem,2vw,1.25rem)]">
+                        {dateText && (
+                          <time
+                            className="block text-sm text-neutral-500 mb-1"
+                            dateTime={dateISO}
+                          >
+                            {dateText}
+                          </time>
+                        )}
+                        <h3
+                          className="font-bold text-neutral-700 dark:text-neutral-200 mb-3 text-[clamp(1rem,2vw,1.25rem)]"
+                          itemProp="name"
+                        >
                           {it.title}
                         </h3>
                         {it.text && (
@@ -169,12 +199,23 @@ export default function TimelineM062u03Client({ items = [] }) {
                   >
                     {(!isMdUp || !leftSide) && (
                       <motion.div
-                        initial={fadeUp.initial}
-                        whileInView={fadeUp.whileInView}
-                        transition={fadeUp.transition}
-                        viewport={fadeUp.viewport}
+                        initial={false} // ⚠️ 同樣關閉 initial
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                        viewport={{ once: true, amount: 0.55 }}
                       >
-                        <h3 className="font-bold text-neutral-700 dark:text-neutral-200 mb-3 text-[clamp(1rem,2vw,1.25rem)]">
+                        {dateText && (
+                          <time
+                            className="block text-sm text-neutral-500 mb-1"
+                            dateTime={dateISO}
+                          >
+                            {dateText}
+                          </time>
+                        )}
+                        <h3
+                          className="font-bold text-neutral-700 dark:text-neutral-200 mb-3 text-[clamp(1rem,2vw,1.25rem)]"
+                          itemProp="name"
+                        >
                           {it.title}
                         </h3>
                         {it.text && (
@@ -196,10 +237,10 @@ export default function TimelineM062u03Client({ items = [] }) {
                       </motion.div>
                     )}
                   </div>
-                </div>
+                </li>
               );
             })}
-          </div>
+          </ol>
         </div>
       </div>
 
