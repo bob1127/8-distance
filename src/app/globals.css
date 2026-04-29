@@ -1,0 +1,83 @@
+/* Tailwind base setup */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer base {
+  /* H1：主標題（極大），適合頁面開頭 */
+  h1 {
+    @apply text-xl md:text-2xl lg:text-3xl font-bold mt-5 mb-2 leading-tight;
+  }
+  
+  /* H2：區塊標題（大），適合段落大綱 */
+  h2 {
+    @apply text-xl md:text-xl lg:text-2xl font-bold leading-snug mt-5;
+  }
+  
+  /* H3：次區塊標題（中大），適合卡片標題或子段落 */
+  h3 {
+    @apply text-lg md:text-xl lg:text-xl font-semibold leading-snug;
+  }
+  
+  /* H4：小標題（中），稍微比內文大一點 */
+  h4 {
+    @apply text-lg md:text-xl font-semibold leading-normal;
+  }
+  
+  /* H5：附註標題（常規），與內文同大但加粗 */
+  h5 {
+    @apply text-base md:text-lg font-medium leading-normal;
+  }
+  
+  /* H6：最小標題（常規），通常搭配顏色淡化 */
+  h6 {
+    @apply text-base font-medium leading-normal text-gray-700;
+  }
+  p {
+    @apply text-base font-medium leading-normal tracking-wider;
+  }
+}
+/* ===== 字型鎖定：只允許 tearsfont / jf-openhuninn（與 emoji 後備） ===== */
+:root {
+  --app-font: "tearsfont", "jf-openhuninn-2.0",
+    "Apple Color Emoji", "Segoe UI Emoji";
+}
+ 
+/* 全站套用 tearsfont / jf-openhuninn（固定 400），避免偽粗/偽斜 */
+html, body,
+h1, h2, h3, h4, h5, h6,
+p, span, div, button, input, select, textarea {
+  font-family: var(--app-font) !important;
+   font-weight: 300;   
+              /* tearsfont 只有 400 */
+  font-synthesis: none;                      /* 禁偽粗/偽斜 */
+  -webkit-font-synthesis: none;
+  -moz-font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+@layer utilities {
+  .font-medium, .font-semibold, .font-bold, .font-extrabold, .font-black {
+    font-weight: 300 !important;
+  }
+}
+ .yarl__slide_captions_container{
+ 
+  display:none !important;
+}
+ .article-content,
+  .blog-content,
+  .ckeditor-output {
+      text-align: left;
+  }
+
+  /* 或者更通用的 */
+  .prose {
+      text-align: left;
+  }
+  .article-content p{
+    
+    line-height: 22.5px !important;
+  }
+  .article-content strong {
+      font-weight: 900 !important;
+  }
