@@ -11,9 +11,12 @@ const nextConfig = {
     unoptimized: true, // 不啟用 Next 圖片優化
   },
 
-  // 2. 新增的轉址設定
+  // 2. 完整轉址設定 (合併中文舊網址與 Wix 舊網址)
   async redirects() {
     return [
+      /* =========================================
+         A. 您原本設定的中文舊網址轉址
+         ========================================= */
       // 1. 關於我們 -> /about
       {
         source: '/%E9%97%9C%E6%96%BC%E6%88%91%E5%80%91',
@@ -44,7 +47,23 @@ const nextConfig = {
         destination: '/works/%E5%95%86%E6%A5%AD%E7%A9%BA%E9%96%93',
         permanent: true,
       },
-    ]
+
+      /* =========================================
+         B. Wix 舊網站幽靈網址 301 轉址
+         ========================================= */
+      // 6. 把所有 Wix 舊作品集網址，導向新版作品總覽頁
+      {
+        source: '/portfolio-collections/:path*', 
+        destination: '/works', 
+        permanent: true,
+      },
+      // 7. 把所有 Wix 舊個人檔案網址，導向關於我們
+      {
+        source: '/profile/:path*',
+        destination: '/about', 
+        permanent: true,
+      },
+    ];
   },
 };
 

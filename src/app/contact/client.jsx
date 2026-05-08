@@ -85,6 +85,7 @@ function buildPayload(form) {
       name: form.name,
       gender: form.gender, // "先生" | "小姐"
       age_range: form.age, // 例 "31-40歲"
+      occupation: form.occupation, // 新增：職業
       phone: form.phone,
       line_id: form.lineId,
       email: form.email,
@@ -678,6 +679,7 @@ export default function AppointmentFormPage() {
     name: "",
     gender: "",
     age: "",
+    occupation: "", // 新增：職業
     phone: "",
     lineId: "",
     email: "",
@@ -687,8 +689,8 @@ export default function AppointmentFormPage() {
     adults: 1,
     kids: 0,
     region: "",
-    caseAddress: "", // 新增
-    caseName: "", // 新增
+    caseAddress: "",
+    caseName: "",
     houseStatus: "",
     sizeRange: "",
     // Step 3 設計需求
@@ -706,6 +708,7 @@ export default function AppointmentFormPage() {
     name: useRef(null),
     gender: useRef(null),
     age: useRef(null),
+    occupation: useRef(null), // 新增
     phone: useRef(null),
     lineId: useRef(null),
     email: useRef(null),
@@ -713,7 +716,7 @@ export default function AppointmentFormPage() {
     refOther: useRef(null),
 
     region: useRef(null),
-    caseAddress: useRef(null), // 新增
+    caseAddress: useRef(null),
     houseStatus: useRef(null),
     sizeRange: useRef(null),
 
@@ -754,13 +757,14 @@ export default function AppointmentFormPage() {
     if (s === 0) {
       const phoneDigits = digitsOnly(form.phone);
       const refOK =
-        (form.ref && !form.ref.startsWith("其他:")) || hasOther(form.ref); // 其他: 必須有內容
+        (form.ref && !form.ref.startsWith("其他:")) || hasOther(form.ref);
 
       return (
         isNonEmpty(form.name) &&
         isNonEmpty(form.gender) &&
         isNonEmpty(form.age) &&
-        phoneDigits.length >= 8 && // 簡單長度檢查
+        isNonEmpty(form.occupation) && // 新增：職業必填
+        phoneDigits.length >= 8 &&
         isNonEmpty(form.lineId) &&
         isEmail.test(String(form.email).trim()) &&
         refOK
@@ -770,14 +774,13 @@ export default function AppointmentFormPage() {
     if (s === 1) {
       return (
         isNonEmpty(form.region) &&
-        isNonEmpty(form.caseAddress) && // 必填檢查
+        isNonEmpty(form.caseAddress) &&
         isNonEmpty(form.houseStatus) &&
         isNonEmpty(form.sizeRange)
       );
     }
 
     if (s === 2) {
-      // budget 需能轉出 label
       const budgetOK = !!(
         form.budget &&
         ["200-300", "301-400", "401-500", "501+"].includes(form.budget)
@@ -798,6 +801,7 @@ export default function AppointmentFormPage() {
       if (!isNonEmpty(form.name)) errs.name = "請填寫姓名";
       if (!isNonEmpty(form.gender)) errs.gender = "請選擇稱謂";
       if (!isNonEmpty(form.age)) errs.age = "請選擇年齡";
+      if (!isNonEmpty(form.occupation)) errs.occupation = "請填寫職業"; // 新增
       if (digitsOnly(form.phone).length < 8) errs.phone = "電話格式不正確";
       if (!isNonEmpty(form.lineId)) errs.lineId = "請填寫 LINE ID";
       if (!isEmail.test(String(form.email).trim()))
@@ -811,7 +815,7 @@ export default function AppointmentFormPage() {
 
     if (s === 1) {
       if (!isNonEmpty(form.region)) errs.region = "請選擇區域";
-      if (!isNonEmpty(form.caseAddress)) errs.caseAddress = "請填寫案件地址"; // 必填訊息
+      if (!isNonEmpty(form.caseAddress)) errs.caseAddress = "請填寫案件地址";
       if (!isNonEmpty(form.houseStatus)) errs.houseStatus = "請選擇房屋現況";
       if (!isNonEmpty(form.sizeRange)) errs.sizeRange = "請選擇室內坪數";
     }
@@ -835,7 +839,6 @@ export default function AppointmentFormPage() {
         : null) || (refs[key] ? refs[key].current : null);
     if (el && typeof el.scrollIntoView === "function") {
       el.scrollIntoView({ behavior: "smooth", block: "center" });
-      // 嘗試 focus 輸入框
       const input = el.querySelector?.("input, textarea, button, [tabindex]");
       if (input && typeof input.focus === "function") {
         setTimeout(() => input.focus(), 350);
@@ -932,11 +935,12 @@ export default function AppointmentFormPage() {
       setServerMsg(okMsg);
       alert(okMsg);
 
-      // 成功後清空表單並回到第一步（可改保留內容）
+      // 成功後清空表單並回到第一步
       setForm({
         name: "",
         gender: "",
         age: "",
+        occupation: "", // 重置
         phone: "",
         lineId: "",
         email: "",
@@ -945,8 +949,8 @@ export default function AppointmentFormPage() {
         adults: 1,
         kids: 0,
         region: "",
-        caseAddress: "", // 重置
-        caseName: "", // 重置
+        caseAddress: "",
+        caseName: "",
         houseStatus: "",
         sizeRange: "",
         need: "",
@@ -1152,6 +1156,29 @@ export default function AppointmentFormPage() {
                     {errors.age && (
                       <p className="mt-1 text-xs text-rose-600">{errors.age}</p>
                     )}
+                  </Section>
+
+                  {/* 職業 */}
+                  <Section title="職業 *">
+                    <div ref={refs.occupation}>
+                      <input
+                        type="text"
+                        placeholder="請填寫職業"
+                        className={`w-full rounded-xl border px-4 py-3 outline-none focus:ring-2 focus:ring-neutral-800 ${
+                          errors.occupation
+                            ? "border-rose-500"
+                            : "border-neutral-200"
+                        }`}
+                        value={form.occupation}
+                        onChange={(e) => setF({ occupation: e.target.value })}
+                        aria-invalid={!!errors.occupation}
+                      />
+                      {errors.occupation && (
+                        <p className="mt-1 text-xs text-rose-600">
+                          {errors.occupation}
+                        </p>
+                      )}
+                    </div>
                   </Section>
 
                   {/* 聯絡 */}
