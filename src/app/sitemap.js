@@ -48,13 +48,13 @@ export default async function sitemap() {
     "/service",
     "/qa",
     "/qa/design_process",
-    "/qa/renovation_knowledge",
+    
     "/contact",
     "/news",
     "/blog",
     "/works",
     "/video",
-    "/appointment",
+ 
   ];
 
   staticPages.forEach((route) => {

@@ -290,7 +290,7 @@ function LoanHelpModal({ open, onClose }) {
       },
     ],
     ctas: [
-      { label: "預約諮詢表單", href: "/appointment" },
+      { label: "預約諮詢表單", href: "/contact" },
       { label: "詢問客服", href: "/contact" },
     ],
     notes: [

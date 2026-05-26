@@ -18,7 +18,7 @@ export const metadata = {
     "聯絡表單",
   ],
   icons: {
-    icon: "/images/logo/company-logo.ico",
+    icon: "/images/logo/favicon.ico",
   },
   openGraph: {
     type: "website",
