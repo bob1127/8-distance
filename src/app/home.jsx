@@ -1,7 +1,7 @@
 // app/home/home.jsx
 "use client";
 
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import gsap from "gsap";
@@ -27,83 +27,30 @@ function getYouTubeId(url) {
 /* ---------------- HERO 智慧載入影片 (修正版：強制寬度滿版) ---------------- */
 function SmartHeroVideo({
   videoUrl,
-  poster,
   className = "w-full h-full",
-  loadDelayMs = 0,
-  minWidthForVideo = 768,
 }) {
-  const wrapRef = useRef(null);
   const videoRef = useRef(null);
-  const [shouldMountVideo, setShouldMountVideo] = useState(false);
-  const [canAutoplay, setCanAutoplay] = useState(false);
 
   useEffect(() => {
-    const el = wrapRef.current;
-    if (!el) return;
-    if (!videoUrl) return;
-
-    const io = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((e) => e.isIntersecting)) {
-          const t = setTimeout(() => setShouldMountVideo(true), loadDelayMs);
-          return () => clearTimeout(t);
-        }
-      },
-      { threshold: 0.15 },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, [loadDelayMs, videoUrl]);
-
-  useEffect(() => {
-    const isSmall = window.innerWidth < minWidthForVideo;
-    const prefersReduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-    const saveData =
-      navigator.connection &&
-      (navigator.connection.saveData ||
-        navigator.connection.effectiveType === "2g");
-
-    if (isSmall || prefersReduced || saveData) {
-      setShouldMountVideo(false);
-      setCanAutoplay(false);
-      return;
-    }
-    setCanAutoplay(true);
-  }, [minWidthForVideo]);
-
-  useEffect(() => {
-    if (shouldMountVideo && canAutoplay && videoRef.current) {
+    if (videoRef.current) {
       videoRef.current.play().catch((err) => {
         console.warn("Autoplay blocked:", err);
       });
     }
-  }, [shouldMountVideo, canAutoplay]);
+  }, [videoUrl]);
 
   return (
-    <div
-      ref={wrapRef}
-      className={`absolute inset-0 overflow-hidden bg-black ${className}`}
-    >
-      <Image
-        src={poster || "/images/placeholder.jpg"}
-        alt="Hero Background"
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover z-[1] opacity-100"
-      />
+    <div className={`absolute inset-0 overflow-hidden bg-black ${className}`}>
       <div className="absolute inset-0 z-[5] bg-transparent pointer-events-auto" />
-      {shouldMountVideo && canAutoplay && videoUrl && (
+      {videoUrl && (
         <video
           ref={videoRef}
-          className="absolute inset-0 w-full h-full z-[2] object-cover"
+          className="absolute inset-0 z-[2] h-full w-full object-cover"
           autoPlay
           muted
           loop
           playsInline
-          poster={poster}
+          preload="auto"
         >
           <source src={videoUrl} type="video/mp4" />
         </video>
@@ -261,9 +208,6 @@ function CategoryTile({
 }
 
 /* ---------------- 主首頁 ---------------- */
-const HERO_POSTER =
-  "/images/index/b69ff1_8d67d2bc26bd45529c4848f4343ccecc~mv2.jpg.avif";
-
 function HomeClient({ specialPosts = [], frontData = {}, worksData = {} }) {
   const containerRef = useRef(null);
 
@@ -273,11 +217,10 @@ function HomeClient({ specialPosts = [], frontData = {}, worksData = {} }) {
       : null;
 
     const videoUrl = first?.video_url || "";
-    const poster = HERO_POSTER || first?.image_url || "/images/placeholder.jpg";
-    return { videoUrl, poster };
+    return { videoUrl };
   };
 
-  const { videoUrl, poster } = getHeroVideo(frontData);
+  const { videoUrl } = getHeroVideo(frontData);
 
   const tiles = Array.isArray(worksData.works_classifications)
     ? worksData.works_classifications.map((w) => {
@@ -311,12 +254,7 @@ function HomeClient({ specialPosts = [], frontData = {}, worksData = {} }) {
       <div ref={containerRef} className="main bg-[#f5f5f7]">
         {/* HERO 區塊 */}
         <section className="relative h-screen z-50 overflow-hidden bg-black">
-          <SmartHeroVideo
-            videoUrl={videoUrl}
-            poster={poster}
-            minWidthForVideo={0}
-            loadDelayMs={0}
-          />
+          <SmartHeroVideo videoUrl={videoUrl} />
           <div className="sr-only">
             <h1>捌程室內設計 8distance・台中室內設計推薦・商空規劃</h1>
           </div>
