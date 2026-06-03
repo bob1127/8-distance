@@ -4,6 +4,7 @@ export const dynamic = "force-static";
 export const runtime = "nodejs";
 
 import Client from "./home";
+import { buildHeroSlides } from "@/lib/heroCarousel";
 
 /* ----------------- generateMetadata ----------------- */
 export async function generateMetadata() {
@@ -137,12 +138,11 @@ export default async function Page() {
 
   const specialPosts = [];
 
-  const firstHero =
-    Array.isArray(frontJson?.front_carouse_video) &&
-    frontJson.front_carouse_video.find((v) => v?.video_url);
+  const heroSlides = buildHeroSlides(frontJson);
+  const firstMp4 = heroSlides.find((s) => s.type === "mp4");
 
   const heroMp4 =
-    firstHero?.video_url ||
+    firstMp4?.url ||
     "https://video.wixstatic.com/video/b69ff1_143f9b33dccf44eea83413490c5a1713/1080p/mp4/file.mp4";
   const heroPoster =
     frontJson?.front_design_image?.[0]?.image_url ||

@@ -11,49 +11,76 @@ import Nav from "../components/PageTransition/Nav";
 import { ReactLenis } from "@studio-freight/react-lenis";
 import LatestNewsCarousel from "../components/LatestNewsCarousel";
 import TestimonialsEmbla from "../components/TestimonialsEmbla";
+import { buildHeroSlides } from "@/lib/heroCarousel";
 import "swiper/css";
 import "swiper/css/pagination";
 
 gsap.registerPlugin(ScrollTrigger);
 
-/* ---------------- 輔助：解析 YouTube ID (保留但暫不使用) ---------------- */
-function getYouTubeId(url) {
-  if (!url) return null;
-  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-  const match = url.match(regExp);
-  return match && match[2].length === 11 ? match[2] : null;
+const HERO_ROTATE_MS = 15000;
+
+function youtubeEmbedSrc(videoId, startSeconds = 0) {
+  const params = new URLSearchParams({
+    autoplay: "1",
+    mute: "1",
+    controls: "0",
+    playsinline: "1",
+    loop: "1",
+    playlist: videoId,
+    rel: "0",
+    modestbranding: "1",
+    iv_load_policy: "3",
+  });
+  if (startSeconds > 0) {
+    params.set("start", String(Math.floor(startSeconds)));
+  }
+  return `https://www.youtube.com/embed/${videoId}?${params}`;
 }
 
-/* ---------------- HERO 智慧載入影片 (修正版：強制寬度滿版) ---------------- */
-function SmartHeroVideo({
-  videoUrl,
+/* ---------------- HERO 輪播：依後台 sort_order，支援 mp4 + YouTube ---------------- */
+function HeroVideoCarousel({
+  slides = [],
   poster,
   className = "w-full h-full",
   loadDelayMs = 0,
   minWidthForVideo = 768,
+  rotateMs = HERO_ROTATE_MS,
 }) {
   const wrapRef = useRef(null);
-  const videoRef = useRef(null);
+  const videoRefsMap = useRef({});
+  const youtubeProgressRef = useRef({});
+  const youtubeActiveSinceRef = useRef(null);
   const [shouldMountVideo, setShouldMountVideo] = useState(false);
   const [canAutoplay, setCanAutoplay] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [youtubeMountKeys, setYoutubeMountKeys] = useState(() => new Set());
+  const [youtubeEmbedStart, setYoutubeEmbedStart] = useState({});
+
+  const count = slides.length;
+  const safeIndex = count > 0 ? activeIndex % count : 0;
+  const active = count > 0 ? slides[safeIndex] : null;
+  const defaultPoster = poster || "/images/placeholder.jpg";
+  const showMedia = shouldMountVideo && canAutoplay && !!active;
 
   useEffect(() => {
     const el = wrapRef.current;
-    if (!el) return;
-    if (!videoUrl) return;
+    if (!el || count === 0) return;
 
+    let timeoutId;
     const io = new IntersectionObserver(
       (entries) => {
         if (entries.some((e) => e.isIntersecting)) {
-          const t = setTimeout(() => setShouldMountVideo(true), loadDelayMs);
-          return () => clearTimeout(t);
+          timeoutId = setTimeout(() => setShouldMountVideo(true), loadDelayMs);
         }
       },
       { threshold: 0.15 },
     );
     io.observe(el);
-    return () => io.disconnect();
-  }, [loadDelayMs, videoUrl]);
+    return () => {
+      io.disconnect();
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [loadDelayMs, count]);
 
   useEffect(() => {
     const isSmall = window.innerWidth < minWidthForVideo;
@@ -74,12 +101,57 @@ function SmartHeroVideo({
   }, [minWidthForVideo]);
 
   useEffect(() => {
-    if (shouldMountVideo && canAutoplay && videoRef.current) {
-      videoRef.current.play().catch((err) => {
-        console.warn("Autoplay blocked:", err);
-      });
+    if (!shouldMountVideo || !canAutoplay || count <= 1) return;
+    const timer = setInterval(() => {
+      setActiveIndex((i) => (i + 1) % count);
+    }, rotateMs);
+    return () => clearInterval(timer);
+  }, [shouldMountVideo, canAutoplay, count, rotateMs]);
+
+  /* 切換時暫停非 active 的 mp4，保留 currentTime；回來時從原處續播 */
+  useEffect(() => {
+    if (!showMedia) return;
+
+    slides.forEach((slide, idx) => {
+      const v = videoRefsMap.current[slide.key];
+      if (slide.type !== "mp4" || !v) return;
+      if (idx === safeIndex) {
+        v.play().catch((err) => {
+          console.warn("Autoplay blocked:", err);
+        });
+      } else {
+        v.pause();
+      }
+    });
+  }, [safeIndex, showMedia, slides]);
+
+  /* 離開 YouTube 時累計已播秒數，下次嵌入用 start= 接續 */
+  useEffect(() => {
+    const prev = youtubeActiveSinceRef.current;
+    if (prev?.key) {
+      const elapsed = (Date.now() - prev.at) / 1000;
+      youtubeProgressRef.current[prev.key] =
+        (youtubeProgressRef.current[prev.key] || 0) + elapsed;
     }
-  }, [shouldMountVideo, canAutoplay]);
+
+    if (active?.type === "youtube" && active.youtubeId) {
+      youtubeActiveSinceRef.current = { key: active.key, at: Date.now() };
+      setYoutubeMountKeys((s) => new Set(s).add(active.key));
+      setYoutubeEmbedStart((starts) => ({
+        ...starts,
+        [active.key]: youtubeProgressRef.current[active.key] || 0,
+      }));
+    } else {
+      youtubeActiveSinceRef.current = null;
+    }
+  }, [safeIndex, active?.key, active?.type, active?.youtubeId]);
+
+  const slideLayerClass = (isActive) =>
+    `absolute inset-0 overflow-hidden transition-opacity duration-700 ${
+      isActive
+        ? "opacity-100 z-10"
+        : "pointer-events-none opacity-0 invisible z-0"
+    }`;
 
   return (
     <div
@@ -87,27 +159,63 @@ function SmartHeroVideo({
       className={`absolute inset-0 overflow-hidden bg-black ${className}`}
     >
       <Image
-        src={poster || "/images/placeholder.jpg"}
+        src={active?.poster || defaultPoster}
         alt="Hero Background"
         fill
         priority
         sizes="100vw"
-        className="object-cover z-[1] opacity-100"
+        className={`object-cover z-[1] transition-opacity duration-700 ${
+          showMedia ? "opacity-0" : "opacity-100"
+        }`}
       />
-      <div className="absolute inset-0 z-[5] bg-transparent pointer-events-auto" />
-      {shouldMountVideo && canAutoplay && videoUrl && (
-        <video
-          ref={videoRef}
-          className="absolute inset-0 w-full h-full z-[2] object-cover"
-          autoPlay
-          muted
-          loop
-          playsInline
-          poster={poster}
-        >
-          <source src={videoUrl} type="video/mp4" />
-        </video>
+
+      {/* 每支影片只掛載一次，切換時 pause/hide，回來從原處續播 */}
+      {showMedia && (
+        <div className="absolute inset-0 z-[2] overflow-hidden">
+          {slides.map((slide, idx) => {
+            const isActive = idx === safeIndex;
+
+            if (slide.type === "youtube" && slide.youtubeId) {
+              if (!youtubeMountKeys.has(slide.key)) return null;
+              const startAt = youtubeEmbedStart[slide.key] || 0;
+              return (
+                <div
+                  key={slide.key}
+                  className={slideLayerClass(isActive)}
+                  aria-hidden={!isActive}
+                >
+                  <iframe
+                    key={`${slide.key}-${Math.floor(startAt)}`}
+                    title={slide.title || "Hero video"}
+                    src={youtubeEmbedSrc(slide.youtubeId, startAt)}
+                    className="pointer-events-none absolute left-1/2 top-1/2 min-h-[100%] min-w-[100%] w-[300%] h-[300%] max-w-none -translate-x-1/2 -translate-y-1/2"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  />
+                </div>
+              );
+            }
+
+            return (
+              <video
+                key={slide.key}
+                ref={(el) => {
+                  if (el) videoRefsMap.current[slide.key] = el;
+                  else delete videoRefsMap.current[slide.key];
+                }}
+                className={`${slideLayerClass(isActive)} h-full w-full object-cover`}
+                src={slide.url}
+                muted
+                playsInline
+                preload="auto"
+                loop={count === 1}
+                aria-hidden={!isActive}
+              />
+            );
+          })}
+        </div>
       )}
+
+      <div className="absolute inset-0 z-[5] bg-transparent pointer-events-auto" />
     </div>
   );
 }
@@ -267,17 +375,11 @@ const HERO_POSTER =
 function HomeClient({ specialPosts = [], frontData = {}, worksData = {} }) {
   const containerRef = useRef(null);
 
-  const getHeroVideo = (frontData) => {
-    const first = Array.isArray(frontData?.front_carouse_video)
-      ? frontData.front_carouse_video.find((v) => v?.video_url)
-      : null;
-
-    const videoUrl = first?.video_url || "";
-    const poster = HERO_POSTER || first?.image_url || "/images/placeholder.jpg";
-    return { videoUrl, poster };
-  };
-
-  const { videoUrl, poster } = getHeroVideo(frontData);
+  const heroSlides = buildHeroSlides(frontData);
+  const poster =
+    HERO_POSTER ||
+    heroSlides[0]?.poster ||
+    "/images/placeholder.jpg";
 
   const tiles = Array.isArray(worksData.works_classifications)
     ? worksData.works_classifications.map((w) => {
@@ -311,8 +413,8 @@ function HomeClient({ specialPosts = [], frontData = {}, worksData = {} }) {
       <div ref={containerRef} className="main bg-[#f5f5f7]">
         {/* HERO 區塊 */}
         <section className="relative h-screen z-50 overflow-hidden bg-black">
-          <SmartHeroVideo
-            videoUrl={videoUrl}
+          <HeroVideoCarousel
+            slides={heroSlides}
             poster={poster}
             minWidthForVideo={0}
             loadDelayMs={0}
