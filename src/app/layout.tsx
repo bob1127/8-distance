@@ -71,12 +71,6 @@ export default function RootLayout({
             href="https://ds.justfont.com"
             crossOrigin=""
           />
-          <link
-            rel="preload"
-            href="https://ds.justfont.com/js/auto/id/479204107662"
-            as="script"
-            crossOrigin="anonymous"
-          />
 
           <style id="portal-font-fix">{`
             .portal-root, .portal-root * {
@@ -88,11 +82,16 @@ export default function RootLayout({
         </head>
 
         <body className="antialiased bg-white text-gray-900 tearsfont">
-          {/* --- justfont 腳本 --- */}
+          {/* --- justfont 腳本（順序不可改：core → loader）--- */}
           <Script
             id="jf-core"
             strategy="beforeInteractive"
             src="https://s3-ap-northeast-1.amazonaws.com/justfont-user-script/jf-65752.js"
+          />
+          <Script
+            id="jf-loader"
+            strategy="beforeInteractive"
+            src="https://ds.justfont.com/js/auto/id/479204107662"
           />
           {/* --- 字體預熱 --- */}
           <span
@@ -227,22 +226,50 @@ export default function RootLayout({
             `}
           </Script>
 
-          {/* justfont 載入逾時 → jf-inactive 時，延遲重試一次 ds 腳本 */}
+          {/* jf-inactive 時重試載入 loader 並等待 jf-active */}
           <Script id="jf-inactive-retry" strategy="afterInteractive">
             {`
               (function () {
+                function flush() {
+                  try {
+                    var jf = window._jf;
+                    if (jf && typeof jf.flush === "function") jf.flush();
+                  } catch (e) {}
+                }
+                function waitActive(tries) {
+                  var html = document.documentElement;
+                  if (html.classList.contains("jf-active")) {
+                    flush();
+                    return;
+                  }
+                  if (tries > 0 && !html.classList.contains("jf-inactive")) {
+                    setTimeout(function () { waitActive(tries - 1); }, 250);
+                    return;
+                  }
+                  if (tries > 0 && html.classList.contains("jf-inactive")) {
+                    setTimeout(function () { waitActive(tries - 1); }, 250);
+                  }
+                }
                 function retryLoader() {
                   var html = document.documentElement;
-                  if (!html.classList.contains("jf-inactive")) return;
-                  if (document.querySelector('script[data-jf-retry="1"]')) return;
+                  if (html.classList.contains("jf-active")) return;
+                  if (document.querySelector('script[data-jf-retry="1"]')) {
+                    waitActive(40);
+                    return;
+                  }
                   var s = document.createElement("script");
                   s.src = "https://ds.justfont.com/js/auto/id/479204107662";
                   s.async = true;
                   s.setAttribute("data-jf-retry", "1");
+                  s.onload = function () { waitActive(40); };
                   document.head.appendChild(s);
                 }
                 window.addEventListener("load", function () {
-                  setTimeout(retryLoader, 600);
+                  if (document.documentElement.classList.contains("jf-active")) {
+                    flush();
+                    return;
+                  }
+                  setTimeout(retryLoader, 300);
                 });
               })();
             `}
