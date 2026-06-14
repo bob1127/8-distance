@@ -5,9 +5,9 @@ export const dynamic = "force-static"; // 靜態 + ISR
 import Script from "next/script";
 import Link from "next/link";
 import ServiceClient from "./client";
+import { SITE_HOME, SITE_ORIGIN, absoluteUrl } from "@/lib/site";
 
 const API = "https://api.8distance.com/api/processes";
-const SITE = "https://8-distance.vercel.app";
 
 /* ----------------- 小工具 ----------------- */
 function safeArray(x) {
@@ -141,17 +141,16 @@ export async function generateMetadata() {
       ? meta.key_word.split(/\s*,\s*|\s+/).filter(Boolean)
       : ["服務流程", "收費標準", "室內設計", "8distance", "捌程設計"];
 
-    const canonical = `${SITE}/services`;
+    const canonical = absoluteUrl("/service");
     const siteName = "8distance 捌程室內設計";
 
     return {
       title,
       description,
       keywords,
-      metadataBase: new URL(SITE),
+      metadataBase: new URL(SITE_ORIGIN),
       alternates: {
         canonical,
-        languages: { "zh-TW": "/services", en: "/en/services" },
       },
       openGraph: {
         title,
@@ -176,7 +175,7 @@ export async function generateMetadata() {
       title: "服務流程",
       description: "捌程室內設計的服務流程與收費標準。",
       keywords: ["服務流程", "收費標準", "室內設計", "8distance"],
-      alternates: { canonical: `${SITE}/services` },
+      alternates: { canonical: absoluteUrl("/service") },
     };
   }
 }
@@ -185,7 +184,7 @@ export async function generateMetadata() {
 export default async function ServicesPage() {
   const { designs, charges } = await getProcesses();
 
-  const pageUrl = `${SITE}/services`;
+  const pageUrl = absoluteUrl("/service");
 
   // 1) BreadcrumbList
   const breadcrumbLd = {
@@ -193,7 +192,7 @@ export default async function ServicesPage() {
     "@type": "BreadcrumbList",
     "@id": `${pageUrl}#breadcrumb`,
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "首頁", item: `${SITE}/` },
+      { "@type": "ListItem", position: 1, name: "首頁", item: SITE_HOME },
       { "@type": "ListItem", position: 2, name: "服務流程", item: pageUrl },
     ],
   };

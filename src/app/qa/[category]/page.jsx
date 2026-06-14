@@ -7,6 +7,7 @@ import Script from "next/script";
 import { notFound } from "next/navigation";
 import Client from "../client"; // 指向原本的 client.jsx
 import { fetchQA } from "@/lib/qa";
+import { SITE_HOME, SITE_ORIGIN, absoluteUrl } from "@/lib/site";
 
 /* ✅ 1. 產生靜態路徑 (SSG) */
 export async function generateStaticParams() {
@@ -33,7 +34,7 @@ export async function generateMetadata({ params }) {
   const catName = category === "renovation_knowledge" ? "裝修知識" : "設計流程";
   const title = `${catName} - ${meta.title || "常見問題"}`;
 
-  const canonical = `https://8-distance.vercel.app/qa/${category}`;
+  const canonical = absoluteUrl(`/qa/${category}`);
 
   // ✅ 指定的 OG 圖片網址
   const ogImage =
@@ -43,6 +44,7 @@ export async function generateMetadata({ params }) {
     title,
     description: meta.description,
     keywords: meta.key_word,
+    metadataBase: new URL(SITE_ORIGIN),
     alternates: { canonical },
     openGraph: {
       url: canonical,
@@ -78,8 +80,7 @@ export default async function Page({ params }) {
     notFound();
   }
 
-  const siteUrl = "https://8-distance.vercel.app";
-  const pageUrl = `${siteUrl}/qa/${category}`;
+  const pageUrl = absoluteUrl(`/qa/${category}`);
 
   // JSON-LD (只針對當前分類生成)
   const currentItems = byCat[category] || [];
@@ -100,12 +101,12 @@ export default async function Page({ params }) {
     "@type": "BreadcrumbList",
     "@id": `${pageUrl}#breadcrumb`,
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "首頁", item: `${siteUrl}/` },
+      { "@type": "ListItem", position: 1, name: "首頁", item: SITE_HOME },
       {
         "@type": "ListItem",
         position: 2,
         name: "常見問題",
-        item: `${siteUrl}/qa`,
+        item: absoluteUrl("/qa/design_process"),
       },
       {
         "@type": "ListItem",

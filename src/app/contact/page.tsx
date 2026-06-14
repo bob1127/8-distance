@@ -1,7 +1,9 @@
 import Client from "./client";
+import { SITE_ORIGIN } from "@/lib/site";
 
 // /app/contact/page.jsx
 export const metadata = {
+  metadataBase: new URL(SITE_ORIGIN),
   title: "聯絡我們｜捌程室內設計 8 Distance｜預約諮詢與合作洽談",
   description:
     "需要住宅或商業空間規劃？透過表單留下需求，或以 Email／電話聯繫捌程室內設計 8 Distance。我們提供設計諮詢、預約丈量與品牌／商業合作洽談，服務包含住宅設計、老屋翻新、純設計案與商業空間整體規劃。",

@@ -5,9 +5,9 @@ export const runtime = "nodejs";
 import Script from "next/script";
 import AnimatedHeading from "@/components/AnimatedHeading";
 import YouTubeLiteClient from "./client";
+import { SITE_HOME, absoluteUrl } from "@/lib/site";
 
 const API_BASE = "https://api.8distance.com/api/videos";
-const SITE = "https://8-distance.vercel.app";
 
 /* ---------------- 工具：解析 YouTube ID ---------------- */
 function extractYouTubeId(input) {
@@ -194,6 +194,28 @@ async function getInitialData(page = 1) {
   }
 }
 
+export async function generateMetadata() {
+  const canonical = absoluteUrl("/video");
+  const title = "影音內容｜捌程室內設計 8distance";
+  const description =
+    "捌程室內設計影音專區，收錄室內設計案例、裝修知識與品牌動態影片。";
+
+  return {
+    title,
+    description,
+    metadataBase: new URL("https://www.8distance.com"),
+    alternates: { canonical },
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+      siteName: "捌程室內設計 8distance",
+      type: "website",
+      locale: "zh_TW",
+    },
+  };
+}
+
 /* ---------------- Page Component ---------------- */
 export default async function Page({ searchParams }) {
   const page = searchParams?.page || 1;
@@ -202,14 +224,14 @@ export default async function Page({ searchParams }) {
   const { sliderItems, normalVideos, shortsVideos, pagination } =
     await getInitialData(page);
 
-  const pageUrl = `${SITE}/video`;
+  const pageUrl = absoluteUrl("/video");
 
   // Breadcrumb Schema
   const breadcrumbLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "首頁", item: `${SITE}/` },
+      { "@type": "ListItem", position: 1, name: "首頁", item: SITE_HOME },
       { "@type": "ListItem", position: 2, name: "影音內容", item: pageUrl },
     ],
   };

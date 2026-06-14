@@ -5,11 +5,10 @@ export const runtime = "nodejs";
 
 import Client from "./home";
 import { buildHeroSlides } from "@/lib/heroCarousel";
+import { SITE_HOME, SITE_ORIGIN, absoluteUrl } from "@/lib/site";
 
 /* ----------------- generateMetadata ----------------- */
 export async function generateMetadata() {
-  const SITE_URL = "https://www.8distance.com";
-
   try {
     const res = await fetch("https://api.8distance.com/api/front", {
       next: { revalidate },
@@ -48,7 +47,7 @@ export async function generateMetadata() {
     }
 
     return {
-      metadataBase: new URL(SITE_URL),
+      metadataBase: new URL(SITE_ORIGIN),
       title,
       description,
       keywords,
@@ -67,7 +66,7 @@ export async function generateMetadata() {
       openGraph: {
         type: "website",
         locale: "zh_TW",
-        url: SITE_URL,
+        url: SITE_HOME,
         siteName: "捌程室內設計 8distance",
         title,
         description,
@@ -97,16 +96,18 @@ export async function generateMetadata() {
           "max-snippet": -1,
         },
       },
-      alternates: { canonical: SITE_URL },
+      alternates: { canonical: SITE_HOME },
     };
   } catch (e) {
     console.error("generateMetadata front fetch failed:", e);
     return {
-      metadataBase: new URL("https://www.8distance.com"),
+      metadataBase: new URL(SITE_ORIGIN),
       title: "台中室內設計推薦｜捌程室內設計 8distance",
       description:
         "捌程室內設計深耕中部多年，專精住宅空間、商業空間及老屋翻新設計。",
+      alternates: { canonical: SITE_HOME },
       openGraph: {
+        url: SITE_HOME,
         images: [
           {
             url: "https://api.8distance.com/storage/uploads/works_classification/01K97QQ2SP8W61E7W5QDWFMRZ0.webp",
@@ -121,8 +122,6 @@ export async function generateMetadata() {
 
 /* ----------------- Page ----------------- */
 export default async function Page() {
-  const SITE_URL = "https://www.8distance.com";
-
   const [frontRes, worksRes] = await Promise.allSettled([
     fetch("https://api.8distance.com/api/front", {
       next: { revalidate },
@@ -154,7 +153,7 @@ export default async function Page() {
       ? worksJson.works_classifications.map((w, i) => ({
           "@type": "ListItem",
           position: i + 1,
-          url: `${SITE_URL}/works/${w.id}`,
+          url: `${SITE_ORIGIN}/works/${w.id}`,
           name: w.title || `作品分類 ${i + 1}`,
           image: w.image_url || undefined,
         }))
@@ -175,11 +174,15 @@ export default async function Page() {
   const localBusinessJsonLd = {
     "@context": "https://schema.org",
     "@type": ["LocalBusiness", "HomeAndConstructionBusiness", "Organization"],
-    "@id": `${SITE_URL}/#organization`,
+    "@id": `${SITE_ORIGIN}/#organization`,
     name: "捌程室內設計 8distance",
-    url: SITE_URL,
-    logo: `${SITE_URL}/images/favicon.ico`,
-    image: [heroPoster],
+    url: SITE_HOME,
+    logo: `${SITE_ORIGIN}/images/favicon.ico`,
+    image: [
+      heroPoster.startsWith("http")
+        ? heroPoster
+        : `${SITE_ORIGIN}${heroPoster.startsWith("/") ? heroPoster : `/${heroPoster}`}`,
+    ],
     description: pageDescription,
     telephone: "+886-4-23720128",
     email: "8distancee@gmail.com",
@@ -214,15 +217,15 @@ export default async function Page() {
   const webSiteJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "@id": `${SITE_URL}/#website`,
-    url: SITE_URL,
+    "@id": `${SITE_ORIGIN}/#website`,
+    url: SITE_HOME,
     name: "捌程室內設計 8distance",
     publisher: {
-      "@id": `${SITE_URL}/#organization`,
+      "@id": `${SITE_ORIGIN}/#organization`,
     },
     potentialAction: {
       "@type": "SearchAction",
-      target: `${SITE_URL}/search?q={search_term_string}`,
+      target: `${SITE_ORIGIN}/search?q={search_term_string}`,
       "query-input": "required name=search_term_string",
     },
   };
@@ -231,31 +234,31 @@ export default async function Page() {
   const siteNavigationJsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    "@id": `${SITE_URL}/#sitenavigation`,
+    "@id": `${SITE_ORIGIN}/#sitenavigation`,
     itemListElement: [
       {
         "@type": "SiteNavigationElement",
         position: 1,
         name: "空間作品 Works",
-        url: `${SITE_URL}/works`,
+        url: `${SITE_ORIGIN}/works`,
       },
       {
         "@type": "SiteNavigationElement",
         position: 2,
         name: "服務流程 Service",
-        url: `${SITE_URL}/service`,
+        url: `${SITE_ORIGIN}/service`,
       },
       {
         "@type": "SiteNavigationElement",
         position: 3,
         name: "最新消息 News",
-        url: `${SITE_URL}/news`,
+        url: `${SITE_ORIGIN}/news`,
       },
       {
         "@type": "SiteNavigationElement",
         position: 4,
         name: "聯絡我們 Contact",
-        url: `${SITE_URL}/contact`,
+        url: `${SITE_ORIGIN}/contact`,
       },
     ],
   };
@@ -264,15 +267,15 @@ export default async function Page() {
   const webPageJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "@id": `${SITE_URL}/#webpage`,
-    url: SITE_URL,
+    "@id": `${SITE_ORIGIN}/#webpage`,
+    url: SITE_HOME,
     name: pageTitle,
     description: pageDescription,
     isPartOf: {
-      "@id": `${SITE_URL}/#website`,
+      "@id": `${SITE_ORIGIN}/#website`,
     },
     about: {
-      "@id": `${SITE_URL}/#organization`,
+      "@id": `${SITE_ORIGIN}/#organization`,
     },
   };
 
@@ -286,9 +289,9 @@ export default async function Page() {
         thumbnailUrl: [heroPoster],
         uploadDate: new Date().toISOString(),
         contentUrl: heroMp4,
-        embedUrl: SITE_URL,
+        embedUrl: SITE_HOME,
         publisher: {
-          "@id": `${SITE_URL}/#organization`,
+          "@id": `${SITE_ORIGIN}/#organization`,
         },
       }
     : null;

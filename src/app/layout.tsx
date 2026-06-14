@@ -12,6 +12,7 @@ import ConditionalNav from "@/components/ConditionalNav";
 import RenderFooter from "../components/RenderFooter";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.8distance.com"),
   title: "捌程室內設計｜商業空間與住宅設計",
   description:
     "捌程室內設計專注於舊屋翻新、住宅裝修與商業空間的室內設計整合服務。",
@@ -77,19 +78,6 @@ export default function RootLayout({
               font-synthesis-weight: auto;
             }
           `}</style>
-
-          {/* ✅ 新增：Google 結構化資料 (JSON-LD)，明確告訴 Google 網站的正式名稱 */}
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify({
-                "@context": "https://schema.org",
-                "@type": "WebSite",
-                name: "捌程室內設計",
-                url: "https://www.8distance.com/",
-              }),
-            }}
-          />
         </head>
 
         <body className="antialiased bg-white text-gray-900">

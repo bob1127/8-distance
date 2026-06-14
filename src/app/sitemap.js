@@ -1,7 +1,8 @@
 // app/sitemap.js
 export const revalidate = 3600; // 每小時更新一次快取
 
-const SITE_URL = "https://www.8distance.com";
+import { SITE_HOME, SITE_ORIGIN } from "@/lib/site";
+
 const API_ROOT = "https://api.8distance.com/api";
 
 // 工具：網址編碼
@@ -43,23 +44,23 @@ export default async function sitemap() {
   // 1. 靜態頁面
   // ==========================================
   const staticPages = [
-    "",
+    { path: "", url: SITE_HOME },
     "/about",
     "/service",
-    "/qa",
     "/qa/design_process",
-    
+    "/qa/renovation_knowledge",
     "/contact",
     "/news",
     "/blog",
     "/works",
     "/video",
- 
   ];
 
-  staticPages.forEach((route) => {
+  staticPages.forEach((entry) => {
+    const route = typeof entry === "string" ? entry : entry.path;
+    const url = typeof entry === "string" ? `${SITE_ORIGIN}${entry}` : entry.url;
     routes.push({
-      url: `${SITE_URL}${route}`,
+      url,
       lastModified: now,
       changeFrequency: route === "" ? "daily" : "weekly",
       priority: route === "" ? 1.0 : 0.8,
@@ -79,7 +80,7 @@ export default async function sitemap() {
 
     // 加入分類列表頁
     routes.push({
-      url: `${SITE_URL}/works/${escape(catSlug)}`,
+      url: `${SITE_ORIGIN}/works/${escape(catSlug)}`,
       lastModified: now,
       changeFrequency: "weekly",
       priority: 0.8,
@@ -105,7 +106,7 @@ export default async function sitemap() {
           const workSlug = work.url_slug || work.name || work.title || work.id;
           if (workSlug) {
             routes.push({
-              url: `${SITE_URL}/works/${escape(realCat)}/${escape(workSlug)}`,
+              url: `${SITE_ORIGIN}/works/${escape(realCat)}/${escape(workSlug)}`,
               lastModified: work.updated_at ? new Date(work.updated_at) : now,
               changeFrequency: "monthly",
               priority: 0.7,
@@ -123,10 +124,10 @@ export default async function sitemap() {
   const newsList = Array.isArray(newsJson?.news) ? newsJson.news : [];
 
   newsList.forEach((item) => {
-    const slug = item.url_slug || item.id;
+    const slug = item.url_slug || item.work_name || item.id;
     if (slug) {
       routes.push({
-        url: `${SITE_URL}/news/${escape(slug)}`,
+        url: `${SITE_ORIGIN}/news/${escape(slug)}`,
         lastModified: item.updated_at || item.publish_date ? new Date(item.updated_at || item.publish_date) : now,
         changeFrequency: "weekly",
         priority: 0.7,
@@ -146,7 +147,7 @@ export default async function sitemap() {
     
     if (slug) {
       routes.push({
-        url: `${SITE_URL}/blog/${escape(slug)}`,
+        url: `${SITE_ORIGIN}/blog/${escape(slug)}`,
         lastModified: item.updated_at || item.date || item.created_at ? new Date(item.updated_at || item.date || item.created_at) : now,
         changeFrequency: "weekly",
         priority: 0.7,

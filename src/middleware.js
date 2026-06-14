@@ -1,11 +1,17 @@
 import { NextResponse } from "next/server";
 
+const CANONICAL_HOST = "www.8distance.com";
+const LEGACY_HOSTS = new Set(["8distance.com", "8-distance.vercel.app"]);
+
 /**
- * Wix 舊站內部 API（如 /_api/v1/access-tokens）不應被索引。
- * 回傳 410 Gone，讓 Google 比 404 更快從索引中移除。
+ * - 非 www 網域 → 301 到 www（避免重複網頁）
+ * - Wix 舊站內部 API → 410 Gone
  */
 export function middleware(request) {
-  if (request.nextUrl.pathname.startsWith("/_api")) {
+  const host = (request.headers.get("host") || "").split(":")[0];
+  const { pathname, search } = request.nextUrl;
+
+  if (pathname.startsWith("/_api")) {
     return new NextResponse(null, {
       status: 410,
       headers: {
@@ -14,9 +20,19 @@ export function middleware(request) {
     });
   }
 
+  if (LEGACY_HOSTS.has(host)) {
+    return NextResponse.redirect(
+      new URL(`https://${CANONICAL_HOST}${pathname}${search}`),
+      301,
+    );
+  }
+
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/_api/:path*"],
+  matcher: [
+    "/_api/:path*",
+    "/((?!_next/static|_next/image|.*\\.(?:ico|png|jpg|jpeg|gif|webp|svg|avif|mp4|xml|txt|js|css|woff2?)).*)",
+  ],
 };

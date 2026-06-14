@@ -5,9 +5,9 @@ export const runtime = "nodejs";
 
 import NextDynamic from "next/dynamic";
 import Client from "./about";
+import { SITE_HOME, SITE_ORIGIN } from "@/lib/site";
 
 const API = "https://api.8distance.com/api/about";
-const SITE_URL = "https://www.8distance.com";
 
 const LenisRoot = NextDynamic(() => import("../../components/LenisRoot"), {
   ssr: false,
@@ -105,21 +105,21 @@ export async function generateMetadata() {
         ];
 
     const ogImage =
-      json?.abouts?.[0]?.image_url || `${SITE_URL}/images/og-default.jpg`;
+      json?.abouts?.[0]?.image_url || `${SITE_ORIGIN}/images/og-default.jpg`;
 
     return {
-      metadataBase: new URL(SITE_URL),
+      metadataBase: new URL(SITE_ORIGIN),
       title,
       description,
       keywords,
       authors: [{ name: "捌程室內設計 8distance" }],
       publisher: "捌程室內設計 8distance",
       formatDetection: { email: false, address: false, telephone: false },
-      alternates: { canonical: `${SITE_URL}/about` },
+      alternates: { canonical: `${SITE_ORIGIN}/about` },
       openGraph: {
         type: "website",
         locale: "zh_TW",
-        url: `${SITE_URL}/about`,
+        url: `${SITE_ORIGIN}/about`,
         siteName: "捌程室內設計 8distance",
         title,
         description,
@@ -139,15 +139,15 @@ export async function generateMetadata() {
       "捌程專注於老屋翻新、商業空間與住宅設計，融合風格與機能，打造舒適與美感並存的空間。";
 
     return {
-      metadataBase: new URL(SITE_URL),
+      metadataBase: new URL(SITE_ORIGIN),
       title: fallbackTitle,
       description: fallbackDesc,
       authors: [{ name: "捌程室內設計 8distance" }],
-      alternates: { canonical: `${SITE_URL}/about` },
+      alternates: { canonical: `${SITE_ORIGIN}/about` },
       openGraph: {
         type: "website",
         locale: "zh_TW",
-        url: `${SITE_URL}/about`,
+        url: `${SITE_ORIGIN}/about`,
         siteName: "捌程室內設計 8distance",
         title: fallbackTitle,
         description: fallbackDesc,
@@ -174,8 +174,8 @@ export default async function AboutPage() {
     teams = [];
   }
 
-  const pageUrl = `${SITE_URL}/about`;
-  const orgId = `${SITE_URL}/#organization`;
+  const pageUrl = `${SITE_ORIGIN}/about`;
+  const orgId = `${SITE_ORIGIN}/#organization`;
 
   /* ==========================================
      JSON-LD 結構化資料打包區
@@ -186,10 +186,10 @@ export default async function AboutPage() {
     "@type": "Organization",
     "@id": orgId,
     name: "捌程室內設計 8distance",
-    url: SITE_URL,
+    url: SITE_HOME,
     logo: {
       "@type": "ImageObject",
-      url: `${SITE_URL}/images/favicon.ico`,
+      url: `${SITE_ORIGIN}/images/favicon.ico`,
     },
     description:
       "捌程專注於老屋翻新、商業空間與住宅設計，融合風格與機能，打造舒適與美感並存的空間。",
@@ -204,7 +204,7 @@ export default async function AboutPage() {
     "@type": "BreadcrumbList",
     "@id": `${pageUrl}/#breadcrumb`,
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "首頁", item: `${SITE_URL}/` },
+      { "@type": "ListItem", position: 1, name: "首頁", item: SITE_HOME },
       { "@type": "ListItem", position: 2, name: "關於我們", item: pageUrl },
     ],
   };
