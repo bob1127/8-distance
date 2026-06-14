@@ -1,14 +1,20 @@
 // app/qa/client.jsx
 "use client";
 
+import { useEffect } from "react";
 import Image from "next/image";
 import QaAccordion from "@/components/QAAccordionClient";
+import { refreshJustFontDelayed } from "@/lib/justfont";
 
 export default function Client({
   initialByCategory = { design_process: [], renovation_knowledge: [] },
   settings = [],
   defaultCategory = "design_process", // ✅ 接收從 URL [category] 傳進來的當前分類
 }) {
+  useEffect(() => {
+    refreshJustFontDelayed([0, 400, 1200, 2500]);
+  }, [defaultCategory]);
+
   // 圖片處理邏輯：根據 sort_order 排序並取前 3 張
   const pics = Array.isArray(settings)
     ? settings

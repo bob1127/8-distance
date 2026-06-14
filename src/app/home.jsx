@@ -9,6 +9,7 @@ import ScrollTrigger from "gsap/ScrollTrigger";
 import IntroOverlay from "@/components/IntroOverlayOnce";
 import Nav from "../components/PageTransition/Nav";
 import { ReactLenis } from "@studio-freight/react-lenis";
+import { refreshJustFontDelayed } from "@/lib/justfont";
 import LatestNewsCarousel from "../components/LatestNewsCarousel";
 import TestimonialsEmbla from "../components/TestimonialsEmbla";
 import { buildHeroSlides } from "@/lib/heroCarousel";
@@ -376,21 +377,7 @@ function HomeClient({ specialPosts = [], frontData = {}, worksData = {} }) {
   const containerRef = useRef(null);
 
   useEffect(() => {
-    const html = document.documentElement;
-    const run = () => window.dispatchEvent(new Event("jf-refresh"));
-    if (html.classList.contains("jf-active")) {
-      run();
-      return;
-    }
-    const t = setInterval(() => {
-      if (html.classList.contains("jf-active")) {
-        clearInterval(t);
-        run();
-      } else if (html.classList.contains("jf-inactive")) {
-        clearInterval(t);
-      }
-    }, 200);
-    return () => clearInterval(t);
+    refreshJustFontDelayed([0, 500, 1500, 3000, 5000]);
   }, []);
 
   const heroSlides = buildHeroSlides(frontData);

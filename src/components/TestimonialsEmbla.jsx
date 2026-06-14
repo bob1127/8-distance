@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import AnimatedHeading from "@/components/AnimatedHeading";
 import Image from "next/image";
+import { refreshJustFontDelayed } from "@/lib/justfont";
 
 export default function TestimonialsEmbla({
   title = "業主好評",
@@ -36,7 +37,7 @@ export default function TestimonialsEmbla({
                 date: it.date || "",
               }))
           );
-          window.dispatchEvent(new Event("jf-refresh"));
+          refreshJustFontDelayed([0, 400]);
         }
       } catch (err) {
         console.error("Failed to fetch testimonials:", err);

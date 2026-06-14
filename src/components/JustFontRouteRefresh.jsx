@@ -2,31 +2,18 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { refreshJustFontDelayed } from "@/lib/justfont";
 
-/** SPA 換頁後，等 jf-active 再 flush 讓淚體套到新 DOM */
+const HOME_DELAYS = [0, 400, 1000, 2000, 3500, 5000];
+const DEFAULT_DELAYS = [0, 400, 1200, 2500];
+
+/** 換頁後多次 flush，首頁 ssr:false 需更長等待 */
 export default function JustFontRouteRefresh() {
   const pathname = usePathname();
 
   useEffect(() => {
-    const html = document.documentElement;
-
-    function flush() {
-      if (!html.classList.contains("jf-active")) return;
-      try {
-        window._jf?.flush?.();
-      } catch {
-        /* ignore */
-      }
-    }
-
-    flush();
-    const t1 = window.setTimeout(flush, 400);
-    const t2 = window.setTimeout(flush, 1200);
-
-    return () => {
-      window.clearTimeout(t1);
-      window.clearTimeout(t2);
-    };
+    const delays = pathname === "/" ? HOME_DELAYS : DEFAULT_DELAYS;
+    refreshJustFontDelayed(delays);
   }, [pathname]);
 
   return null;

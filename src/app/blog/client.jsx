@@ -10,7 +10,9 @@ import {
   motion,
   MotionConfig,
   useReducedMotion,
+  AnimatePresence,
 } from "framer-motion";
+import { refreshJustFontDelayed } from "@/lib/justfont";
 
 /* === 動畫設定 === */
 const spring = { type: "spring", stiffness: 70, damping: 22, mass: 0.9 };
@@ -24,6 +26,20 @@ const cardVariants = {
     transition: { ...spring, delay },
   }),
 };
+
+const listVariants = (reduce) => ({
+  hidden: { opacity: 0, y: 40, filter: "blur(6px)" },
+  show: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: {
+      staggerChildren: reduce ? 0 : 0.06,
+      delayChildren: reduce ? 0 : 0.04,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+});
 
 /* ====== 偏好減少動態 ====== */
 const prefersReducedMotion = () =>
@@ -65,9 +81,6 @@ function BlogCard({ item, index, formatWan }) {
       style={{ transform: "translateZ(0)" }}
       variants={cardVariants}
       custom={delay}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, amount: 0.3, margin: "0px 0px -10% 0px" }}
     >
       <div className="item overflow-hidden relative group transition-all duration-300">
         <div className="img mx-5 overflow-hidden mt-2 relative aspect-[3/3.5]">
@@ -137,6 +150,17 @@ function BlogCard({ item, index, formatWan }) {
 
 /* === 主元件 === */
 export default function BlogListClient({ items = [], banner = null }) {
+  const reduce = useReducedMotion();
+  const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    refreshJustFontDelayed([0, 400, 1200, 2500, 4000]);
+  }, []);
+
+  useEffect(() => {
+    refreshJustFontDelayed([0, 400, 1200]);
+  }, [page]);
+
   // Lenis 滾動控制
   useEffect(() => {
     const unlock = () => {
@@ -179,8 +203,6 @@ export default function BlogListClient({ items = [], banner = null }) {
       lenisRef.current = null;
     };
   }, []);
-
-  const [page, setPage] = useState(1);
 
   // 處理 items
   const cases = useMemo(() => {
@@ -328,13 +350,15 @@ export default function BlogListClient({ items = [], banner = null }) {
             ref={listRef}
             className="pb-20 max-w-[1920px] w-[97%] mx-auto"
           >
-            <motion.div
-              key={pageSafe}
-              className="blog-grid grid pl-0 lg:pr-6 2XL:pr-10 grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-4"
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, amount: 0.2 }}
-            >
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={pageSafe}
+                className="blog-grid grid pl-0 lg:pr-6 2XL:pr-10 grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-4"
+                variants={listVariants(reduce)}
+                initial="hidden"
+                animate="show"
+                exit="hidden"
+              >
               {pageItems.map((item, i) => (
                 <BlogCard
                   key={item.id ?? i}
@@ -343,7 +367,8 @@ export default function BlogListClient({ items = [], banner = null }) {
                   formatWan={formatWan}
                 />
               ))}
-            </motion.div>
+              </motion.div>
+            </AnimatePresence>
 
             {/* 🔥 分頁功能區域 */}
             {totalPages > 1 && (

@@ -71,6 +71,12 @@ export default function RootLayout({
             href="https://ds.justfont.com"
             crossOrigin=""
           />
+          <link rel="dns-prefetch" href="https://go.justfont.com" />
+          <link
+            rel="preconnect"
+            href="https://go.justfont.com"
+            crossOrigin=""
+          />
 
           <style id="portal-font-fix">{`
             .portal-root, .portal-root * {
@@ -82,16 +88,11 @@ export default function RootLayout({
         </head>
 
         <body className="antialiased bg-white text-gray-900 tearsfont">
-          {/* --- justfont 腳本（順序不可改：core → loader）--- */}
+          {/* --- justfont（與備份相同，只載入 core；loader 由 core 自行載入）--- */}
           <Script
             id="jf-core"
             strategy="beforeInteractive"
             src="https://s3-ap-northeast-1.amazonaws.com/justfont-user-script/jf-65752.js"
-          />
-          <Script
-            id="jf-loader"
-            strategy="beforeInteractive"
-            src="https://ds.justfont.com/js/auto/id/479204107662"
           />
           {/* --- 字體預熱 --- */}
           <span
@@ -222,92 +223,6 @@ export default function RootLayout({
 
                 if (desktopBtn) desktopBtn.addEventListener('click', smoothTop);
                 if (mobileBtn) mobileBtn.addEventListener('click', smoothTop);
-              })();
-            `}
-          </Script>
-
-          {/* jf-inactive 時重試載入 loader 並等待 jf-active */}
-          <Script id="jf-inactive-retry" strategy="afterInteractive">
-            {`
-              (function () {
-                function flush() {
-                  try {
-                    var jf = window._jf;
-                    if (jf && typeof jf.flush === "function") jf.flush();
-                  } catch (e) {}
-                }
-                function waitActive(tries) {
-                  var html = document.documentElement;
-                  if (html.classList.contains("jf-active")) {
-                    flush();
-                    return;
-                  }
-                  if (tries > 0 && !html.classList.contains("jf-inactive")) {
-                    setTimeout(function () { waitActive(tries - 1); }, 250);
-                    return;
-                  }
-                  if (tries > 0 && html.classList.contains("jf-inactive")) {
-                    setTimeout(function () { waitActive(tries - 1); }, 250);
-                  }
-                }
-                function retryLoader() {
-                  var html = document.documentElement;
-                  if (html.classList.contains("jf-active")) return;
-                  if (document.querySelector('script[data-jf-retry="1"]')) {
-                    waitActive(40);
-                    return;
-                  }
-                  var s = document.createElement("script");
-                  s.src = "https://ds.justfont.com/js/auto/id/479204107662";
-                  s.async = true;
-                  s.setAttribute("data-jf-retry", "1");
-                  s.onload = function () { waitActive(40); };
-                  document.head.appendChild(s);
-                }
-                window.addEventListener("load", function () {
-                  if (document.documentElement.classList.contains("jf-active")) {
-                    flush();
-                    return;
-                  }
-                  setTimeout(retryLoader, 300);
-                });
-              })();
-            `}
-          </Script>
-
-          {/* 等 justfont 進入 jf-active 後才 flush（首頁 ssr:false 動態內容） */}
-          <Script id="jf-safe-refresh" strategy="afterInteractive">
-            {`
-              (function () {
-                function flushWhenActive() {
-                  var html = document.documentElement;
-                  function run() {
-                    try {
-                      var jf = window._jf;
-                      if (jf && typeof jf.flush === "function") jf.flush();
-                    } catch (e) {}
-                  }
-                  if (html.classList.contains("jf-active")) {
-                    run();
-                    return;
-                  }
-                  if (html.classList.contains("jf-inactive")) return;
-                  var n = 0;
-                  var t = setInterval(function () {
-                    n++;
-                    if (html.classList.contains("jf-active")) {
-                      clearInterval(t);
-                      run();
-                    } else if (
-                      html.classList.contains("jf-inactive") ||
-                      n > 40
-                    ) {
-                      clearInterval(t);
-                    }
-                  }, 250);
-                }
-                window.addEventListener("jf-refresh", flushWhenActive);
-                window.addEventListener("load", flushWhenActive);
               })();
             `}
           </Script>
