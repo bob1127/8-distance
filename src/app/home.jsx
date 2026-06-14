@@ -375,6 +375,24 @@ const HERO_POSTER =
 function HomeClient({ specialPosts = [], frontData = {}, worksData = {} }) {
   const containerRef = useRef(null);
 
+  useEffect(() => {
+    const html = document.documentElement;
+    const run = () => window.dispatchEvent(new Event("jf-refresh"));
+    if (html.classList.contains("jf-active")) {
+      run();
+      return;
+    }
+    const t = setInterval(() => {
+      if (html.classList.contains("jf-active")) {
+        clearInterval(t);
+        run();
+      } else if (html.classList.contains("jf-inactive")) {
+        clearInterval(t);
+      }
+    }, 200);
+    return () => clearInterval(t);
+  }, []);
+
   const heroSlides = buildHeroSlides(frontData);
   const poster =
     HERO_POSTER ||

@@ -191,6 +191,7 @@ export default function LatestNewsEmbla({ title = "最新動態" }) {
               };
             })
           );
+          window.dispatchEvent(new Event("jf-refresh"));
         }
       } catch (err) {
         console.error("Failed to fetch latest news:", err);

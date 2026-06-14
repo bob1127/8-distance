@@ -92,17 +92,7 @@ export default function NewsClient({ items = [] }) {
   return (
     <LazyMotion features={domAnimation}>
       <MotionConfig transition={spring} reducedMotion="user">
-        {/* ================= 字體強制鎖定（部署版防回退） ================= */}
-        <div
-          className="
-            font-sans antialiased tracking-widest
-            [font-variant-numeric:tabular-nums]
-          "
-          style={{
-            fontFamily:
-              'var(--site-font, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", "Helvetica Neue", Arial)',
-          }}
-        >
+        <div className="antialiased tracking-widest [font-variant-numeric:tabular-nums]">
           {/* ===== 標題 ===== */}
           <section
             className="mt-[150px] mx-auto w-full max-w-[1920px]"

@@ -274,6 +274,7 @@ export default function SiteFooter() {
           setLinks(nextLinks);
           setContacts(nextContacts);
           setTabsData(mergedTabs);
+          window.dispatchEvent(new Event("jf-refresh"));
         }
       } catch {
         // 忽略錯誤，沿用預設

@@ -36,6 +36,7 @@ export default function TestimonialsEmbla({
                 date: it.date || "",
               }))
           );
+          window.dispatchEvent(new Event("jf-refresh"));
         }
       } catch (err) {
         console.error("Failed to fetch testimonials:", err);

@@ -10,6 +10,7 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import ExoApeOverlayMenu from "../components/ExoApeOverlayMenu";
 import ConditionalNav from "@/components/ConditionalNav";
 import RenderFooter from "../components/RenderFooter";
+import JustFontRouteRefresh from "@/components/JustFontRouteRefresh";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.8distance.com"),
@@ -70,6 +71,12 @@ export default function RootLayout({
             href="https://ds.justfont.com"
             crossOrigin=""
           />
+          <link
+            rel="preload"
+            href="https://ds.justfont.com/js/auto/id/479204107662"
+            as="script"
+            crossOrigin="anonymous"
+          />
 
           <style id="portal-font-fix">{`
             .portal-root, .portal-root * {
@@ -80,7 +87,7 @@ export default function RootLayout({
           `}</style>
         </head>
 
-        <body className="antialiased bg-white text-gray-900">
+        <body className="antialiased bg-white text-gray-900 tearsfont">
           {/* --- justfont 腳本 --- */}
           <Script
             id="jf-core"
@@ -219,6 +226,66 @@ export default function RootLayout({
               })();
             `}
           </Script>
+
+          {/* justfont 載入逾時 → jf-inactive 時，延遲重試一次 ds 腳本 */}
+          <Script id="jf-inactive-retry" strategy="afterInteractive">
+            {`
+              (function () {
+                function retryLoader() {
+                  var html = document.documentElement;
+                  if (!html.classList.contains("jf-inactive")) return;
+                  if (document.querySelector('script[data-jf-retry="1"]')) return;
+                  var s = document.createElement("script");
+                  s.src = "https://ds.justfont.com/js/auto/id/479204107662";
+                  s.async = true;
+                  s.setAttribute("data-jf-retry", "1");
+                  document.head.appendChild(s);
+                }
+                window.addEventListener("load", function () {
+                  setTimeout(retryLoader, 600);
+                });
+              })();
+            `}
+          </Script>
+
+          {/* 等 justfont 進入 jf-active 後才 flush（首頁 ssr:false 動態內容） */}
+          <Script id="jf-safe-refresh" strategy="afterInteractive">
+            {`
+              (function () {
+                function flushWhenActive() {
+                  var html = document.documentElement;
+                  function run() {
+                    try {
+                      var jf = window._jf;
+                      if (jf && typeof jf.flush === "function") jf.flush();
+                    } catch (e) {}
+                  }
+                  if (html.classList.contains("jf-active")) {
+                    run();
+                    return;
+                  }
+                  if (html.classList.contains("jf-inactive")) return;
+                  var n = 0;
+                  var t = setInterval(function () {
+                    n++;
+                    if (html.classList.contains("jf-active")) {
+                      clearInterval(t);
+                      run();
+                    } else if (
+                      html.classList.contains("jf-inactive") ||
+                      n > 40
+                    ) {
+                      clearInterval(t);
+                    }
+                  }, 250);
+                }
+                window.addEventListener("jf-refresh", flushWhenActive);
+                window.addEventListener("load", flushWhenActive);
+              })();
+            `}
+          </Script>
+
+          <JustFontRouteRefresh />
 
           <div className="fixed inset-x-0 top-0 z-[9999]">
             <ConditionalNav />

@@ -138,10 +138,10 @@ export default function QAAccordionClient({
           font-synthesis: weight style small-caps !important;
         }
         .qa-scope {
-          font-family: "jf-openhuninn-2.0", "PingFang TC", sans-serif !important;
+          font-family: var(--app-font) !important;
         }
         .qa-scope .qa-title {
-          font-family: "Noto Sans TC", "PingFang TC", sans-serif !important;
+          font-family: var(--app-font) !important;
           font-weight: 600;
         }
       `}</style>
