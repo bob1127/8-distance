@@ -11,9 +11,11 @@ import ExoApeOverlayMenu from "../components/ExoApeOverlayMenu";
 import ConditionalNav from "@/components/ConditionalNav";
 import RenderFooter from "../components/RenderFooter";
 import JustFontRouteRefresh from "@/components/JustFontRouteRefresh";
+import { SITE_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.8distance.com"),
+  applicationName: SITE_NAME,
   title: "捌程室內設計｜商業空間與住宅設計",
   description:
     "捌程室內設計專注於舊屋翻新、住宅裝修與商業空間的室內設計整合服務。",
@@ -31,7 +33,7 @@ export const metadata: Metadata = {
     title: "捌程室內設計｜商業空間與住宅設計",
     description:
       "捌程室內設計專注於舊屋翻新、住宅裝修與商業空間的室內設計整合服務。",
-    siteName: "捌程室內設計",
+    siteName: SITE_NAME,
     locale: "zh_TW",
     type: "website",
   },

@@ -9,6 +9,7 @@ import { PlayCircle, HelpCircle } from "lucide-react";
 import { Swiper as SwiperReact, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
+import { YOUTUBE_CHANNEL_URL } from "@/lib/site";
 
 const SEARCH_API = "https://api.8distance.com/api/search";
 
@@ -611,7 +612,7 @@ export default function ExoApeOverlayMenu({ children }) {
                   },
                   {
                     label: "YOUTUBE",
-                    href: "https://www.youtube.com/@%E6%8D%8C%E7%A8%8B%E6%99%AF%E8%A7%80%E8%88%87%E5%AE%A4%E5%85%A7%E8%A8%AD%E8%A8%88",
+                    href: YOUTUBE_CHANNEL_URL,
                   },
                   {
                     label: "LINE",

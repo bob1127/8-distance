@@ -5,7 +5,7 @@ export const runtime = "nodejs";
 
 import Client from "./home";
 import { buildHeroSlides } from "@/lib/heroCarousel";
-import { SITE_HOME, SITE_ORIGIN, absoluteUrl } from "@/lib/site";
+import { SITE_HOME, SITE_NAME, SITE_ORIGIN, absoluteUrl } from "@/lib/site";
 
 /* ----------------- generateMetadata ----------------- */
 export async function generateMetadata() {
@@ -67,7 +67,7 @@ export async function generateMetadata() {
         type: "website",
         locale: "zh_TW",
         url: SITE_HOME,
-        siteName: "捌程室內設計 8distance",
+        siteName: SITE_NAME,
         title,
         description,
         images: [
@@ -175,7 +175,7 @@ export default async function Page() {
     "@context": "https://schema.org",
     "@type": ["LocalBusiness", "HomeAndConstructionBusiness", "Organization"],
     "@id": `${SITE_ORIGIN}/#organization`,
-    name: "捌程室內設計 8distance",
+    name: SITE_NAME,
     url: SITE_HOME,
     logo: `${SITE_ORIGIN}/images/favicon.ico`,
     image: [
@@ -219,7 +219,9 @@ export default async function Page() {
     "@type": "WebSite",
     "@id": `${SITE_ORIGIN}/#website`,
     url: SITE_HOME,
-    name: "捌程室內設計 8distance",
+    name: SITE_NAME,
+    alternateName: ["8distance", "8distance.com"],
+    inLanguage: "zh-TW",
     publisher: {
       "@id": `${SITE_ORIGIN}/#organization`,
     },

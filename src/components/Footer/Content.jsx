@@ -7,6 +7,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import Image from "next/image";
 import { refreshJustFontDelayed } from "@/lib/justfont";
+import { YOUTUBE_CHANNEL_URL, resolveYouTubeUrl } from "@/lib/site";
 
 const API = "https://api.8distance.com/api/pages";
 
@@ -132,7 +133,7 @@ export default function SiteFooter() {
     facebook: "https://www.facebook.com/share/14QeXJTqNaL/?mibextid=wwXIfr",
     instagram: "https://www.instagram.com/8_distance/",
     line: "https://page.line.me/655cyzya?oat_content=url&openQrModal=true",
-    youtube: "https://www.youtube.com/@捌程景觀與室內設計",
+    youtube: YOUTUBE_CHANNEL_URL,
   });
 
   const [contacts, setContacts] = useState({
@@ -224,9 +225,7 @@ export default function SiteFooter() {
             ? rawLinks.instagram
             : links.instagram,
           line: isHttpUrl(rawLinks.line) ? rawLinks.line : links.line,
-          youtube: isHttpUrl(rawLinks.youtube)
-            ? rawLinks.youtube
-            : links.youtube,
+          youtube: resolveYouTubeUrl(rawLinks.youtube),
         };
 
         // --- 聯絡資訊 ---
@@ -289,7 +288,7 @@ export default function SiteFooter() {
   // 依目前 tab 顯示對應據點
   const current = useMemo(
     () => tabsData.find((t) => t.key === tab) ?? tabsData[0],
-    [tab, tabsData]
+    [tab, tabsData],
   );
 
   return (
