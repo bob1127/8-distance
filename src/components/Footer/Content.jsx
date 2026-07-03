@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import Image from "next/image";
-import { refreshJustFontDelayed } from "@/lib/justfont";
 import { YOUTUBE_CHANNEL_URL, resolveYouTubeUrl } from "@/lib/site";
 
 const API = "https://api.8distance.com/api/pages";
@@ -274,7 +273,6 @@ export default function SiteFooter() {
           setLinks(nextLinks);
           setContacts(nextContacts);
           setTabsData(mergedTabs);
-          refreshJustFontDelayed([0, 400]);
         }
       } catch {
         // 忽略錯誤，沿用預設

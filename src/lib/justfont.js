@@ -1,37 +1,84 @@
-/** justfont 在 jf-active 後重新掃描 DOM（SPA / 動態內容必須） */
-export function refreshJustFont() {
+/** JustFont flush：全站唯一協調器，合併重複請求避免文字跳動 */
+
+const DEBOUNCE_MS = 400;
+const ACTIVE_POLL_MS = 250;
+const ACTIVE_POLL_MAX = 48;
+
+let debounceTimer = null;
+let activeWaitTimer = null;
+const scheduledDelays = new Set();
+
+function isJustFontActive() {
+  return document.documentElement.classList.contains("jf-active");
+}
+
+function doFlush() {
+  try {
+    window._jf?.flush?.();
+  } catch {
+    /* ignore */
+  }
+}
+
+function waitForActiveThenFlush() {
   if (typeof window === "undefined") return;
 
-  const html = document.documentElement;
-
-  function flush() {
-    try {
-      window._jf?.flush?.();
-    } catch {
-      /* ignore */
-    }
-  }
-
-  if (html.classList.contains("jf-active")) {
-    flush();
+  if (isJustFontActive()) {
+    doFlush();
     return;
   }
 
+  if (activeWaitTimer !== null) return;
+
   let n = 0;
-  const timer = window.setInterval(() => {
+  activeWaitTimer = window.setInterval(() => {
     n += 1;
+    const html = document.documentElement;
     if (html.classList.contains("jf-active")) {
-      window.clearInterval(timer);
-      flush();
-    } else if (html.classList.contains("jf-inactive") || n > 48) {
-      window.clearInterval(timer);
+      window.clearInterval(activeWaitTimer);
+      activeWaitTimer = null;
+      doFlush();
+    } else if (html.classList.contains("jf-inactive") || n >= ACTIVE_POLL_MAX) {
+      window.clearInterval(activeWaitTimer);
+      activeWaitTimer = null;
     }
-  }, 250);
+  }, ACTIVE_POLL_MS);
 }
 
-/** 內容晚於首次掃描的頁面，延遲多次 flush */
-export function refreshJustFontDelayed(delays = [0, 400, 1200, 2500]) {
-  delays.forEach((ms) => {
-    window.setTimeout(refreshJustFont, ms);
-  });
+/** 短時間內多次呼叫會合併為一次 flush */
+export function refreshJustFont() {
+  if (typeof window === "undefined") return;
+
+  if (debounceTimer !== null) {
+    window.clearTimeout(debounceTimer);
+  }
+
+  debounceTimer = window.setTimeout(() => {
+    debounceTimer = null;
+    waitForActiveThenFlush();
+  }, DEBOUNCE_MS);
+}
+
+/** 延遲 flush；同毫秒值只排程一次 */
+export function refreshJustFontDelayed(delays = [0, 1200]) {
+  if (typeof window === "undefined") return;
+
+  for (const ms of [...new Set(delays)].sort((a, b) => a - b)) {
+    if (scheduledDelays.has(ms)) continue;
+    scheduledDelays.add(ms);
+
+    window.setTimeout(() => {
+      scheduledDelays.delete(ms);
+      refreshJustFont();
+    }, ms);
+  }
+}
+
+/** 換頁時清除排程，避免舊頁與新頁 flush 疊加 */
+export function resetJustFontSchedule() {
+  scheduledDelays.clear();
+  if (debounceTimer !== null) {
+    window.clearTimeout(debounceTimer);
+    debounceTimer = null;
+  }
 }

@@ -9,7 +9,6 @@ import ScrollTrigger from "gsap/ScrollTrigger";
 import IntroOverlay from "@/components/IntroOverlayOnce";
 import Nav from "../components/PageTransition/Nav";
 import { ReactLenis } from "@studio-freight/react-lenis";
-import { refreshJustFontDelayed } from "@/lib/justfont";
 import LatestNewsCarousel from "../components/LatestNewsCarousel";
 import TestimonialsEmbla from "../components/TestimonialsEmbla";
 import { buildHeroSlides } from "@/lib/heroCarousel";
@@ -375,10 +374,6 @@ const HERO_POSTER =
 
 function HomeClient({ specialPosts = [], frontData = {}, worksData = {} }) {
   const containerRef = useRef(null);
-
-  useEffect(() => {
-    refreshJustFontDelayed([0, 500, 1500, 3000, 5000]);
-  }, []);
 
   const heroSlides = buildHeroSlides(frontData);
   const poster =

@@ -100,6 +100,8 @@ function buildPayload(form) {
       case_name: form.caseName, // 新增：案件名稱
       house_status: form.houseStatus,
       size_range: form.sizeRange, // "41-60坪" 等
+      handover_time: formatScheduleValue(form.handoverTime),
+      expected_completion_time: formatScheduleValue(form.completionTime),
     },
     step3: {
       need: form.need,
@@ -210,6 +212,91 @@ function NumberField({ label, value, onChange, min = 0, max = 20, step = 1 }) {
         step={step}
         onChange={(e) => onChange(Number(e.target.value))}
       />
+    </div>
+  );
+}
+
+const MONTH_VALUE_RE = /^\d{4}-\d{2}$/;
+
+function formatScheduleValue(v) {
+  if (!v) return "";
+  if (
+    v === "已交屋" ||
+    v === "尚未確定" ||
+    v === "3個月內" ||
+    v === "6個月內" ||
+    v === "1年內"
+  ) {
+    return v;
+  }
+  const m = String(v).match(/^(\d{4})-(\d{2})$/);
+  if (m) return `${m[1]}年${Number(m[2])}月`;
+  return v;
+}
+
+/** 交屋 / 完工時間：快捷選項 + 年月選擇器（與表單 ChoiceCard 風格一致） */
+function MonthScheduleField({
+  label,
+  value = "",
+  onChange,
+  quickOptions = ["尚未確定"],
+  inputRef,
+  error,
+}) {
+  const isQuick = quickOptions.includes(value);
+  const monthValue = MONTH_VALUE_RE.test(value) ? value : "";
+
+  return (
+    <div ref={inputRef}>
+      <label className="block text-sm text-neutral-600 mb-2">{label}</label>
+
+      <div
+        className={`grid gap-2 mb-3 ${
+          quickOptions.length >= 3
+            ? "grid-cols-2 sm:grid-cols-3"
+            : "grid-cols-2"
+        }`}
+      >
+        {quickOptions.map((opt) => (
+          <ChoiceCard
+            key={opt}
+            name={label}
+            value={opt}
+            current={value}
+            onChange={onChange}
+          >
+            {opt}
+          </ChoiceCard>
+        ))}
+      </div>
+
+      <div
+        className={`rounded-xl border px-4 py-3 transition ${
+          monthValue
+            ? "border-neutral-900 bg-neutral-50"
+            : "border-neutral-200"
+        }`}
+      >
+        <div className="flex items-center justify-between gap-3">
+          <span className="text-xs text-neutral-500 shrink-0">預計年月</span>
+          <input
+            type="month"
+            className="w-full min-w-0 bg-transparent text-sm outline-none focus:ring-0 [color-scheme:light]"
+            value={monthValue}
+            min="2024-01"
+            max="2035-12"
+            onChange={(e) => onChange(e.target.value)}
+            aria-label={`${label}預計年月`}
+          />
+        </div>
+      </div>
+
+      {!isQuick && !monthValue && (
+        <p className="mt-1.5 text-xs text-neutral-400">
+          可點選上方選項，或選擇預計年月
+        </p>
+      )}
+      {error && <p className="mt-1 text-xs text-rose-600">{error}</p>}
     </div>
   );
 }
@@ -693,6 +780,8 @@ export default function AppointmentFormPage() {
     caseName: "",
     houseStatus: "",
     sizeRange: "",
+    handoverTime: "",
+    completionTime: "",
     // Step 3 設計需求
     need: "",
     budget: "",
@@ -953,6 +1042,8 @@ export default function AppointmentFormPage() {
         caseName: "",
         houseStatus: "",
         sizeRange: "",
+        handoverTime: "",
+        completionTime: "",
         need: "",
         budget: "",
         styles: [],
@@ -1083,9 +1174,7 @@ export default function AppointmentFormPage() {
                       <input
                         type="text"
                         placeholder="請填寫姓名"
-                        className={`w-full rounded-xl border px-4 py-3 outline-none focus:ring-2 focus:ring-neutral-800 ${
-                          errors.name ? "border-rose-500" : "border-neutral-200"
-                        }`}
+                        className="w-full rounded-xl border border-neutral-200 px-4 py-3 outline-none focus:ring-2 focus:ring-neutral-800"
                         value={form.name}
                         onChange={(e) => setF({ name: e.target.value })}
                         aria-invalid={!!errors.name}
@@ -1102,11 +1191,7 @@ export default function AppointmentFormPage() {
                   <Section title="稱謂 *">
                     <div
                       ref={refs.gender}
-                      className={`grid gap-3 grid-cols-2 ${
-                        errors.gender
-                          ? "ring-1 ring-rose-500 rounded-lg p-2"
-                          : ""
-                      }`}
+                      className="grid gap-3 grid-cols-2"
                     >
                       {["先生", "小姐"].map((v) => (
                         <ChoiceCard
@@ -1131,9 +1216,7 @@ export default function AppointmentFormPage() {
                   <Section title="年齡 *">
                     <div
                       ref={refs.age}
-                      className={`grid gap-3 grid-cols-1 sm:grid-cols-3 ${
-                        errors.age ? "ring-1 ring-rose-500 rounded-lg p-2" : ""
-                      }`}
+                      className="grid gap-3 grid-cols-1 sm:grid-cols-3"
                     >
                       {[
                         "30歲以下",
@@ -1164,11 +1247,7 @@ export default function AppointmentFormPage() {
                       <input
                         type="text"
                         placeholder="請填寫職業"
-                        className={`w-full rounded-xl border px-4 py-3 outline-none focus:ring-2 focus:ring-neutral-800 ${
-                          errors.occupation
-                            ? "border-rose-500"
-                            : "border-neutral-200"
-                        }`}
+                        className="w-full rounded-xl border border-neutral-200 px-4 py-3 outline-none focus:ring-2 focus:ring-neutral-800"
                         value={form.occupation}
                         onChange={(e) => setF({ occupation: e.target.value })}
                         aria-invalid={!!errors.occupation}
@@ -1187,11 +1266,7 @@ export default function AppointmentFormPage() {
                       <input
                         type="tel"
                         placeholder="請留聯絡電話"
-                        className={`w-full rounded-xl border px-4 py-3 outline-none focus:ring-2 focus:ring-neutral-800 ${
-                          errors.phone
-                            ? "border-rose-500"
-                            : "border-neutral-200"
-                        }`}
+                        className="w-full rounded-xl border border-neutral-200 px-4 py-3 outline-none focus:ring-2 focus:ring-neutral-800"
                         value={form.phone}
                         onChange={(e) => setF({ phone: e.target.value })}
                         aria-invalid={!!errors.phone}
@@ -1208,11 +1283,7 @@ export default function AppointmentFormPage() {
                       <input
                         type="text"
                         placeholder="請留 LINE ID（必填）"
-                        className={`w-full rounded-xl border px-4 py-3 outline-none focus:ring-2 focus:ring-neutral-800 ${
-                          errors.lineId
-                            ? "border-rose-500"
-                            : "border-neutral-200"
-                        }`}
+                        className="w-full rounded-xl border border-neutral-200 px-4 py-3 outline-none focus:ring-2 focus:ring-neutral-800"
                         value={form.lineId}
                         onChange={(e) => setF({ lineId: e.target.value })}
                         aria-invalid={!!errors.lineId}
@@ -1230,11 +1301,7 @@ export default function AppointmentFormPage() {
                       <input
                         type="email"
                         placeholder="請留下常用信箱"
-                        className={`w-full rounded-xl border px-4 py-3 outline-none focus:ring-2 focus:ring-neutral-800 ${
-                          errors.email
-                            ? "border-rose-500"
-                            : "border-neutral-200"
-                        }`}
+                        className="w-full rounded-xl border border-neutral-200 px-4 py-3 outline-none focus:ring-2 focus:ring-neutral-800"
                         value={form.email}
                         onChange={(e) => setF({ email: e.target.value })}
                         aria-invalid={!!errors.email}
@@ -1260,9 +1327,7 @@ export default function AppointmentFormPage() {
                   <Section title="從哪裡得知我們 *">
                     <div
                       ref={refs.ref}
-                      className={`grid gap-3 grid-cols-2 sm:grid-cols-3 ${
-                        errors.ref ? "ring-1 ring-rose-500 rounded-lg p-2" : ""
-                      }`}
+                      className="grid gap-3 grid-cols-2 sm:grid-cols-3"
                     >
                       {[
                         "官網",
@@ -1302,11 +1367,7 @@ export default function AppointmentFormPage() {
                         <input
                           type="text"
                           placeholder="請輸入其他來源"
-                          className={`mt-3 w-full border-0 border-b px-1 py-2 outline-none bg-transparent focus:border-neutral-900 ${
-                            errors.ref
-                              ? "border-rose-500"
-                              : "border-neutral-300"
-                          }`}
+                          className="mt-3 w-full border-0 border-b border-neutral-300 px-1 py-2 outline-none bg-transparent focus:border-neutral-900"
                           value={form.ref.replace(/^其他:/, "")}
                           onChange={(e) =>
                             setF({ ref: "其他:" + e.target.value })
@@ -1347,11 +1408,7 @@ export default function AppointmentFormPage() {
                   <Section title="房屋所在區域 *">
                     <div
                       ref={refs.region}
-                      className={`grid gap-3 grid-cols-3 ${
-                        errors.region
-                          ? "ring-1 ring-rose-500 rounded-lg p-2"
-                          : ""
-                      }`}
+                      className="grid gap-3 grid-cols-3"
                     >
                       {["北部", "中部", "南部"].map((v) => (
                         <ChoiceCard
@@ -1381,11 +1438,7 @@ export default function AppointmentFormPage() {
                         <input
                           type="text"
                           placeholder="請填寫案件地址"
-                          className={`w-full rounded-xl border px-4 py-3 outline-none focus:ring-2 focus:ring-neutral-800 ${
-                            errors.caseAddress
-                              ? "border-rose-500"
-                              : "border-neutral-200"
-                          }`}
+                          className="w-full rounded-xl border border-neutral-200 px-4 py-3 outline-none focus:ring-2 focus:ring-neutral-800"
                           value={form.caseAddress}
                           onChange={(e) =>
                             setF({ caseAddress: e.target.value })
@@ -1415,11 +1468,7 @@ export default function AppointmentFormPage() {
                   <Section title="房屋現況 *">
                     <div
                       ref={refs.houseStatus}
-                      className={`grid gap-4 grid-cols-2 sm:grid-cols-3 ${
-                        errors.houseStatus
-                          ? "ring-1 ring-rose-500 rounded-lg p-3"
-                          : ""
-                      }`}
+                      className="grid gap-4 grid-cols-2 sm:grid-cols-3"
                     >
                       {[
                         "新成屋",
@@ -1457,11 +1506,7 @@ export default function AppointmentFormPage() {
                   <Section title="室內坪數 *">
                     <div
                       ref={refs.sizeRange}
-                      className={`grid gap-3 grid-cols-2 ${
-                        errors.sizeRange
-                          ? "ring-1 ring-rose-500 rounded-lg p-2"
-                          : ""
-                      }`}
+                      className="grid gap-3 grid-cols-2"
                     >
                       {["25坪以下", "26-40坪", "41-60坪", "61坪以上"].map(
                         (label) => (
@@ -1486,6 +1531,31 @@ export default function AppointmentFormPage() {
                       設計費每坪 $6500 起（未稅），依實際設計坪數計算
                     </p>
                   </Section>
+
+                  <Section
+                    title="交屋與完工時間"
+                    subtitle="若尚未確定，可直接點選選項"
+                  >
+                    <div className="grid gap-6 sm:grid-cols-2">
+                      <MonthScheduleField
+                        label="交屋時間"
+                        value={form.handoverTime}
+                        onChange={(val) => setF({ handoverTime: val })}
+                        quickOptions={["已交屋", "尚未確定"]}
+                      />
+                      <MonthScheduleField
+                        label="預計完工時間"
+                        value={form.completionTime}
+                        onChange={(val) => setF({ completionTime: val })}
+                        quickOptions={[
+                          "3個月內",
+                          "6個月內",
+                          "1年內",
+                          "尚未確定",
+                        ]}
+                      />
+                    </div>
+                  </Section>
                 </>
               )}
 
@@ -1495,9 +1565,7 @@ export default function AppointmentFormPage() {
                   <Section title="本次委託需求 *">
                     <div
                       ref={refs.need}
-                      className={`grid gap-3 grid-cols-1 sm:grid-cols-2 ${
-                        errors.need ? "ring-1 ring-rose-500 rounded-lg p-2" : ""
-                      }`}
+                      className="grid gap-3 grid-cols-1 sm:grid-cols-2"
                     >
                       {[
                         "室內全規劃",
@@ -1535,11 +1603,7 @@ export default function AppointmentFormPage() {
 
                     <div
                       ref={refs.budget}
-                      className={`grid gap-3 grid-cols-2 ${
-                        errors.budget
-                          ? "ring-1 ring-rose-500 rounded-lg p-2"
-                          : ""
-                      }`}
+                      className="grid gap-3 grid-cols-2"
                     >
                       {[
                         ["200-300", "200-300萬"],
@@ -1564,7 +1628,7 @@ export default function AppointmentFormPage() {
                       </p>
                     )}
                     <p className="text-xs text-rose-600 mt-1">
-                      工程最低承接總額為 200 萬。即日起推出{" "}
+                      工程最低承接總額為 120 萬。即日起推出{" "}
                       <button
                         type="button"
                         onClick={() => setLoanOpen(true)}
@@ -1670,7 +1734,7 @@ export default function AppointmentFormPage() {
                       onChange={(e) => setF({ agree: e.target.checked })}
                     />
                     <label htmlFor="agree" className="text-sm">
-                      我已閱讀並同意：工程最低承接總額為 200 萬以上，設計費每坪
+                      我已閱讀並同意：工程最低承接總額為 120 萬以上，設計費每坪
                       $6500（未稅）起。*
                     </label>
                   </div>

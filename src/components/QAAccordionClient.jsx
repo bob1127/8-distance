@@ -3,7 +3,6 @@
 
 import { useMemo, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { refreshJustFontDelayed } from "@/lib/justfont";
 
 export default function QAAccordionClient({
   initialByCategory = { design_process: [], renovation_knowledge: [] },
@@ -17,10 +16,6 @@ export default function QAAccordionClient({
       setActiveKey(activeCategory);
     }
   }, [activeCategory]);
-
-  useEffect(() => {
-    refreshJustFontDelayed([0, 500, 1500]);
-  }, [activeKey]);
 
   const tabs = useMemo(
     () => [

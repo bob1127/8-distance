@@ -9,7 +9,6 @@ import AnimatedHeading from "@/components/AnimatedHeading";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import Link from "next/link";
-import { refreshJustFontDelayed } from "@/lib/justfont";
 gsap.registerPlugin(ScrollTrigger);
 
 /* ===== HTML 解碼與去標籤 ===== */
@@ -192,7 +191,6 @@ export default function LatestNewsEmbla({ title = "最新動態" }) {
               };
             })
           );
-          refreshJustFontDelayed([0, 400]);
         }
       } catch (err) {
         console.error("Failed to fetch latest news:", err);

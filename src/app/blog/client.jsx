@@ -12,8 +12,6 @@ import {
   useReducedMotion,
   AnimatePresence,
 } from "framer-motion";
-import { refreshJustFontDelayed } from "@/lib/justfont";
-
 /* === 動畫設定 === */
 const spring = { type: "spring", stiffness: 70, damping: 22, mass: 0.9 };
 const cardVariants = {
@@ -152,14 +150,6 @@ function BlogCard({ item, index, formatWan }) {
 export default function BlogListClient({ items = [], banner = null }) {
   const reduce = useReducedMotion();
   const [page, setPage] = useState(1);
-
-  useEffect(() => {
-    refreshJustFontDelayed([0, 400, 1200, 2500, 4000]);
-  }, []);
-
-  useEffect(() => {
-    refreshJustFontDelayed([0, 400, 1200]);
-  }, [page]);
 
   // Lenis 滾動控制
   useEffect(() => {
