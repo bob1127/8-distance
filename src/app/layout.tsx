@@ -49,10 +49,6 @@ export default function RootLayout({
       <html lang="zh-Hant">
         <head>
           <link
-            rel="stylesheet"
-            href="https://unpkg.com/@tailwindcss/typography@0.5.10/dist/typography.min.css"
-          />
-          <link
             rel="dns-prefetch"
             href="https://s3-ap-northeast-1.amazonaws.com"
           />

@@ -6,9 +6,13 @@ import { usePathname } from "next/navigation";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import Image from "next/image";
-import { YOUTUBE_CHANNEL_URL, resolveYouTubeUrl } from "@/lib/site";
+import {
+  DEFAULT_SOCIAL_LINKS,
+  PAGES_API,
+  socialLinksFromPages,
+} from "@/lib/site";
 
-const API = "https://api.8distance.com/api/pages";
+const API = PAGES_API;
 
 /* ---------------- helpers ---------------- */
 const toStr = (v, d = "") => (v == null ? d : String(v));
@@ -128,12 +132,7 @@ export default function SiteFooter() {
   const pathname = usePathname();
 
   // ====== 後台資料狀態（有資料就覆蓋，沒有就用預設） ======
-  const [links, setLinks] = useState({
-    facebook: "https://www.facebook.com/share/14QeXJTqNaL/?mibextid=wwXIfr",
-    instagram: "https://www.instagram.com/8_distance/",
-    line: "https://page.line.me/655cyzya?oat_content=url&openQrModal=true",
-    youtube: YOUTUBE_CHANNEL_URL,
-  });
+  const [links, setLinks] = useState({ ...DEFAULT_SOCIAL_LINKS });
 
   const [contacts, setContacts] = useState({
     interiorText: "室內設計｜04-23720128 室內設計部門",
@@ -200,7 +199,7 @@ export default function SiteFooter() {
     let aborted = false;
     (async () => {
       try {
-        const res = await fetch(API, { cache: "force-cache" });
+        const res = await fetch(API, { cache: "no-store" });
         if (!res.ok) throw new Error(String(res.status));
         const json = await res.json();
 
@@ -209,23 +208,8 @@ export default function SiteFooter() {
           : [];
         const addrs = Array.isArray(json?.addresses) ? json.addresses : [];
 
-        // --- 社群連結 ---
-        const rawLinks = {
-          facebook: decodeEntities(pickInfo(infos, "facebook")),
-          instagram: decodeEntities(pickInfo(infos, "instagram")),
-          line: decodeEntities(pickInfo(infos, "line")),
-          youtube: decodeEntities(pickInfo(infos, "youtube")),
-        };
-        const nextLinks = {
-          facebook: isHttpUrl(rawLinks.facebook)
-            ? rawLinks.facebook
-            : links.facebook,
-          instagram: isHttpUrl(rawLinks.instagram)
-            ? rawLinks.instagram
-            : links.instagram,
-          line: isHttpUrl(rawLinks.line) ? rawLinks.line : links.line,
-          youtube: resolveYouTubeUrl(rawLinks.youtube),
-        };
+        // --- 社群連結（與選單共用解析；勿 force-cache）---
+        const nextLinks = socialLinksFromPages(json);
 
         // --- 聯絡資訊 ---
         const interiorRaw =

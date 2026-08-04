@@ -9,7 +9,7 @@ import { PlayCircle, HelpCircle } from "lucide-react";
 import { Swiper as SwiperReact, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
-import { YOUTUBE_CHANNEL_URL } from "@/lib/site";
+import { YOUTUBE_CHANNEL_URL, DEFAULT_SOCIAL_LINKS, fetchSocialLinks } from "@/lib/site";
 
 const SEARCH_API = "https://api.8distance.com/api/search";
 
@@ -33,6 +33,9 @@ export default function ExoApeOverlayMenu({ children }) {
   const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState("");
 
+  // 社群連結：預設 → 後台 /api/pages 覆蓋（與 Footer 同源）
+  const [socialLinks, setSocialLinks] = useState({ ...DEFAULT_SOCIAL_LINKS });
+
   const topDividerRef = useRef(null);
   const footerDividerRef = useRef(null);
   const closeMenuRef = useRef(() => {});
@@ -40,6 +43,22 @@ export default function ExoApeOverlayMenu({ children }) {
   // ✅ 確保只在客戶端渲染
   useEffect(() => {
     setMounted(true);
+  }, []);
+
+  // ✅ 從後台同步社群連結（含 IG）
+  useEffect(() => {
+    let aborted = false;
+    (async () => {
+      try {
+        const next = await fetchSocialLinks();
+        if (!aborted) setSocialLinks(next);
+      } catch {
+        /* 沿用預設 */
+      }
+    })();
+    return () => {
+      aborted = true;
+    };
   }, []);
 
   // ✅ [新增] 監聽視窗尺寸變化
@@ -604,19 +623,19 @@ export default function ExoApeOverlayMenu({ children }) {
                 {[
                   {
                     label: "INSTAGRAM",
-                    href: "https://www.instagram.com/8_distance/",
+                    href: socialLinks.instagram,
                   },
                   {
                     label: "FACEBOOK",
-                    href: "https://www.facebook.com/HuDecorator?locale=zh_TW",
+                    href: socialLinks.facebook,
                   },
                   {
                     label: "YOUTUBE",
-                    href: YOUTUBE_CHANNEL_URL,
+                    href: socialLinks.youtube || YOUTUBE_CHANNEL_URL,
                   },
                   {
                     label: "LINE",
-                    href: "https://page.line.me/655cyzya?oat_content=url&openQrModal=true",
+                    href: socialLinks.line,
                   },
                 ].map((s) => (
                   <div key={s.label} className="social pb-1">
